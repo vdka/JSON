@@ -168,9 +168,9 @@ extension JSON: DictionaryLiteralConvertible {
 
 ## Parser
 ```swift
-JSONParser.parse(string: String) throws -> JSON
+JSONParser.parse(string: String, options: [JSONParser.Option] = []) throws -> JSON
 ```
-Throws `iff` JSON does not conform to [RFC7159](https://tools.ietf.org/html/rfc7159) compatible JSON.
+Throws a `JSONParser.Error` should any issue be encountered.
 
 ## Serializer
 ```swift

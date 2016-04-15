@@ -122,8 +122,8 @@ class JSONTests: XCTestCase {
       var title: String
       var time: Int
       private static func decode(json: JSON) throws -> Role {
-        let title = try json["title"].string ?? raise(JSON.Error.BadField("title"))
-        let time = try json["time"].int ?? raise(JSON.Error.BadField("time"))
+        let title = try json["title"].string ?? JSON.Error.BadField("title")
+        let time = try json["time"].int ?? JSON.Error.BadField("time")
         return Role(title: title, time: time)
       }
     }

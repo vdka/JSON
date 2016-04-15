@@ -15,5 +15,14 @@ extension JSON {
   }
 }
 
-/// Throws the error passed to it. Can be used with nil coalescing (??) to throw an error on nil.
-public func raise<T>(error: ErrorType) throws -> T { throw error }
+
+// TODO: precedence associativity?
+// TODO: should I be overloading an existing operator?
+
+infix operator ?? { associativity right precedence 131 }
+
+/// Throws the error on the right side. Use to throw on nil.
+public func ??<T>(lhs: T?, @autoclosure error: () -> ErrorType) throws -> T {
+  guard case .Some(let value) = lhs else { throw error() }
+  return value
+}

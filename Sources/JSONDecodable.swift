@@ -91,7 +91,7 @@ extension Optional where Wrapped: JSONDecodable {
 extension RawRepresentable where RawValue: JSONDecodable {
   public static func decode(json: JSON) throws -> Self {
     guard let value = json.value as? RawValue else { throw JSON.Error.BadValue(json.value) }
-    return try Self(rawValue: value) ?? raise(JSON.Error.BadValue(value))
+    return try Self(rawValue: value) ?? JSON.Error.BadValue(value)
   }
 }
 

@@ -70,12 +70,6 @@ extension Optional where Wrapped: _JSON {
     return self.string
   }
   
-  /// Returns an `Int` iff `Wrapped == JSON.integer(_)`
-  public var int: Int? {
-    guard let `self` = self as? JSON else { return nil }
-    return self.int
-  }
-  
   /// Returns this enum's associated `Int64` iff `self == .integer(_)`, `nil` otherwise.
   public var int64: Int64? {
     guard let `self` = self as? JSON else { return nil }
@@ -92,5 +86,33 @@ extension Optional where Wrapped: _JSON {
   public var double: Double? {
     guard let `self` = self as? JSON else { return nil }
     return self.double
+  }
+}
+
+
+// MARK: Non RFC JSON types
+
+extension Optional where Wrapped: _JSON {
+  /// Returns an `Int` iff `Wrapped == JSON.integer(_)`
+  public var int: Int? {
+    guard let `self` = self as? JSON else { return nil }
+    return self.int
+  }
+  
+  /// Returns an `Float` iff `Wrapped == JSON.double(_)`
+  public var float: Float? {
+    guard let `self` = self as? JSON else { return nil }
+    return self.float
+  }
+}
+
+
+// MARK: JSON Accessors calling into Element.decode(json: JSON)
+
+extension Optional where Wrapped: _JSON {
+  /// Calls `try? T.decode(self)`
+  func typed<T: JSONDecodable>() -> T? {
+    guard let `self` = self as? JSON else { return nil }
+    return self.typed()
   }
 }

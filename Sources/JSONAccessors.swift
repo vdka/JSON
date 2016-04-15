@@ -40,6 +40,8 @@ extension JSON {
 }
 
 
+// TODO: Investigate `subscript(set key: String) -> JSONEncodable?` for setting.
+
 // MARK: - JSON Subscripts
 
 extension JSON {
@@ -106,13 +108,6 @@ extension JSON {
     return s
   }
   
-  /// Returns this enum's associated `Int64` value as an `Int` iff `self == .integer(_)`, `nil` otherwise.
-  public var int: Int? {
-    // where clause protects against RunTime crashes where the value of i won't fit within a native Int
-    guard case .integer(let i) = self where Int64(Int.min) <= i && i <= Int64(Int.max) else { return nil }
-    return Int(i)
-  }
-  
   /// Returns this enum's associated `Int64` value iff `self == .integer(i)`, `nil` otherwise.
   public var int64: Int64? {
     guard case .integer(let i) = self else { return nil }
@@ -129,5 +124,33 @@ extension JSON {
   public var double: Double? {
     guard case .double(let d) = self else { return nil }
     return d
+  }
+}
+
+
+// MARK: Non RFC JSON types
+
+extension JSON {
+  /// Returns this enum's associated `Int64` value as an `Int` iff `self == .integer(_)`, `nil` otherwise.
+  public var int: Int? {
+    // where clause protects against RunTime crashes where the value of i won't fit within a native Int
+    guard case .integer(let i) = self where Int64(Int.min) <= i && i <= Int64(Int.max) else { return nil }
+    return Int(i)
+  }
+  
+  /// Returns this enum's associated `Double` value as an `Float` iff `self == .double(_)`, `nil` otherwise.
+  public var float: Float? {
+    guard case .double(let d) = self else { return nil }
+    return Float(d)
+  }
+}
+
+
+// MARK: JSON Accessors calling into Element.decode(json: JSON)
+
+extension JSON {
+  /// Calls `try? T.decode(self)`
+  func typed<T: JSONDecodable>() -> T? {
+    return try? T.decode(self)
   }
 }
