@@ -16,9 +16,9 @@ extension JSON {
 }
 
 
-// TODO: precedence associativity?
-// TODO: should I be overloading an existing operator?
+// DISCUSS: should I be overloading an existing operator?
 
+// associativity and precedence set to match stlib ?? operator.
 infix operator ?? { associativity right precedence 131 }
 
 /// Throws the error on the right side. Use to throw on nil.

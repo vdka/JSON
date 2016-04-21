@@ -1,12 +1,6 @@
-//
-//  JSONCore.swift
-//  JSONCore
-//
-//  Created by Tyrone Trevorrow on 23/10/2015.
-//  Copyright © 2015 Tyrone Trevorrow. All rights reserved.
-//
 
-// TODO: Copyright permissions.
+
+// MARK: - VDKA/JSON
 
 /// Any value that can be expressed in JSON has a representation in `JSON`.
 public enum JSON {
@@ -21,6 +15,18 @@ public enum JSON {
 
 
 // MARK: - JSON: CustomStringConvertible
+
+extension JSON {
+  
+  /**
+   Turns a nested graph of `JSON`s into a Swift `String`. This produces JSON data that
+   strictly conforms to [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
+   It can optionally pretty-print the output for debugging, but this comes with a non-negligible performance cost.
+   */
+  public func serialized(options options: [JSON.Serializer.Option] = []) throws -> String {
+    return try JSON.Serializer.serialize(self, options: options)
+  }
+}
 
 extension JSON: CustomStringConvertible {
   public var description: String {

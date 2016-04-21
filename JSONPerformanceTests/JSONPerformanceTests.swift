@@ -1,6 +1,46 @@
 
 import XCTest
-@testable import JSON
+import JSON
+
+let json: JSON = {
+  print("Generating jsonString")
+  
+  let numElements = 100_000
+  let arc4random_max: UInt64 = 0x100000000
+  
+  func randomNumber() -> Double { return Double(arc4random()) / Double(arc4random_max) }
+  
+  func randomName() -> String {
+    var str = ""
+    let chars = Array("abcdefghijklmnopqrstuvwxyz".characters)
+    for _ in 0...5 {
+      let char = chars[Int(arc4random_uniform(UInt32(chars.count)))]
+      str.append(char)
+    }
+    str.appendContentsOf(" ")
+    str.appendContentsOf(arc4random_uniform(10000).description)
+    return str
+  }
+  
+  var arr: [JSON] = []
+  
+  for _ in 0..<numElements {
+    arr.append(
+      [
+        "x": randomNumber(),
+        "y": randomNumber(),
+        "z": randomNumber(),
+        "name": randomName(),
+        "opts": [
+          "1": [1, true] as JSON
+          ] as JSON
+        ] as JSON
+    )
+  }
+  print("Done generating jsonString")
+  
+  return ["coordinates": arr.encoded(), "info": "some info"]
+}()
 
 class JSONPerformanceTests: XCTestCase {
   
@@ -8,61 +48,20 @@ class JSONPerformanceTests: XCTestCase {
   override func setUp() {
     super.setUp()
     
-    json = {
-      print("Generating jsonString")
-      
-      let numElements = 10_000
-      let arc4random_max = 0x100000000
-      
-      func randomNumber() -> Double { return Double(arc4random()) / Double(arc4random_max) }
-      
-      func randomName() -> String {
-        var str = ""
-        let chars = Array("abcdefghijklmnopqrstuvwxyz".characters)
-        for _ in 0...5 {
-          let char = chars[Int(arc4random_uniform(UInt32(chars.count)))]
-          str.append(char)
-        }
-        str.appendContentsOf(" ")
-        str.appendContentsOf(arc4random_uniform(10000).description)
-        return str
-      }
-      
-      var arr: [JSON] = []
-      
-      for _ in 0..<numElements {
-        arr.append(
-          [
-            "x": randomNumber(),
-            "y": randomNumber(),
-            "z": randomNumber(),
-            "name": randomName(),
-            "opts": [
-              "1": [1, true] as JSON
-              ] as JSON
-            ] as JSON
-        )
-      }
-      print("Done generating jsonString")
-      
-      return ["coordinates": arr.encoded(), "info": "some info"]
-    }()
-    
-    jsonString = try! JSONSerializer.serialize(json)
+    jsonString = try! JSON.Serializer.serialize(json)
     
     let jsonArray: JSON = .array((100_000..<200_000).map({ i in JSON(i) }))
     largeJsonArray = try! jsonArray.serialized()
   }
   
-  var json: JSON!
   var jsonString: String!
   var largeJsonArray: String!
   
-  func testParsePerformanceWithLargeJson() {
+  func testVDKAParsePerformanceWithLargeJson() { // VDKAParser
     
     measureBlock {
       do {
-        self.json = try JSONParser.parse(self.jsonString)
+        try JSON.Parser.parse(self.jsonString)
       } catch {
         if let printableError = error as? CustomStringConvertible {
           XCTFail("JSON parse error: \(printableError)")
@@ -71,7 +70,7 @@ class JSONPerformanceTests: XCTestCase {
     }
   }
   
-  func testParsePerformanceWithLargeJsonNSJSONSerialization() {
+  func testParsePerformanceWithLargeJsonNSJSONSerialization() { // Apple
     
     let data = jsonString.dataUsingEncoding(NSUTF8StringEncoding)!
     
@@ -86,49 +85,10 @@ class JSONPerformanceTests: XCTestCase {
     }
   }
   
-  func testParseSimple10KeyPairObject() {
-    let tenKeyJson = try! ([
-      "abcde": 1,
-      "yerea": "ueiro",
-      "leida": false,
-      "iweur": true,
-      "cnale": 9324,
-      "awier": 839.4,
-      "weiru": -1.0,
-      "eiruaa": "12311238jf",
-      "ljasdflkj": true,
-      "ewkrjl": "qelrkjl"
-    ] as JSON).serialized()
-    
+  func testVDKASerializerSpeed() {
     measureBlock {
       do {
-        for _ in 0..<10000 {
-          try JSONParser.parse(tenKeyJson)
-        }
-      } catch {
-        if let printableError = error as? CustomStringConvertible {
-          XCTFail("JSON parse error: \(printableError)")
-        }
-      }
-    }
-  }
-  
-  func testParseLargeJsonArray() {
-    measureBlock {
-      do {
-        try JSONSerializer.serialize(self.largeJsonArray!)
-      } catch {
-        if let printableError = error as? CustomStringConvertible {
-          XCTFail("JSON parse error: \(printableError)")
-        }
-      }
-    }
-  }
-  
-  func testSerializerSpeed() {
-    measureBlock {
-      do {
-        try JSONSerializer.serialize(self.json!)
+        try JSON.Serializer.serialize(json)
       } catch {
         if let printableError = error as? CustomStringConvertible {
           XCTFail("JSON parse error: \(printableError)")
@@ -154,7 +114,7 @@ class JSONPerformanceTests: XCTestCase {
   func testSerializerSpeedPrettyPrinting() {
     measureBlock {
       do {
-        try JSONSerializer.serialize(self.json!, options: [.prettyPrint])
+        try JSON.Serializer.serialize(json, options: [.prettyPrint])
       } catch {
         if let printableError = error as? CustomStringConvertible {
           XCTFail("JSON parse error: \(printableError)")
