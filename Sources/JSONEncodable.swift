@@ -18,7 +18,6 @@ public protocol JSONEncodable {
 
 // MARK: - JSON Conformance to JSONEncodable
 
-//// NOTE: Is this necessary?
 extension JSON: JSONEncodable {
   public init(_ value: JSONEncodable) {
     self = value.encoded()
@@ -26,6 +25,15 @@ extension JSON: JSONEncodable {
   
   public func encoded() -> JSON {
     return self
+  }
+}
+
+
+// MARK: - Add `serialized` to `JSONEncodable`
+
+extension JSONEncodable {
+  public func serialized(options options: [JSON.Serializer.Option] = []) throws -> String {
+    return try JSON.Serializer.serialize(self.encoded(), options: options)
   }
 }
 

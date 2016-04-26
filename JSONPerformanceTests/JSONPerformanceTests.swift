@@ -85,7 +85,7 @@ class JSONPerformanceTests: XCTestCase {
     }
   }
   
-  func testVDKASerializerSpeed() {
+  func testSerializerSpeed() {
     measureBlock {
       do {
         try JSON.Serializer.serialize(json)

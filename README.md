@@ -1,5 +1,8 @@
 # JSON
 
+[![Language](https://img.shields.io/badge/Swift-2.2-brightgreen.svg)](http://swift.org)
+[![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
+
 This library makes dealing with JSON feel more _native_ to Swift.
 
 Internally JSON is represented as follows in a simple `enum`. This means there is no
@@ -59,7 +62,7 @@ extension Person: JSONEncodable {
     return [
       "name": name,
       "age": age,
-      "accountBalances": accountsBalances.encoded(),
+      "accountBalances": accountsBalances.encoded(), // encoded is called for _container_ objects like `Array<T>`, `Optional<T>`
       "totalBalance": totalBalance
     ]
   }
@@ -104,7 +107,7 @@ print(try! JSONSerializer.serialize(person, options: [.prettyPrint]))
 extension Currency: JSONDecodable {} // RawRepresentable types have a default implementation. You must still conform though.
 extension Money: JSONDecodable {
   static func decode(json: JSON) throws -> Money {
-    let minorUnits = try json["minorUnits"].int ?? raise(JSON.Error.BadField("minorUnits"))
+    let minorUnits = try json["minorUnits"].int ?? JSON.Error.BadField("minorUnits")
     let currency: Currency = try json.get("currency")
     return Money(minorUnits: minorUnits, currency: currency)
   }
@@ -112,8 +115,8 @@ extension Money: JSONDecodable {
 
 extension Person: JSONDecodable {
   static func decode(json: JSON) throws -> Person {
-    let name = try json["name"].string ?? raise(JSON.Error.BadField("name"))
-    let age = try json["age"].int ?? raise(JSON.Error.BadField("age"))
+    let name = try json["name"].string ?? JSON.Error.BadField("name")
+    let age = try json["age"].int ?? JSON.Error.BadField("age")
     let accountBalances: [Money] = try json["accountBalances"].array?.flatMap(Money.init) ?? []
     return Person(name: name, age: age, accountBalances: accountBalances)
   }
@@ -166,6 +169,22 @@ extension JSON: DictionaryLiteralConvertible {
 }
 ```
 
+## JSONDecodable
+Conforming types can be decoded and initialized directly from JSON
+```swift
+public protocol JSONDecodable {
+  init(json: JSON) throws
+  static func decode(json: JSON) throws -> Self
+}
+
+// Default implementation
+extension JSONDecodable {
+  public init(json: JSON) throws {
+    self = try Self.decode(json)
+  }
+}
+```
+
 ## Parser
 ```swift
 JSONParser.parse(string: String, options: [JSONParser.Option] = []) throws -> JSON
@@ -177,6 +196,19 @@ Throws a `JSONParser.Error` should any issue be encountered.
 JSONSerializer.serialize(json: JSON, options: [JSONSerializer.Option] = []) throws -> String
 ```
 Throws `iff` Double values are non finite.
+
+## Operators
+
+The `??` operator has been overloaded for convencience allowing throw on nil behaviour.
+```swift
+infix operator ?? { associativity right precedence 131 } // matches stdlib ??
+
+/// Throws the error on the right side. Use to throw on nil.
+public func ??<T>(lhs: T?, @autoclosure error: () -> ErrorType) throws -> T {
+  guard case .Some(let value) = lhs else { throw error() }
+  return value
+}
+```
 
 # Language Limitations
 - Protocol extensions cannot have add conformance to other protocols [radar](http://www.openradar.me/23433955)
