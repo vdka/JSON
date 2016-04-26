@@ -345,13 +345,13 @@ extension JSON.Parser {
 
 extension JSON.Parser {
   
-  struct Error: ErrorType {
+  public struct Error: ErrorType {
     let char: UInt
     let line: UInt
     let code: ErrorCode
   }
   
-  enum ErrorCode: ErrorType {
+  public enum ErrorCode: ErrorType {
     case missingColon
     case trailingComma
     case expectedColon
@@ -364,7 +364,7 @@ extension JSON.Parser {
 }
 
 extension JSON.Parser.Error: CustomStringConvertible {
-  var description: String {
+  public var description: String {
     return "\(code) @ ln: \(line), col: \(char)"
   }
 }

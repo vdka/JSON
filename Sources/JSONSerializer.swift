@@ -105,8 +105,9 @@ extension JSON.Serializer {
       defer { i += 1 }
       if skipNull && v == .null {
         nullsFound += 1
+        continue
       }
-      if i != 0 && i != a.count - nullsFound {
+      if i != nullsFound { // check we have seen non null values
         stream.write(",")
         writeNewlineIfNeeded(to: &stream)
       }
@@ -132,8 +133,9 @@ extension JSON.Serializer {
       defer { i += 1 }
       if skipNull && value == .null {
         nullsFound += 1
+        continue
       }
-      if i != 0 && i != o.count - nullsFound {
+      if i != nullsFound { // check we have seen non null values
         stream.write(",")
         writeNewlineIfNeeded(to: &stream)
       }
