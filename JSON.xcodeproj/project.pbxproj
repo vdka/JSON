@@ -105,7 +105,7 @@
 		AA213B291CBC800800910D50 /* JSONError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JSONError.swift; sourceTree = "<group>"; };
 		AA213B2A1CBC800800910D50 /* JSONOptionalExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JSONOptionalExtensions.swift; sourceTree = "<group>"; };
 		AA213B381CBC804E00910D50 /* Package.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Package.swift; sourceTree = "<group>"; };
-		AA213B391CBC823F00910D50 /* LinuxMain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = LinuxMain.swift; path = Tests/LinuxMain.swift; sourceTree = "<group>"; };
+		AA213B391CBC823F00910D50 /* LinuxMain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinuxMain.swift; sourceTree = "<group>"; };
 		AA213B3A1CBC8A7B00910D50 /* JSONTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = JSONTests.swift; path = JSON/JSONTests.swift; sourceTree = "<group>"; };
 		AA3459711CCF6F9E00DD3F87 /* GenerateJSON.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GenerateJSON.swift; sourceTree = "<group>"; };
 		AA3459721CCF6F9E00DD3F87 /* Shared.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Shared.swift; sourceTree = "<group>"; };
@@ -118,17 +118,17 @@
 		AA4CE86B1CC469F200A1C8EB /* JSONParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JSONParser.swift; sourceTree = "<group>"; };
 		AA853ADD1CBE366500FD3970 /* JSONPerformanceTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = JSONPerformanceTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		AA853AF11CBE9DFE00FD3970 /* JSON.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = JSON.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		AA853AF31CBE9DFE00FD3970 /* JSON watchOS.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "JSON watchOS.h"; sourceTree = "<group>"; };
-		AA853AF51CBE9DFE00FD3970 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		AA853AFE1CBE9E1E00FD3970 /* JSON.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = JSON.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		AA853B001CBE9E1E00FD3970 /* JSON tvOS.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "JSON tvOS.h"; sourceTree = "<group>"; };
-		AA853B021CBE9E1E00FD3970 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		AA853B0B1CBE9E4700FD3970 /* JSON.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = JSON.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		AA853B0D1CBE9E4700FD3970 /* JSON OSX.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "JSON OSX.h"; sourceTree = "<group>"; };
-		AA853B0F1CBE9E4700FD3970 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		AAB69A9E1CC8D9C300940C5D /* JSONSerializer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JSONSerializer.swift; sourceTree = "<group>"; };
 		AAB69AA41CC8FB5300940C5D /* SerializerUnitTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SerializerUnitTests.swift; path = JSON/SerializerUnitTests.swift; sourceTree = "<group>"; };
 		AAC7F5901CCE5083001DF64A /* ReadmeTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReadmeTests.swift; sourceTree = "<group>"; };
+		AAC7F66B1CCF3491001DF64A /* Info_iOS.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Info_iOS.plist; path = SupportingFiles/Info_iOS.plist; sourceTree = "<group>"; };
+		AAC7F66C1CCF3491001DF64A /* Info_OSX.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Info_OSX.plist; path = SupportingFiles/Info_OSX.plist; sourceTree = "<group>"; };
+		AAC7F66D1CCF3491001DF64A /* Info_tvOS.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Info_tvOS.plist; path = SupportingFiles/Info_tvOS.plist; sourceTree = "<group>"; };
+		AAC7F66E1CCF3491001DF64A /* Info_watchOS.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Info_watchOS.plist; path = SupportingFiles/Info_watchOS.plist; sourceTree = "<group>"; };
+		AAC7F66F1CCF3491001DF64A /* PerformanceTestsInfo.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = PerformanceTestsInfo.plist; path = SupportingFiles/PerformanceTestsInfo.plist; sourceTree = "<group>"; };
+		AAC7F6701CCF3491001DF64A /* TestsInfo.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = TestsInfo.plist; path = SupportingFiles/TestsInfo.plist; sourceTree = "<group>"; };
 		AAFB64531CC66F3900C269E3 /* ParserUnitTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ParserUnitTests.swift; path = JSON/ParserUnitTests.swift; sourceTree = "<group>"; };
 		AAFB64591CC6F09500C269E3 /* Profiling */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Profiling; sourceTree = BUILT_PRODUCTS_DIR; };
 		AAFB645B1CC6F09500C269E3 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
@@ -195,13 +195,11 @@
 		AA213B001CBC7F5F00910D50 = {
 			isa = PBXGroup;
 			children = (
+				AA213B381CBC804E00910D50 /* Package.swift */,
 				AA213B241CBC800800910D50 /* Sources */,
 				AA213B351CBC803100910D50 /* Tests */,
 				AA853ADE1CBE366500FD3970 /* PerformanceTests */,
 				AA213B3C1CBC8A8900910D50 /* SupportingFiles */,
-				AA853AF21CBE9DFE00FD3970 /* JSON watchOS */,
-				AA853AFF1CBE9E1E00FD3970 /* JSON tvOS */,
-				AA853B0C1CBE9E4700FD3970 /* JSON OSX */,
 				AAFB645A1CC6F09500C269E3 /* Profiling */,
 				AA213B0B1CBC7F5F00910D50 /* Products */,
 			);
@@ -239,6 +237,7 @@
 		AA213B351CBC803100910D50 /* Tests */ = {
 			isa = PBXGroup;
 			children = (
+				AAC7F66A1CCF3486001DF64A /* Linux */,
 				AA213B3A1CBC8A7B00910D50 /* JSONTests.swift */,
 				AAFB64531CC66F3900C269E3 /* ParserUnitTests.swift */,
 				AAB69AA41CC8FB5300940C5D /* SerializerUnitTests.swift */,
@@ -250,8 +249,12 @@
 		AA213B3C1CBC8A8900910D50 /* SupportingFiles */ = {
 			isa = PBXGroup;
 			children = (
-				AA213B381CBC804E00910D50 /* Package.swift */,
-				AA213B391CBC823F00910D50 /* LinuxMain.swift */,
+				AAC7F66B1CCF3491001DF64A /* Info_iOS.plist */,
+				AAC7F66C1CCF3491001DF64A /* Info_OSX.plist */,
+				AAC7F66D1CCF3491001DF64A /* Info_tvOS.plist */,
+				AAC7F66E1CCF3491001DF64A /* Info_watchOS.plist */,
+				AAC7F66F1CCF3491001DF64A /* PerformanceTestsInfo.plist */,
+				AAC7F6701CCF3491001DF64A /* TestsInfo.plist */,
 			);
 			name = SupportingFiles;
 			sourceTree = "<group>";
@@ -280,31 +283,12 @@
 			path = JSONPerformanceTests;
 			sourceTree = "<group>";
 		};
-		AA853AF21CBE9DFE00FD3970 /* JSON watchOS */ = {
+		AAC7F66A1CCF3486001DF64A /* Linux */ = {
 			isa = PBXGroup;
 			children = (
-				AA853AF31CBE9DFE00FD3970 /* JSON watchOS.h */,
-				AA853AF51CBE9DFE00FD3970 /* Info.plist */,
+				AA213B391CBC823F00910D50 /* LinuxMain.swift */,
 			);
-			path = "JSON watchOS";
-			sourceTree = "<group>";
-		};
-		AA853AFF1CBE9E1E00FD3970 /* JSON tvOS */ = {
-			isa = PBXGroup;
-			children = (
-				AA853B001CBE9E1E00FD3970 /* JSON tvOS.h */,
-				AA853B021CBE9E1E00FD3970 /* Info.plist */,
-			);
-			path = "JSON tvOS";
-			sourceTree = "<group>";
-		};
-		AA853B0C1CBE9E4700FD3970 /* JSON OSX */ = {
-			isa = PBXGroup;
-			children = (
-				AA853B0D1CBE9E4700FD3970 /* JSON OSX.h */,
-				AA853B0F1CBE9E4700FD3970 /* Info.plist */,
-			);
-			path = "JSON OSX";
+			name = Linux;
 			sourceTree = "<group>";
 		};
 		AAFB645A1CC6F09500C269E3 /* Profiling */ = {

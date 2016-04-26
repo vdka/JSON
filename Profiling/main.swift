@@ -51,7 +51,7 @@ let json: JSON = {
 let jsonString = try! JSON.Serializer.serialize(json)
 //let jsonString = try! json.serialized(options: [.prettyPrint])
 
-try! VDKAParser.parse(jsonString)
+try! JSON.Parser.parse(jsonString)
 
 //try! JSON.serialize(json)
 
