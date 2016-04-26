@@ -15,11 +15,20 @@
 		AA213B311CBC800800910D50 /* JSONError.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA213B291CBC800800910D50 /* JSONError.swift */; };
 		AA213B321CBC800800910D50 /* JSONOptionalExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA213B2A1CBC800800910D50 /* JSONOptionalExtensions.swift */; };
 		AA213B3B1CBC8A7B00910D50 /* JSONTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA213B3A1CBC8A7B00910D50 /* JSONTests.swift */; };
+		AA3459741CCF6F9E00DD3F87 /* Shared.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA3459721CCF6F9E00DD3F87 /* Shared.swift */; };
+		AA3459791CCF7FC300DD3F87 /* ParserBenchmarks.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA3459781CCF7FC300DD3F87 /* ParserBenchmarks.swift */; };
+		AA34597D1CCF801200DD3F87 /* JASON.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AA34597A1CCF801200DD3F87 /* JASON.framework */; };
+		AA34597E1CCF801200DD3F87 /* PMJSON.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AA34597B1CCF801200DD3F87 /* PMJSON.framework */; };
+		AA34597F1CCF801200DD3F87 /* SwiftyJSON.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AA34597C1CCF801200DD3F87 /* SwiftyJSON.framework */; };
+		AA3459801CCF832500DD3F87 /* JASON.framework in Resources */ = {isa = PBXBuildFile; fileRef = AA34597A1CCF801200DD3F87 /* JASON.framework */; };
+		AA3459811CCF832500DD3F87 /* PMJSON.framework in Resources */ = {isa = PBXBuildFile; fileRef = AA34597B1CCF801200DD3F87 /* PMJSON.framework */; };
+		AA3459821CCF832500DD3F87 /* SwiftyJSON.framework in Resources */ = {isa = PBXBuildFile; fileRef = AA34597C1CCF801200DD3F87 /* SwiftyJSON.framework */; };
+		AA3459861CCF88CC00DD3F87 /* test.json in Resources */ = {isa = PBXBuildFile; fileRef = AA3459851CCF88CC00DD3F87 /* test.json */; };
+		AA3459881CCF898500DD3F87 /* SerializerBenchmarks.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA3459871CCF898500DD3F87 /* SerializerBenchmarks.swift */; };
 		AA4CE86C1CC469F200A1C8EB /* JSONParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA4CE86B1CC469F200A1C8EB /* JSONParser.swift */; };
 		AA4CE86D1CC469F200A1C8EB /* JSONParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA4CE86B1CC469F200A1C8EB /* JSONParser.swift */; };
 		AA4CE86E1CC469F200A1C8EB /* JSONParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA4CE86B1CC469F200A1C8EB /* JSONParser.swift */; };
 		AA4CE86F1CC469F200A1C8EB /* JSONParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA4CE86B1CC469F200A1C8EB /* JSONParser.swift */; };
-		AA853AE01CBE366500FD3970 /* JSONPerformanceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA853ADF1CBE366500FD3970 /* JSONPerformanceTests.swift */; };
 		AA853AE21CBE366500FD3970 /* JSON.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AA213B0A1CBC7F5F00910D50 /* JSON.framework */; };
 		AA853B131CBEA3A000FD3970 /* JSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA213B251CBC800800910D50 /* JSON.swift */; };
 		AA853B141CBEA3A000FD3970 /* JSONAccessors.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA213B261CBC800800910D50 /* JSONAccessors.swift */; };
@@ -98,9 +107,16 @@
 		AA213B381CBC804E00910D50 /* Package.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Package.swift; sourceTree = "<group>"; };
 		AA213B391CBC823F00910D50 /* LinuxMain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = LinuxMain.swift; path = Tests/LinuxMain.swift; sourceTree = "<group>"; };
 		AA213B3A1CBC8A7B00910D50 /* JSONTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = JSONTests.swift; path = JSON/JSONTests.swift; sourceTree = "<group>"; };
+		AA3459711CCF6F9E00DD3F87 /* GenerateJSON.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GenerateJSON.swift; sourceTree = "<group>"; };
+		AA3459721CCF6F9E00DD3F87 /* Shared.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Shared.swift; sourceTree = "<group>"; };
+		AA3459781CCF7FC300DD3F87 /* ParserBenchmarks.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ParserBenchmarks.swift; sourceTree = "<group>"; };
+		AA34597A1CCF801200DD3F87 /* JASON.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JASON.framework; path = ../Carthage/Build/iOS/JASON.framework; sourceTree = "<group>"; };
+		AA34597B1CCF801200DD3F87 /* PMJSON.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PMJSON.framework; path = ../Carthage/Build/iOS/PMJSON.framework; sourceTree = "<group>"; };
+		AA34597C1CCF801200DD3F87 /* SwiftyJSON.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftyJSON.framework; path = ../Carthage/Build/iOS/SwiftyJSON.framework; sourceTree = "<group>"; };
+		AA3459851CCF88CC00DD3F87 /* test.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = test.json; sourceTree = "<group>"; };
+		AA3459871CCF898500DD3F87 /* SerializerBenchmarks.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SerializerBenchmarks.swift; sourceTree = "<group>"; };
 		AA4CE86B1CC469F200A1C8EB /* JSONParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JSONParser.swift; sourceTree = "<group>"; };
 		AA853ADD1CBE366500FD3970 /* JSONPerformanceTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = JSONPerformanceTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		AA853ADF1CBE366500FD3970 /* JSONPerformanceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONPerformanceTests.swift; sourceTree = "<group>"; };
 		AA853AF11CBE9DFE00FD3970 /* JSON.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = JSON.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		AA853AF31CBE9DFE00FD3970 /* JSON watchOS.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "JSON watchOS.h"; sourceTree = "<group>"; };
 		AA853AF51CBE9DFE00FD3970 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -139,6 +155,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				AA853AE21CBE366500FD3970 /* JSON.framework in Frameworks */,
+				AA34597D1CCF801200DD3F87 /* JASON.framework in Frameworks */,
+				AA34597E1CCF801200DD3F87 /* PMJSON.framework in Frameworks */,
+				AA34597F1CCF801200DD3F87 /* SwiftyJSON.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -237,10 +256,25 @@
 			name = SupportingFiles;
 			sourceTree = "<group>";
 		};
+		AA3459841CCF836E00DD3F87 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				AA34597A1CCF801200DD3F87 /* JASON.framework */,
+				AA34597B1CCF801200DD3F87 /* PMJSON.framework */,
+				AA34597C1CCF801200DD3F87 /* SwiftyJSON.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		AA853ADE1CBE366500FD3970 /* PerformanceTests */ = {
 			isa = PBXGroup;
 			children = (
-				AA853ADF1CBE366500FD3970 /* JSONPerformanceTests.swift */,
+				AA3459841CCF836E00DD3F87 /* Frameworks */,
+				AA3459851CCF88CC00DD3F87 /* test.json */,
+				AA3459711CCF6F9E00DD3F87 /* GenerateJSON.swift */,
+				AA3459721CCF6F9E00DD3F87 /* Shared.swift */,
+				AA3459781CCF7FC300DD3F87 /* ParserBenchmarks.swift */,
+				AA3459871CCF898500DD3F87 /* SerializerBenchmarks.swift */,
 			);
 			name = PerformanceTests;
 			path = JSONPerformanceTests;
@@ -357,7 +391,9 @@
 			buildPhases = (
 				AA853AD91CBE366500FD3970 /* Sources */,
 				AA853ADA1CBE366500FD3970 /* Frameworks */,
+				AA3459751CCF7E5E00DD3F87 /* Generate JSON */,
 				AA853ADB1CBE366500FD3970 /* Resources */,
+				AA3459831CCF835400DD3F87 /* Carthage Copy */,
 			);
 			buildRules = (
 			);
@@ -516,6 +552,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AA3459801CCF832500DD3F87 /* JASON.framework in Resources */,
+				AA3459861CCF88CC00DD3F87 /* test.json in Resources */,
+				AA3459811CCF832500DD3F87 /* PMJSON.framework in Resources */,
+				AA3459821CCF832500DD3F87 /* SwiftyJSON.framework in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -541,6 +581,40 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		AA3459751CCF7E5E00DD3F87 /* Generate JSON */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Generate JSON";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "cd \"${PROJECT_DIR}/JSONPerformanceTests\"\nif [ ! -e \"test.json\" ]; then\n  ./GenerateJSON.swift\nfi";
+		};
+		AA3459831CCF835400DD3F87 /* Carthage Copy */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"$(SRCROOT)/Carthage/Build/iOS/JASON.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/PMJSON.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/SwiftyJSON.framework",
+			);
+			name = "Carthage Copy";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "/usr/local/bin/carthage copy-frameworks";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		AA213B051CBC7F5F00910D50 /* Sources */ = {
@@ -573,7 +647,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				AA853AE01CBE366500FD3970 /* JSONPerformanceTests.swift in Sources */,
+				AA3459791CCF7FC300DD3F87 /* ParserBenchmarks.swift in Sources */,
+				AA3459881CCF898500DD3F87 /* SerializerBenchmarks.swift in Sources */,
+				AA3459741CCF6F9E00DD3F87 /* Shared.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -809,6 +885,10 @@
 		AA853AE61CBE366500FD3970 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS/**",
+				);
 				INFOPLIST_FILE = SupportingFiles/PerformanceTestsInfo.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.vdka.JSONPerformanceTests;
@@ -819,6 +899,10 @@
 		AA853AE71CBE366500FD3970 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS/**",
+				);
 				GCC_OPTIMIZATION_LEVEL = fast;
 				INFOPLIST_FILE = SupportingFiles/PerformanceTestsInfo.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
