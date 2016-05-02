@@ -3,10 +3,13 @@
 // MARK: - JSON.Parser
 
 #if os(Linux)
-  import GlibC
+  import func Glibc.strtod
+  import func Glibc.strtoll
 #else
-  import Darwin.C
+  import func Darwin.C.stdlib.strtod
+  import func Darwin.C.stdlib.strtoll
 #endif
+
 
 // json special characters
 let arrayOpen: UTF8.CodeUnit = "[".utf8.first!
