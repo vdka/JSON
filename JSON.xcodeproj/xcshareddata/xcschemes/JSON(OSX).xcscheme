@@ -16,7 +16,7 @@
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "AA853B0A1CBE9E4700FD3970"
                BuildableName = "JSON.framework"
-               BlueprintName = "JSON OSX"
+               BlueprintName = "JSON(OSX)"
                ReferencedContainer = "container:JSON.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -45,7 +45,7 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "AA853B0A1CBE9E4700FD3970"
             BuildableName = "JSON.framework"
-            BlueprintName = "JSON OSX"
+            BlueprintName = "JSON(OSX)"
             ReferencedContainer = "container:JSON.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -67,7 +67,7 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "AA853B0A1CBE9E4700FD3970"
             BuildableName = "JSON.framework"
-            BlueprintName = "JSON OSX"
+            BlueprintName = "JSON(OSX)"
             ReferencedContainer = "container:JSON.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -85,7 +85,7 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "AA853B0A1CBE9E4700FD3970"
             BuildableName = "JSON.framework"
-            BlueprintName = "JSON OSX"
+            BlueprintName = "JSON(OSX)"
             ReferencedContainer = "container:JSON.xcodeproj">
          </BuildableReference>
       </MacroExpansion>

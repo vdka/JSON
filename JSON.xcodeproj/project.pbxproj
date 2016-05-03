@@ -333,9 +333,9 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
-		AA213B091CBC7F5F00910D50 /* JSON iOS */ = {
+		AA213B091CBC7F5F00910D50 /* JSON(iOS) */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = AA213B1E1CBC7F5F00910D50 /* Build configuration list for PBXNativeTarget "JSON iOS" */;
+			buildConfigurationList = AA213B1E1CBC7F5F00910D50 /* Build configuration list for PBXNativeTarget "JSON(iOS)" */;
 			buildPhases = (
 				AA213B051CBC7F5F00910D50 /* Sources */,
 				AA213B061CBC7F5F00910D50 /* Frameworks */,
@@ -346,7 +346,7 @@
 			);
 			dependencies = (
 			);
-			name = "JSON iOS";
+			name = "JSON(iOS)";
 			productName = JSON;
 			productReference = AA213B0A1CBC7F5F00910D50 /* JSON.framework */;
 			productType = "com.apple.product-type.framework";
@@ -389,9 +389,9 @@
 			productReference = AA853ADD1CBE366500FD3970 /* JSONPerformanceTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		AA853AF01CBE9DFE00FD3970 /* JSON watchOS */ = {
+		AA853AF01CBE9DFE00FD3970 /* JSON(watchOS) */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = AA853AF61CBE9DFE00FD3970 /* Build configuration list for PBXNativeTarget "JSON watchOS" */;
+			buildConfigurationList = AA853AF61CBE9DFE00FD3970 /* Build configuration list for PBXNativeTarget "JSON(watchOS)" */;
 			buildPhases = (
 				AA853AEC1CBE9DFE00FD3970 /* Sources */,
 				AA853AED1CBE9DFE00FD3970 /* Frameworks */,
@@ -402,14 +402,14 @@
 			);
 			dependencies = (
 			);
-			name = "JSON watchOS";
+			name = "JSON(watchOS)";
 			productName = "JSON watchOS";
 			productReference = AA853AF11CBE9DFE00FD3970 /* JSON.framework */;
 			productType = "com.apple.product-type.framework";
 		};
-		AA853AFD1CBE9E1E00FD3970 /* JSON tvOS */ = {
+		AA853AFD1CBE9E1E00FD3970 /* JSON(tvOS) */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = AA853B031CBE9E1E00FD3970 /* Build configuration list for PBXNativeTarget "JSON tvOS" */;
+			buildConfigurationList = AA853B031CBE9E1E00FD3970 /* Build configuration list for PBXNativeTarget "JSON(tvOS)" */;
 			buildPhases = (
 				AA853AF91CBE9E1E00FD3970 /* Sources */,
 				AA853AFA1CBE9E1E00FD3970 /* Frameworks */,
@@ -420,14 +420,14 @@
 			);
 			dependencies = (
 			);
-			name = "JSON tvOS";
+			name = "JSON(tvOS)";
 			productName = "JSON tvOS";
 			productReference = AA853AFE1CBE9E1E00FD3970 /* JSON.framework */;
 			productType = "com.apple.product-type.framework";
 		};
-		AA853B0A1CBE9E4700FD3970 /* JSON OSX */ = {
+		AA853B0A1CBE9E4700FD3970 /* JSON(OSX) */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = AA853B101CBE9E4700FD3970 /* Build configuration list for PBXNativeTarget "JSON OSX" */;
+			buildConfigurationList = AA853B101CBE9E4700FD3970 /* Build configuration list for PBXNativeTarget "JSON(OSX)" */;
 			buildPhases = (
 				AA853B061CBE9E4700FD3970 /* Sources */,
 				AA853B071CBE9E4700FD3970 /* Frameworks */,
@@ -438,7 +438,7 @@
 			);
 			dependencies = (
 			);
-			name = "JSON OSX";
+			name = "JSON(OSX)";
 			productName = "JSON OSX";
 			productReference = AA853B0B1CBE9E4700FD3970 /* JSON.framework */;
 			productType = "com.apple.product-type.framework";
@@ -506,10 +506,10 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				AA213B091CBC7F5F00910D50 /* JSON iOS */,
-				AA853AF01CBE9DFE00FD3970 /* JSON watchOS */,
-				AA853AFD1CBE9E1E00FD3970 /* JSON tvOS */,
-				AA853B0A1CBE9E4700FD3970 /* JSON OSX */,
+				AA213B091CBC7F5F00910D50 /* JSON(iOS) */,
+				AA853AF01CBE9DFE00FD3970 /* JSON(watchOS) */,
+				AA853AFD1CBE9E1E00FD3970 /* JSON(tvOS) */,
+				AA853B0A1CBE9E4700FD3970 /* JSON(OSX) */,
 				AA213B131CBC7F5F00910D50 /* JSONTests */,
 				AA853ADC1CBE366500FD3970 /* JSONPerformanceTests */,
 				AAFB64581CC6F09500C269E3 /* Profiling */,
@@ -703,12 +703,12 @@
 /* Begin PBXTargetDependency section */
 		AA213B171CBC7F5F00910D50 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = AA213B091CBC7F5F00910D50 /* JSON iOS */;
+			target = AA213B091CBC7F5F00910D50 /* JSON(iOS) */;
 			targetProxy = AA213B161CBC7F5F00910D50 /* PBXContainerItemProxy */;
 		};
 		AA853AE41CBE366500FD3970 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = AA213B091CBC7F5F00910D50 /* JSON iOS */;
+			target = AA213B091CBC7F5F00910D50 /* JSON(iOS) */;
 			targetProxy = AA853AE31CBE366500FD3970 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -1057,7 +1057,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		AA213B1E1CBC7F5F00910D50 /* Build configuration list for PBXNativeTarget "JSON iOS" */ = {
+		AA213B1E1CBC7F5F00910D50 /* Build configuration list for PBXNativeTarget "JSON(iOS)" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				AA213B1F1CBC7F5F00910D50 /* Debug */,
@@ -1084,7 +1084,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		AA853AF61CBE9DFE00FD3970 /* Build configuration list for PBXNativeTarget "JSON watchOS" */ = {
+		AA853AF61CBE9DFE00FD3970 /* Build configuration list for PBXNativeTarget "JSON(watchOS)" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				AA853AF71CBE9DFE00FD3970 /* Debug */,
@@ -1093,7 +1093,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		AA853B031CBE9E1E00FD3970 /* Build configuration list for PBXNativeTarget "JSON tvOS" */ = {
+		AA853B031CBE9E1E00FD3970 /* Build configuration list for PBXNativeTarget "JSON(tvOS)" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				AA853B041CBE9E1E00FD3970 /* Debug */,
@@ -1102,7 +1102,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		AA853B101CBE9E4700FD3970 /* Build configuration list for PBXNativeTarget "JSON OSX" */ = {
+		AA853B101CBE9E4700FD3970 /* Build configuration list for PBXNativeTarget "JSON(OSX)" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				AA853B111CBE9E4700FD3970 /* Debug */,
