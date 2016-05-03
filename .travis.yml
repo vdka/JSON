@@ -1,41 +1,25 @@
-#osx_image: xcode7.3
-#language: generic
-#matrix:
-#  include:
-#    - os: osx   # Xcode current toolchain build
-#      env: TYPE=xcode
-#    - os: osx   # SPM on OSX
-#      env: TYPE=spm
-#    - os: linux # SPM on Linux
-#      dist: trusty
-#      sudo: required
-#      env: TYPE=spm
-#install: if [[ "$TYPE" == "spm" ]]; then eval "$(curl -sL https://gist.githubusercontent.com/kylef/5c0475ff02b7c7671d2a/raw/02090c7ede5a637b76e6df1710e83cd0bbe7dcdf/swiftenv-install.sh)"; fi
-#script: ./scripts/test $TYPE
-
-
 language: objective-c
 osx_image: xcode7.3
 xcode_project: JSON.xcodeproj
-# xcode_workspace: <WORKSPACE_PLACEHOLDER>
-xcode_scheme: "JSON(iOS)"
+xcode_scheme: JSON(iOS)
 xcode_sdk: iphonesimulator9.3
 env:
-  global: 
-    - FRAMEWORK_NAME=JSON
+  global:
+  - FRAMEWORK_NAME=JSON
 before_install:
-  - brew update
-  - brew outdated carthage || brew upgrade carthage
-before_script:
-  # bootstrap the dependencies for the project
-  # you can remove if you don't have dependencies
-  - carthage bootstrap  
+- brew update
+- brew outdated carthage || brew upgrade carthage
 before_deploy:
-  - carthage build --no-skip-current
-  - carthage archive $FRAMEWORK_NAME
-skip_cleanup: true
-on:
-  repo: vdka/json
-  tags: true
+- carthage build --no-skip-current
+- carthage archive $FRAMEWORK_NAME
+deploy:
+  provider: releases
+  api_key:
+    secure: UQUervK2lEoZZD6tTA2I+ujciXGrUqyuJWXbIB27f+zWEgC3O0rU40kBL/7Ng4RSuiewloFINiF8FXO0Ua6eg1VqYVeytKdxbEenqEnzYaJpk7JUMTPWjI3EA+C55zvxpgp6ruak9dz0cBndQsqLuWjTBdP673W5RE07iIRfkSzpZO1jzbAb0PLQGP5AQCuD+qbkgAaOzocbSpb18zF6xfmRVFe8HE+wO+vO21+mF7iMNtDBGwn4ZcyieOjzv4llLEg9vqeg/htjycxrpefYYScXKCCYIwnQI4XFmAv6iqQO6upzjLkEObKgB5p0XQJw1KTH7N+jsY6h/hb0MwzjDwmlmuaCPZfFbGKNX9DIb1BdO3C9IAnHFqPJam9Gw2QnmQOzmPeSFWJqOx2H+gaixZVrpPYvdUiiWqhSK999+y0EgPCMZ1E7a2s+16BEK0Mrv9YxozfYLpP5pT1jU0SGwKlVcdYVKmP+CP9BHexJPVstI3O6x09LLnFuvFFA1opXfCqtvMTlx5onaYN0hWolPA0hYxlsO++736dKbXs1If2DXiO910blb+wGI192/qFp3ypt0SuXioH6OYTYvb4UN9P4b7nsUFlezbNVcKz2gIEJPJP5Keq5zXr8BRX4KR9TJL5ned0wEsMN8Q8ikdRvXJ34ttiNArhDuqOy8okr8Ng=
+  file: $FRAMEWORK_NAME.framework.zip
+  skip_cleanup: true
+  on:
+    repo: VDKA/JSON
+    tags: true
 script:
-  - ./scripts/test xcode
+- ./scripts/test xcode
