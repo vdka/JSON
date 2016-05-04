@@ -39,15 +39,50 @@ class ParserUnitTests: XCTestCase {
 
   func testParseNumber() {
     
-    expect("21", toEqual: 21, afterApplying: JSON.Parser.parseNumber)
+    
+    // Simple tests
     expect("1", toEqual: 1, afterApplying: JSON.Parser.parseNumber)
+    expect("21", toEqual: 21, afterApplying: JSON.Parser.parseNumber)
+    expect("321", toEqual: 321, afterApplying: JSON.Parser.parseNumber)
+    
+    // Simple negative tests
+    
     expect("-1", toEqual: -1, afterApplying: JSON.Parser.parseNumber)
+    expect("-21", toEqual: -21, afterApplying: JSON.Parser.parseNumber)
+    expect("-321", toEqual: -321, afterApplying: JSON.Parser.parseNumber)
+    
+    // Exponent tests
+    
     expect("1e-1", toEqual: 0.1, afterApplying: JSON.Parser.parseNumber)
     expect("-1e-1", toEqual: -0.1, afterApplying: JSON.Parser.parseNumber)
-    expect("-000000001", toEqual: -1, afterApplying: JSON.Parser.parseNumber)
-    expect("-1e000000001", toEqual: -10.0, afterApplying: JSON.Parser.parseNumber)
+    expect("12.34e01", toEqual: 123.4, afterApplying: JSON.Parser.parseNumber)
+    expect("12.34e-01", toEqual: 1.234, afterApplying: JSON.Parser.parseNumber)
     expect("12345.6789e01", toEqual: 123456.789, afterApplying: JSON.Parser.parseNumber)
     expect("-12345.6789e-01", toEqual: -1234.56789, afterApplying: JSON.Parser.parseNumber)
+    
+    // Special exponent case (base x 10 ^ exponent) = (base{e|E}exponent) = base
+    
+    expect("12.34e0", toEqual: 12.34, afterApplying: JSON.Parser.parseNumber)
+    expect("12.34e-0", toEqual: 12.34, afterApplying: JSON.Parser.parseNumber)
+    
+    // Test leading 0's
+    
+    expect("00000001", toEqual: 1, afterApplying: JSON.Parser.parseNumber)
+    expect("-0000001", toEqual: -1, afterApplying: JSON.Parser.parseNumber)
+    
+    // Test int64 boundaries
+    
+    expect("9223372036854775807", toEqual: 9223372036854775807, afterApplying: JSON.Parser.parseNumber)
+    expect("-9223372036854775808", toEqual: -9223372036854775808, afterApplying: JSON.Parser.parseNumber)
+    
+    // Test decimal precision
+    
+    expect("0.0000000000000000001", toEqual: 0.0000000000000000001, afterApplying: JSON.Parser.parseNumber)
+    
+    // Test against a Swift bug found where switch statements with `where` clauses were having the where clause seemingly _ignored_?
+    // only occured when trailed by a non null character for some reason.
+    
+    expect("182.43,", toEqual: 182.43, afterApplying: JSON.Parser.parseNumber)
     
   }
   

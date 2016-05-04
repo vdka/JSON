@@ -2,15 +2,6 @@
 
 // MARK: - JSON.Parser
 
-#if os(Linux)
-  import func Glibc.strtod
-  import func Glibc.strtoll
-#else
-  import func Darwin.C.stdlib.strtod
-  import func Darwin.C.stdlib.strtoll
-#endif
-
-
 // json special characters
 let arrayOpen: UTF8.CodeUnit = "[".utf8.first!
 let objectOpen: UTF8.CodeUnit = "{".utf8.first!
@@ -39,6 +30,7 @@ let s: UTF8.CodeUnit = "s".utf8.first!
 let e: UTF8.CodeUnit = "e".utf8.first!
 
 // Number characters
+let zero: UTF8.CodeUnit = "0".utf8.first!
 let minus: UTF8.CodeUnit = "-".utf8.first!
 let numbers: Range<UTF8.CodeUnit> = "0".utf8.first!..."9".utf8.first!
 let decimal: UTF8.CodeUnit = ".".utf8.first!
@@ -86,12 +78,17 @@ extension JSON {
 // MARK: - External API
 
 extension JSON.Parser {
+  
   public static func parse(string: String, options: [Option] = []) throws -> JSON {
+    
     var parser = self.init(string: string, options: options)
-    var json: JSON = []
     do {
-      json = try parser.parseValue()
-    } catch let code as ErrorCode { // TODO: Make this work, or DEPRECATE it.
+      
+      return try parser.parseValue()
+      
+    } catch let code as ErrorCode {
+      // TODO: Make this work, or DEPRECATE it.
+      
       let charsIn = parser.scalars.count - parser.buffer.count
       print("Parsed up to: \n\(parser.scalars[0..<charsIn].map({ String($0) }).joinWithSeparator(""))")
       var line: UInt = 0
@@ -108,7 +105,6 @@ extension JSON.Parser {
       }
       throw Error(char: char, line: line, code: code)
     }
-    return json
   }
 }
 
@@ -294,42 +290,118 @@ extension JSON.Parser {
     } while true
   }
   
-  // TODO: check receiver size. preventing [over|under] flows?
-  // TODO: Remove dependency on `strtoll` & `strtod` JSONCore style 
   mutating func parseNumber() throws -> JSON {
-    
     assert(numbers ~= peek() || minus == peek())
-    
-    let startAddress = pointer
     
     var seenExponent = false
     var seenDecimal = false
+    
+    let negative: Bool = {
+      guard minus == peek() else { return false }
+      unsafePop()
+      return true
+    }()
+    
+    var significand: UInt64 = 0
+    var mantisa: UInt64 = 0
+    var divisor: Double = 10
+    var exponent: UInt64 = 0
+    var negativeExponent = false
+    var overflow: Bool
+    
     repeat {
-      switch unsafePop() {
-      case minus, numbers: break
+      switch peek() {
+      case numbers where !seenExponent && !seenDecimal:
         
-      case e where !seenExponent,
-           E where !seenExponent:
-        seenExponent = true
+        (significand, overflow) = UInt64.multiplyWithOverflow(significand, 10)
+        guard !overflow else { throw JSON.Parser.ErrorCode.numberOverflow }
         
-      case decimal where !seenDecimal:
+        (significand, overflow) = UInt64.addWithOverflow(significand, UInt64(unsafePop() - zero))
+        guard !overflow else { throw JSON.Parser.ErrorCode.numberOverflow }
+        
+        // naive solution. Ignores overflows
+//        significand *= 10
+//        significand += UInt64(unsafePop() - zero) // unsafePop() returns a UTF8.CodeUnit and `zero` is the UTF8.CodeUnit for '0'
+        
+      case numbers where seenDecimal && !seenExponent: // decimals must come before exponents
+        divisor *= 10
+        
+        (mantisa, overflow) = UInt64.multiplyWithOverflow(mantisa, 10)
+        guard !overflow else { throw JSON.Parser.ErrorCode.numberOverflow }
+        
+        (mantisa, overflow) = UInt64.addWithOverflow(mantisa, UInt64(unsafePop() - zero))
+        guard !overflow else { throw JSON.Parser.ErrorCode.numberOverflow }
+        
+        // naive solution. Ignores overflows
+//        mantisa *= 10
+//        mantisa += UInt64(unsafePop() - zero)
+        
+      case numbers where seenExponent:
+        
+        (exponent, overflow) = UInt64.multiplyWithOverflow(exponent, 10)
+        guard !overflow else { throw JSON.Parser.ErrorCode.numberOverflow }
+        
+        (exponent, overflow) = UInt64.addWithOverflow(exponent, UInt64(unsafePop() - zero))
+        guard !overflow else { throw JSON.Parser.ErrorCode.numberOverflow }
+        
+        // naive solution. Ignores overflows
+//        exponent *= 10
+//        exponent += UInt64(unsafePop() - zero)
+        
+      case decimal where !seenExponent && !seenDecimal:
+        unsafePop() // remove the decimal
         seenDecimal = true
         
-      default: throw ErrorCode.invalidNumber
-      }
-      
-      switch peek() {
-      case arrayClose, objectClose, comma, space, tab, cr, newline, 0:
-        let p = UnsafePointer<Int8>(startAddress)
-        return seenDecimal || seenExponent ?
-          .double(strtod(p, nil)) :
-          .integer(strtoll(p, nil, 10))
+      case E, e where !seenExponent:
+        unsafePop() // remove the 'e' || 'E'
+        seenExponent = true
+        if peek() == minus {
+          negativeExponent = true
+          unsafePop() // remove the '-'
+        }
         
-      default:
-        break
+        
+      // is end of number
+        
+      case arrayClose, objectClose, comma, space, tab, cr, newline, 0:
+        
+        switch (seenDecimal, seenExponent) {
+        case (false, false):
+          
+          if negative && significand == UInt64(Int64.max) + 1 {
+            return .integer(Int64.min)
+          } else if significand > UInt64(Int64.max) {
+            throw JSON.Parser.ErrorCode.numberOverflow
+          }
+          
+          return .integer(negative ? -Int64(significand) : Int64(significand))
+          
+        case (true, false):
+          
+          let n = Double(significand) + Double(mantisa) / (divisor / 10)
+          return .double(negative ? -n : n)
+          
+        case (false, true):
+          
+          let n = Double(significand)
+            .power(10, exponent: exponent, isNegative: negativeExponent)
+          
+          return .double(negative ? -n : n)
+          
+        case (true, true):
+          
+          let n = (Double(significand) + Double(mantisa) / (divisor / 10))
+            .power(10, exponent: exponent, isNegative: negativeExponent)
+          
+          return .double(negative ? -n : n)
+          
+        }
+        
+      default: throw JSON.Parser.ErrorCode.invalidNumber
       }
       
     } while true
+    
   }
 }
 
@@ -355,12 +427,13 @@ extension JSON.Parser {
     let code: ErrorCode
   }
   
-  public enum ErrorCode: ErrorType {
+  public enum ErrorCode: String, ErrorType {
     case missingColon
     case trailingComma
     case expectedColon
     case invalidSyntax
     case invalidNumber
+    case numberOverflow
     case invalidLiteral
     case invalidUnicode
     case endOfStream
@@ -370,5 +443,17 @@ extension JSON.Parser {
 extension JSON.Parser.Error: CustomStringConvertible {
   public var description: String {
     return "\(code) @ ln: \(line), col: \(char)"
+  }
+}
+
+extension Double {
+  internal func power<I: IntegerType>(base: Double, exponent: I, isNegative: Bool) -> Double {
+    var a: Double = self
+    if isNegative {
+      for _ in 0..<exponent { a /= base }
+    } else {
+      for _ in 0..<exponent { a *= base }
+    }
+    return a
   }
 }
