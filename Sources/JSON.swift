@@ -30,7 +30,21 @@ extension JSON {
 
 extension JSON: CustomStringConvertible {
   public var description: String {
-    return (try? self.serialized(options: [.prettyPrint])) ?? "invalid json"
+    do {
+      return try self.serialized()
+    } catch {
+      return String(error)
+    }
+  }
+}
+
+extension JSON: CustomDebugStringConvertible {
+  public var debugDescription: String {
+    do {
+      return try self.serialized(options: [.prettyPrint, .noSkipNull])
+    } catch {
+      return String(error)
+    }
   }
 }
 
