@@ -243,6 +243,7 @@ extension JSON.Parser {
       return .object([])
     }
     var tempDict: [(String, JSON)] = []
+    tempDict.reserveCapacity(6)
     
     repeat {
       switch peek() {
