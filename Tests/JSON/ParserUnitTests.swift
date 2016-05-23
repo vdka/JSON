@@ -13,6 +13,16 @@ func surrounding(string: String, by char: Character = "\"") -> String {
   return "\(char)\(string)\(char)"
 }
 
+func escaping(string: String) -> String {
+  return string.stringByReplacingOccurrencesOfString("'", withString: "\"")
+}
+
+extension String {
+  func substituting(this: String, for that: String) -> String {
+    return self.stringByReplacingOccurrencesOfString(this, withString: that)
+  }
+}
+
 class ParserUnitTests: XCTestCase {
   
   //TODO: add expect(_:, toThrow:_)
@@ -63,15 +73,15 @@ class ParserUnitTests: XCTestCase {
   func testParseObject() {
     
     expect("{}", toEqual: [:], afterApplying: JSON.Parser.parseObject)
-    expect("{\"key\": 321}", toEqual: ["key": 321], afterApplying: JSON.Parser.parseObject)
-    expect("{\"key\": 321, \"key2\": true}", toEqual: ["key": 321, "key2": true], afterApplying: JSON.Parser.parseObject)
-    expect("{ \"key\" : 321 , \"key2\" : true }", toEqual: ["key": 321, "key2": true], afterApplying: JSON.Parser.parseObject)
+    expect("{'key': 321}".substituting("'", for: "\""), toEqual: ["key": 321], afterApplying: JSON.Parser.parseObject)
+    expect("{'key': 321, 'key2': true}".substituting("'", for: "\""), toEqual: ["key": 321, "key2": true], afterApplying: JSON.Parser.parseObject)
+    expect("{ 'key' : 321 , 'key2' : true }".substituting("'", for: "\""), toEqual: ["key": 321, "key2": true], afterApplying: JSON.Parser.parseObject)
   }
   
   func testParseArray() {
     expect("[]", toEqual: [], afterApplying: JSON.Parser.parseArray)
     expect("[1, 2, 3, 4]", toEqual: [1, 2, 3, 4], afterApplying: JSON.Parser.parseArray)
-    expect("[true, false, \"abc\", 4, 5.0]", toEqual: [true, false, "abc", 4, 5.0], afterApplying: JSON.Parser.parseArray)
+    expect("[true, false, 'abc', 4, 5.0]".substituting("'", for: "\""), toEqual: [true, false, "abc", 4, 5.0], afterApplying: JSON.Parser.parseArray)
   }
   
 //  func testSkipWhitespaceOneMillionTimes() {
