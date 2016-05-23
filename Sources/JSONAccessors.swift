@@ -40,22 +40,45 @@ extension JSON {
 }
 
 
-// TODO: Investigate `subscript(set key: String) -> JSONEncodable?` for setting.
-
 // MARK: - JSON Subscripts
 
+// TODO: Investigate `subscript(set key: String) -> JSONEncodable?` for setting.
 extension JSON {
   /// Treat this JSON as a JSON object and attempt to get or set its associated Dictionary values.
   public subscript(key: String) -> JSON? {
     get {
+      // TODO (vdka): Without lazy dictionaries it may be quicker to iterate over the array for accesses. O(n)
+      
       guard case .object(let o) = self else { return nil }
-      return o[key]
+      
+      var dict: [String: JSON] = [:]
+      for (k, v) in o {
+        dict[k] = v
+      }
+      
+      return dict[key]
+      
+      // TODO (vdka): This should be possible but causes a compiler seg fault.
+//      return object?[key] 
     }
     
-    // TODO: Testing for nested objects
     set {
       guard case .object(var o) = self else { return }
-      o[key] = newValue
+      defer { self = .object(o) }
+      for (i, (k, _)) in o.enumerate() where key == k {
+        switch newValue {
+        case let newValue?:
+          o[i] = (k, newValue)
+          
+        case nil:
+          o.removeAtIndex(i)
+          
+        }
+        return
+      }
+      
+      guard let newValue = newValue else { return }
+      o.append( (key, newValue) )
       self = .object(o)
     }
   }
@@ -90,16 +113,26 @@ extension JSON {
 // MARK: - JSON Accessors
 
 extension JSON {
-  /// Returns this enum's associated Array value iff `self == .array(_)`, `nil` otherwise.
-  public var array: [JSON]? {
-    guard case .array(let a) = self else { return nil }
-    return a
-  }
   
   /// Returns this enum's associated Dictionary value iff `self == .object(_), `nil` otherwise.
   public var object: [String: JSON]? {
     guard case .object(let o) = self else { return nil }
-    return o
+    
+    var dict: [String: JSON] = [:]
+    for (k, v) in o {
+      dict[k] = v
+    }
+    
+    return dict
+  }
+}
+
+extension JSON {
+  
+  /// Returns this enum's associated Array value iff `self == .array(_)`, `nil` otherwise.
+  public var array: [JSON]? {
+    guard case .array(let a) = self else { return nil }
+    return a
   }
   
   /// Returns this enum's associated String value iff `self == .string(_)`, `nil` otherwise.
@@ -131,6 +164,7 @@ extension JSON {
 // MARK: Non RFC JSON types
 
 extension JSON {
+  
   /// Returns this enum's associated `Int64` value as an `Int` iff `self == .integer(_)`, `nil` otherwise.
   public var int: Int? {
     // where clause protects against RunTime crashes where the value of i won't fit within a native Int
@@ -149,6 +183,7 @@ extension JSON {
 // MARK: JSON Accessors calling into Element.decode(json: JSON)
 
 extension JSON {
+  
   /// Calls `try? T.decode(self)`
   func typed<T: JSONDecodable>() -> T? {
     return try? T.decode(self)

@@ -10,19 +10,14 @@ extension Optional where Wrapped: _JSON {
   /// returns the `JSON` value for key iff `Wrapped == JSON.object(_)` and there is a value for the key
   public subscript(key: String) -> JSON? {
     get {
-      guard let `self` = self as? JSON else { return nil }
-      guard case .object(let o) = self else { return nil }
-      return o[key]
+      return object?[key]
     }
     
     set {
-      guard var o = (self as? JSON)?.object else { return }
-      switch newValue {
-      case .None: o.removeValueForKey(key)
-      case .Some(let value):
-        o[key] = value
-        self = (JSON.object(o) as? Wrapped)
-      }
+      guard var json = self as? JSON else { return }
+      guard case .object(_) = json else { return }
+      json[key] = newValue
+      self = json as? Wrapped
     }
   }
   

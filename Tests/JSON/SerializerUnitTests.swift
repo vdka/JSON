@@ -63,13 +63,13 @@ class SerializerUnitTests: XCTestCase {
     // null stuff
     
     expect(["a": 1, "b": JSON.null, "c": 2], toEqual: "{'a':1,'c':2}".substituting("'", for: "\""))
-    expect(["a": 1, "b": JSON.null, "c": 2], options: [.noSkipNull], toEqual: "{'b':null,'a':1,'c':2}".substituting("'", for: "\""))
+    expect(["a": 1, "b": JSON.null, "c": 2], options: [.noSkipNull], toEqual: "{'a':1,'b':null,'c':2}".substituting("'", for: "\""))
     expect(["a": 1, "b": JSON.null, "c": 2], options: [.prettyPrint], toEqual: "{\n    'a': 1,\n    'c': 2\n}".substituting("'", for: "\""))
-    expect(["a": 1, "b": JSON.null, "c": 2], options: [.prettyPrint, .noSkipNull], toEqual: "{\n    'b': null,\n    'a': 1,\n    'c': 2\n}".substituting("'", for: "\""))
+    expect(["a": 1, "b": JSON.null, "c": 2], options: [.prettyPrint, .noSkipNull], toEqual: "{\n    'a': 1,\n    'b': null,\n    'c': 2\n}".substituting("'", for: "\""))
     
     
     expect(["a": 1, "b": JSON.null, "c": 2, "d": JSON.null, "e": JSON.null], toEqual: "{'a':1,'c':2}".substituting("'", for: "\""))
-    expect(["a": 1, "b": JSON.null, "c": 2, "d": JSON.null, "e": JSON.null], options: [.noSkipNull], toEqual: "{'b':null,'e':null,'a':1,'d':null,'c':2}".substituting("'", for: "\""))
+    expect(["a": 1, "b": JSON.null, "c": 2, "d": JSON.null, "e": JSON.null], options: [.noSkipNull], toEqual: "{'a':1,'b':null,'c':2,'d':null,'e':null}".substituting("'", for: "\""))
   }
   
   func testSerializeArray() {
@@ -92,8 +92,8 @@ class SerializerUnitTests: XCTestCase {
     expect([:], options: [.prettyPrint], toEqual: "{}")
     expect([1, 2], options: [.prettyPrint], toEqual: "[\n    1,\n    2\n]")
     expect([[1, 2] as JSON, [3, 4] as JSON], options: [.prettyPrint], toEqual: "[\n    [\n        1,\n        2\n    ],\n    [\n        3,\n        4\n    ]\n]")
-    expect(["a": 1, "b": 2], options: [.prettyPrint], toEqual: "{\n    'b': 2,\n    'a': 1\n}".substituting("'", for: "\""))
-    expect(["a": [1, 2] as JSON, "b": [3] as JSON], options: [.prettyPrint], toEqual: "{\n    'b': [\n        3\n    ],\n    'a': [\n        1,\n        2\n    ]\n}".substituting("'", for: "\""))
+    expect(["a": 1, "b": 2], options: [.prettyPrint], toEqual: "{\n    'a': 1,\n    'b': 2\n}".substituting("'", for: "\""))
+    expect(["a": [1, 2] as JSON, "b": [3] as JSON], options: [.prettyPrint], toEqual: "{\n    'a': [\n        1,\n        2\n    ],\n    'b': [\n        3\n    ]\n}".substituting("'", for: "\""))
     
     
   }

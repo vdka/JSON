@@ -78,26 +78,26 @@ print(try! JSONSerializer.serialize(person, options: [.prettyPrint]))
 
 ```json
 {
-  "totalBalance": {
-    "currency": "AUD",
-    "minorUnits": -9000
-  },
-  "age": 20,
-  "accountBalances": [
-    {
-      "currency": "AUD",
-      "minorUnits": 1000
-    },
-    {
-      "currency": "AUD",
-      "minorUnits": 10000
-    },
-    {
-      "currency": "AUD",
-      "minorUnits": -20000
+    "name": "Harry",
+    "age": 20,
+    "accountBalances": [
+        {
+            "minorUnits": 1000,
+            "currency": "AUD"
+        },
+        {
+            "minorUnits": 10000,
+            "currency": "AUD"
+        },
+        {
+            "minorUnits": -20000,
+            "currency": "AUD"
+        }
+    ],
+    "totalBalance": {
+        "minorUnits": -9000,
+        "currency": "AUD"
     }
-  ],
-  "name": "Harry"
 }
 ```
 

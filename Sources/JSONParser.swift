@@ -240,9 +240,9 @@ extension JSON.Parser {
     
     guard peek() != objectClose else {
       unsafePop()
-      return .object([:])
+      return .object([])
     }
-    var tempDict = [String: JSON](minimumCapacity: 6) // TODO: Performance test
+    var tempDict: [(String, JSON)] = []
     
     repeat {
       switch peek() {
@@ -253,7 +253,7 @@ extension JSON.Parser {
         
         switch value {
         case .null where skipNull: break
-        default: tempDict[key] = value
+        default: tempDict.append( (key, value) )
         }
         
       case comma:

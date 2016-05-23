@@ -119,7 +119,7 @@ extension JSON.Serializer {
     stream.write("]")
   }
   
-  func writeObject<O: OutputStreamType>(o: [String: JSON], inout to stream: O, indentLevel: Int = 0) throws {
+  func writeObject<O: OutputStreamType>(o: [(String, JSON)], inout to stream: O, indentLevel: Int = 0) throws {
     if o.isEmpty {
       stream.write("{}")
       return

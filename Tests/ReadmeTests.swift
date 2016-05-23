@@ -35,7 +35,9 @@ class ReadmeTests: XCTestCase {
     try! print(person.serialized(options: [.prettyPrint]))
     
     // gross.
-    let expectedOutput = "{\n    \"totalBalance\": {\n        \"currency\": \"AUD\",\n        \"minorUnits\": -9000\n    },\n    \"age\": 20,\n    \"accountBalances\": [\n        {\n            \"currency\": \"AUD\",\n            \"minorUnits\": 1000\n        },\n        {\n            \"currency\": \"AUD\",\n            \"minorUnits\": 10000\n        },\n        {\n            \"currency\": \"AUD\",\n            \"minorUnits\": -20000\n        }\n    ],\n    \"name\": \"Harry\"\n}"
+    let expectedOutput = "{\n    'name': 'Harry',\n    'age': 20,\n    'accountBalances': [\n        {\n            'minorUnits': 1000,\n            'currency': 'AUD'\n        },\n        {\n            'minorUnits': 10000,\n            'currency': 'AUD'\n        },\n        {\n            'minorUnits': -20000,\n            'currency': 'AUD'\n        }\n    ],\n    'totalBalance': {\n        'minorUnits': -9000,\n        'currency': 'AUD'\n    }\n}".substituting("'", for: "\"")
+    
+    // TODO (vdka): broken because we now have ordered dicts
     
     try! XCTAssertEqual(person.serialized(options: [.prettyPrint]), expectedOutput)
     
