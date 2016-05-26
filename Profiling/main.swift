@@ -49,10 +49,13 @@ let json: JSON = {
 }()
 
 let jsonString = try! JSON.Serializer.serialize(json)
-//let jsonString = try! json.serialized(options: [.prettyPrint])
+
+let codeUnits = jsonString.nulTerminatedUTF8
 
 try! JSON.Parser.parse(jsonString)
 
-//try! JSON.serialize(json)
+let data = jsonString.dataUsingEncoding(NSUTF8StringEncoding)!
+
+try! NSJSONSerialization.JSONObjectWithData(data, options: [])
 
 print("done")

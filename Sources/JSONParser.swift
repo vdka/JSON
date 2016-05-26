@@ -41,6 +41,17 @@ let rue: [UTF8.CodeUnit] = ["r".utf8.first!, "u".utf8.first!, "e".utf8.first!]
 let alse: [UTF8.CodeUnit] = ["a".utf8.first!, "l".utf8.first!, "s".utf8.first!, "e".utf8.first!]
 let ull: [UTF8.CodeUnit] = ["u".utf8.first!, "l".utf8.first!, "l".utf8.first!]
 
+public protocol HasBasePointer {
+  associatedtype Element
+  func withUnsafeBufferPointer<R>(@noescape body: (UnsafeBufferPointer<Element>) throws -> R) rethrows -> R
+  mutating func withUnsafeMutableBufferPointer<R>(@noescape body: (inout UnsafeMutableBufferPointer<Element>) throws -> R) rethrows -> R
+  mutating func append(newElement: Element)
+}
+
+extension Array: HasBasePointer {}
+extension ArraySlice: HasBasePointer {}
+extension ContiguousArray: HasBasePointer {}
+
 extension JSON {
   
   public struct Parser {
@@ -53,58 +64,109 @@ extension JSON {
       public static let noSkipNull = Option(rawValue: 1 << 1)
     }
     
-    init(string: String, options: [Option] = []) {
-      self.string = string
-      
-      self.scalars = Array(string.utf8)
-      self.scalars.append(0) // Null terminated back to days of ye olde C
-      
-      self.buffer = UnsafeMutableBufferPointer(start: &scalars, count: scalars.count)
-      
-      self.pointer = buffer.baseAddress
-      
-      self.skipNull = !options.contains(.noSkipNull)
+    let skipNull: Bool
+    var pointer: UnsafeMutablePointer<UTF8.CodeUnit>
+    var bufferPointer: UnsafeMutableBufferPointer<UTF8.CodeUnit>
+  }
+}
+
+
+// MARK: - Initializers
+
+extension JSON.Parser {
+  
+  // assumes data is nil terminated.
+  internal init(bufferPointer: UnsafeMutableBufferPointer<UTF8.CodeUnit>, options: [Option] = []) {
+    
+    self.bufferPointer = bufferPointer
+    self.pointer = bufferPointer.baseAddress
+    
+    self.skipNull = !options.contains(.noSkipNull)
+  }
+  
+  init<S: HasBasePointer where S.Element == UTF8.CodeUnit>(inout data: S, options: [Option] = []) {
+    
+    data.append(0)
+    
+    let bufferPointer = data.withUnsafeMutableBufferPointer { b -> (UnsafeMutableBufferPointer<UTF8.CodeUnit>, UnsafeMutablePointer<UTF8.CodeUnit>) in
+      let c = UnsafeMutablePointer<UTF8.CodeUnit>.alloc(b.count)
+      c.initializeFrom(b.baseAddress, count: b.count)
+      return (b, c)
     }
     
-    let skipNull: Bool
-    var string: String
-    var scalars: [UTF8.CodeUnit]
-    var pointer: UnsafeMutablePointer<UTF8.CodeUnit>
-    var buffer: UnsafeMutableBufferPointer<UTF8.CodeUnit>
+    self.bufferPointer = bufferPointer.0
+    self.pointer = bufferPointer.1
+    self.skipNull = !options.contains(.noSkipNull)
+//    self.init(bufferPointer: b, options: options)
   }
+
+
+  init<S: HasBasePointer where S.Element == UTF8.CodeUnit>(data: S, options: [Option] = []) {
+    
+    var data = data
+    
+    self.init(data: &data, options: options)
+  }
+}
+
+
+// MARK: - Initializers
+
+extension JSON.Parser {
+  
+  public static func parse <S: HasBasePointer where S.Element == UTF8.CodeUnit> (inout data: S, options: [Option] = []) throws -> JSON {
+    
+    return try data.withUnsafeMutableBufferPointer { bufferPointer in
+      var parser = self.init(bufferPointer: bufferPointer, options: options)
+      return try parser.parseValue()
+    }
+  }
+  
+  public static func parse <S: HasBasePointer where S.Element == UTF8.CodeUnit> (data: S, options: [Option] = []) throws -> JSON {
+    
+    var data = data
+    
+    return try JSON.Parser.parse(&data, options: options)
+  }
+  
+  public static func parse(string: String, options: [Option] = []) throws -> JSON {
+    
+    var data = string.nulTerminatedUTF8
+    
+    return try JSON.Parser.parse(&data, options: options)
+  }
+  
 }
 
 
 // MARK: - External API
 
 extension JSON.Parser {
-  
-  public static func parse(string: String, options: [Option] = []) throws -> JSON {
-    
-    var parser = self.init(string: string, options: options)
-    do {
-      
-      return try parser.parseValue()
-      
-    } catch let code as ErrorCode {
-      // TODO: Make this work, or DEPRECATE it.
-      
-      let charsIn = parser.scalars.count - parser.buffer.count
-      print("Parsed up to: \n\(parser.scalars[0..<charsIn].map({ String($0) }).joinWithSeparator(""))")
-      var line: UInt = 0
-      var char: UInt = 0
-      for ch in parser.scalars.prefix(charsIn) {
-        switch ch {
-        case newline:
-          line += 1
-          char  = 0
-          
-        default:
-          char += 1
-        }
-      }
-      throw Error(char: char, line: line, code: code)
+
+  // TODO: Make this work, or DEPRECATE it.
+  // Screw handling errors (that requires a parser instance, we plan on reiterating the parser anyway)
+  // instead we should have a validate function, which validates that JSON follows the correct form.
+  private mutating func handleError(error: ErrorType) throws {
+    guard let code = error as? ErrorCode else {
+      throw error
     }
+    
+    let offset = pointer.distanceTo(bufferPointer.baseAddress)
+    print("Parsed up to: \n\(bufferPointer[0..<offset].map({ String($0) }).joinWithSeparator(""))")
+    var line: UInt = 0
+    var char: UInt = 0
+    for ch in bufferPointer.prefix(offset) {
+      switch ch {
+      case newline:
+        line += 1
+        char  = 0
+        
+      default:
+        char += 1
+      }
+    }
+    
+    throw Error(char: char, line: line, code: code)
   }
 }
 
@@ -149,6 +211,7 @@ extension JSON.Parser {
    - postcondition: `pointer` will be in the next non-`whiteSpace` position
   */
   mutating func parseValue() throws -> JSON {
+    
     
     assert(![space, tab, cr, newline, 0].contains(pointer.memory))
     
@@ -282,6 +345,7 @@ extension JSON.Parser {
     
     repeat {
       // TODO: Check if we can [point|copy] the memory directly (memcpy)
+      // TODO (vdka): This will crash on ""
       let char = try pop()
       if char == quote && pointer.advancedBy(-2).memory != backslash {
         pointer.advancedBy(-1).memory = 0
@@ -319,10 +383,6 @@ extension JSON.Parser {
         (significand, overflow) = UInt64.addWithOverflow(significand, UInt64(unsafePop() - zero))
         guard !overflow else { throw JSON.Parser.ErrorCode.numberOverflow }
         
-        // naive solution. Ignores overflows
-//        significand *= 10
-//        significand += UInt64(unsafePop() - zero) // unsafePop() returns a UTF8.CodeUnit and `zero` is the UTF8.CodeUnit for '0'
-        
       case numbers where seenDecimal && !seenExponent: // decimals must come before exponents
         divisor *= 10
         
@@ -332,10 +392,6 @@ extension JSON.Parser {
         (mantisa, overflow) = UInt64.addWithOverflow(mantisa, UInt64(unsafePop() - zero))
         guard !overflow else { throw JSON.Parser.ErrorCode.numberOverflow }
         
-        // naive solution. Ignores overflows
-//        mantisa *= 10
-//        mantisa += UInt64(unsafePop() - zero)
-        
       case numbers where seenExponent:
         
         (exponent, overflow) = UInt64.multiplyWithOverflow(exponent, 10)
@@ -343,10 +399,6 @@ extension JSON.Parser {
         
         (exponent, overflow) = UInt64.addWithOverflow(exponent, UInt64(unsafePop() - zero))
         guard !overflow else { throw JSON.Parser.ErrorCode.numberOverflow }
-        
-        // naive solution. Ignores overflows
-//        exponent *= 10
-//        exponent += UInt64(unsafePop() - zero)
         
       case decimal where !seenExponent && !seenDecimal:
         unsafePop() // remove the decimal
@@ -360,9 +412,7 @@ extension JSON.Parser {
           unsafePop() // remove the '-'
         }
         
-        
       // is end of number
-        
       case arrayClose, objectClose, comma, space, tab, cr, newline, 0:
         
         switch (seenDecimal, seenExponent) {

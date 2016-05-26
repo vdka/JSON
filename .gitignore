@@ -1,5 +1,6 @@
 # Mac OS X
 .DS_Store
+JSONPerformanceTests/test.json
 
 # Created by https://www.gitignore.io/api/xcode
 

@@ -28,7 +28,7 @@ class ParserUnitTests: XCTestCase {
   //TODO: add expect(_:, toThrow:_)
   
   func expect<T: Equatable>(input: String, toEqual expected: T, line: UInt = #line, afterApplying function: (inout JSON.Parser) -> () throws -> T) {
-    var parser = JSON.Parser(string: input)
+    var parser = JSON.Parser.init(data: input.utf8.map({ $0 }))
     do {
       let output = try function(&parser)()
       XCTAssertEqual(expected, output, line: line)
