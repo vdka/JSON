@@ -7,9 +7,9 @@ import JSON
 
 class JSONBenchTests: XCTestCase {
   
-  // Relies upon C stdlib
-  
   func testParseVDKAJSON() {
+    // TODO (vdka): determine why the first run of JSON.Parser.parse(_,_:) is so much slower
+    try! VDKAJSON.Parser.parse(jsonString, options: [.noSkipNull])
     measureBlock {
       try! VDKAJSON.Parser.parse(jsonString, options: [.noSkipNull])
     }
