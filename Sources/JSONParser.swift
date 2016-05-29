@@ -2,56 +2,6 @@
 
 // MARK: - JSON.Parser
 
-// json special characters
-let arrayOpen: UTF8.CodeUnit = "[".utf8.first!
-let objectOpen: UTF8.CodeUnit = "{".utf8.first!
-let arrayClose: UTF8.CodeUnit = "]".utf8.first!
-let objectClose: UTF8.CodeUnit = "}".utf8.first!
-let comma: UTF8.CodeUnit = ",".utf8.first!
-let colon: UTF8.CodeUnit = ":".utf8.first!
-let quote: UTF8.CodeUnit = "\"".utf8.first!
-let backslash: UTF8.CodeUnit = "\\".utf8.first!
-
-// whitespace characters
-let space: UTF8.CodeUnit = " ".utf8.first!
-let tab: UTF8.CodeUnit = "\t".utf8.first!
-let cr: UTF8.CodeUnit = "\r".utf8.first!
-let newline: UTF8.CodeUnit = "\n".utf8.first!
-
-// Literal characters
-let n: UTF8.CodeUnit = "n".utf8.first!
-let t: UTF8.CodeUnit = "t".utf8.first!
-let r: UTF8.CodeUnit = "r".utf8.first!
-let u: UTF8.CodeUnit = "u".utf8.first!
-let f: UTF8.CodeUnit = "f".utf8.first!
-let a: UTF8.CodeUnit = "a".utf8.first!
-let l: UTF8.CodeUnit = "l".utf8.first!
-let s: UTF8.CodeUnit = "s".utf8.first!
-let e: UTF8.CodeUnit = "e".utf8.first!
-
-// Number characters
-let zero: UTF8.CodeUnit = "0".utf8.first!
-let minus: UTF8.CodeUnit = "-".utf8.first!
-let numbers: Range<UTF8.CodeUnit> = "0".utf8.first!..."9".utf8.first!
-let decimal: UTF8.CodeUnit = ".".utf8.first!
-let E: UTF8.CodeUnit = "E".utf8.first!
-
-// End of here Literals
-let rue: [UTF8.CodeUnit] = ["r".utf8.first!, "u".utf8.first!, "e".utf8.first!]
-let alse: [UTF8.CodeUnit] = ["a".utf8.first!, "l".utf8.first!, "s".utf8.first!, "e".utf8.first!]
-let ull: [UTF8.CodeUnit] = ["u".utf8.first!, "l".utf8.first!, "l".utf8.first!]
-
-public protocol HasBasePointer {
-  associatedtype Element
-  func withUnsafeBufferPointer<R>(@noescape body: (UnsafeBufferPointer<Element>) throws -> R) rethrows -> R
-  mutating func withUnsafeMutableBufferPointer<R>(@noescape body: (inout UnsafeMutableBufferPointer<Element>) throws -> R) rethrows -> R
-  mutating func append(newElement: Element)
-}
-
-extension Array: HasBasePointer {}
-extension ArraySlice: HasBasePointer {}
-extension ContiguousArray: HasBasePointer {}
-
 extension JSON {
   
   public struct Parser {
@@ -74,72 +24,58 @@ extension JSON {
 // MARK: - Initializers
 
 extension JSON.Parser {
-  
-  // assumes data is nil terminated.
-  internal init(bufferPointer: UnsafeMutableBufferPointer<UTF8.CodeUnit>, options: [Option] = []) {
+
+  // assumes data is null terminated.
+  // and that the buffer will not be de-allocated before completion (handled by JSON.Parser.parse(_:,options:)
+  internal init(bufferPointer: UnsafeMutableBufferPointer<UTF8.CodeUnit>, options: [Option]) {
     
     self.bufferPointer = bufferPointer
     self.pointer = bufferPointer.baseAddress
-    
     self.skipNull = !options.contains(.noSkipNull)
-  }
-  
-  init<S: HasBasePointer where S.Element == UTF8.CodeUnit>(inout data: S, options: [Option] = []) {
-    
-    data.append(0)
-    
-    let bufferPointer = data.withUnsafeMutableBufferPointer { b -> (UnsafeMutableBufferPointer<UTF8.CodeUnit>, UnsafeMutablePointer<UTF8.CodeUnit>) in
-      let c = UnsafeMutablePointer<UTF8.CodeUnit>.alloc(b.count)
-      c.initializeFrom(b.baseAddress, count: b.count)
-      return (b, c)
-    }
-    
-    self.bufferPointer = bufferPointer.0
-    self.pointer = bufferPointer.1
-    self.skipNull = !options.contains(.noSkipNull)
-//    self.init(bufferPointer: b, options: options)
-  }
-
-
-  init<S: HasBasePointer where S.Element == UTF8.CodeUnit>(data: S, options: [Option] = []) {
-    
-    var data = data
-    
-    self.init(data: &data, options: options)
   }
 }
 
 
-// MARK: - Initializers
+// MARK: - Public API
 
 extension JSON.Parser {
   
-  public static func parse <S: HasBasePointer where S.Element == UTF8.CodeUnit> (inout data: S, options: [Option] = []) throws -> JSON {
+  public static func parse(inout data: [UTF8.CodeUnit], options: [Option] = []) throws -> JSON {
+    
+    data.append(0)
     
     return try data.withUnsafeMutableBufferPointer { bufferPointer in
       var parser = self.init(bufferPointer: bufferPointer, options: options)
+      parser.skipWhitespace()
       return try parser.parseValue()
     }
   }
   
-  public static func parse <S: HasBasePointer where S.Element == UTF8.CodeUnit> (data: S, options: [Option] = []) throws -> JSON {
+  public static func parse(data: [UTF8.CodeUnit], options: [Option] = []) throws -> JSON {
     
     var data = data
+    data.append(0)
     
-    return try JSON.Parser.parse(&data, options: options)
+    return try data.withUnsafeMutableBufferPointer { bufferPointer in
+      var parser = JSON.Parser(bufferPointer: bufferPointer, options: options)
+      parser.skipWhitespace()
+      return try parser.parseValue()
+    }
   }
   
   public static func parse(string: String, options: [Option] = []) throws -> JSON {
     
     var data = string.nulTerminatedUTF8
     
-    return try JSON.Parser.parse(&data, options: options)
+    return try data.withUnsafeMutableBufferPointer { bufferPointer in
+      var parser = JSON.Parser(bufferPointer: bufferPointer, options: options)
+      parser.skipWhitespace()
+      return try parser.parseValue()
+    }
   }
   
 }
 
-
-// MARK: - External API
 
 extension JSON.Parser {
 
@@ -158,6 +94,7 @@ extension JSON.Parser {
     for ch in bufferPointer.prefix(offset) {
       switch ch {
       case newline:
+        
         line += 1
         char  = 0
         
@@ -174,6 +111,7 @@ extension JSON.Parser {
 // MARK: - Internals
 
 extension JSON.Parser {
+  
   func peek() -> UTF8.CodeUnit {
     return pointer.memory
   }
@@ -192,16 +130,15 @@ extension JSON.Parser {
 }
 
 extension JSON.Parser {
+  
   mutating func skipWhitespace() {
     repeat {
       switch peek() {
-      case space, tab, cr, newline:
-        unsafePop()
+      case space, tab, cr, newline: unsafePop()
       default: return
       }
     } while true
   }
-  
 }
 
 extension JSON.Parser {
@@ -212,38 +149,44 @@ extension JSON.Parser {
   */
   mutating func parseValue() throws -> JSON {
     
-    
     assert(![space, tab, cr, newline, 0].contains(pointer.memory))
     
     defer { skipWhitespace() }
     switch peek() {
     case objectOpen:
+      
       let o = try parseObject()
       return o
       
     case arrayOpen:
+      
       let a = try parseArray()
       return a
       
     case quote:
+      
       let s = try parseString()
       return .string(s)
       
     case minus, numbers:
+      
       let num = try parseNumber()
       return num
       
     case f:
+      
       unsafePop()
       try assertFollowedBy(alse)
       return .bool(false)
       
     case t:
+      
       unsafePop()
       try assertFollowedBy(rue)
       return .bool(true)
       
     case n:
+      
       unsafePop()
       try assertFollowedBy(ull)
       return .null
@@ -252,10 +195,10 @@ extension JSON.Parser {
       // NOTE: This could occur if we failed to skipWhitespace somewhere
       throw ErrorCode.invalidSyntax
     }
-      
   }
   
   mutating func parseArray() throws -> JSON {
+    
     assert(peek() == arrayOpen)
     unsafePop()
     
@@ -272,10 +215,12 @@ extension JSON.Parser {
       
       switch peek() {
       case comma:
+        
         unsafePop()
         skipWhitespace()
         
       case arrayClose:
+        
         unsafePop()
         return .array(tempArray)
         
@@ -285,7 +230,6 @@ extension JSON.Parser {
         case .null where skipNull: break
         default: tempArray.append(value)
         }
-        
       }
     } while true
   }
@@ -307,20 +251,24 @@ extension JSON.Parser {
     repeat {
       switch peek() {
       case quote:
+        
         let key = try parseString()
         try skipColon()
         let value = try parseValue()
         
         switch value {
         case .null where skipNull: break
+          
         default: tempDict.append( (key, value) )
         }
         
       case comma:
+        
         unsafePop()
         skipWhitespace()
         
       case objectClose:
+        
         unsafePop()
         return .object(tempDict)
         
@@ -331,6 +279,7 @@ extension JSON.Parser {
   }
   
   mutating func assertFollowedBy(chars: [UTF8.CodeUnit]) throws {
+    
     for scalar in chars {
       guard try scalar == pop() else { throw ErrorCode.invalidLiteral }
     }
@@ -355,6 +304,7 @@ extension JSON.Parser {
   }
   
   mutating func parseNumber() throws -> JSON {
+    
     assert(numbers ~= peek() || minus == peek())
     
     var seenExponent = false
@@ -384,6 +334,7 @@ extension JSON.Parser {
         guard !overflow else { throw JSON.Parser.ErrorCode.numberOverflow }
         
       case numbers where seenDecimal && !seenExponent: // decimals must come before exponents
+        
         divisor *= 10
         
         (mantisa, overflow) = UInt64.multiplyWithOverflow(mantisa, 10)
@@ -401,10 +352,12 @@ extension JSON.Parser {
         guard !overflow else { throw JSON.Parser.ErrorCode.numberOverflow }
         
       case decimal where !seenExponent && !seenDecimal:
+        
         unsafePop() // remove the decimal
         seenDecimal = true
         
       case E, e where !seenExponent:
+        
         unsafePop() // remove the 'e' || 'E'
         seenExponent = true
         if peek() == minus {
@@ -449,9 +402,7 @@ extension JSON.Parser {
         
       default: throw JSON.Parser.ErrorCode.invalidNumber
       }
-      
     } while true
-    
   }
 }
 
@@ -491,12 +442,14 @@ extension JSON.Parser {
 }
 
 extension JSON.Parser.Error: CustomStringConvertible {
+  
   public var description: String {
     return "\(code) @ ln: \(line), col: \(char)"
   }
 }
 
 extension Double {
+  
   internal func power<I: IntegerType>(base: Double, exponent: I, isNegative: Bool) -> Double {
     var a: Double = self
     if isNegative {

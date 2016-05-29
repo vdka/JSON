@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		AA18CE191CF72C6B00ED0FE6 /* test.json in Resources */ = {isa = PBXBuildFile; fileRef = AA18CE181CF72C6B00ED0FE6 /* test.json */; };
 		AA18CE1A1CF72C6B00ED0FE6 /* test.json in Resources */ = {isa = PBXBuildFile; fileRef = AA18CE181CF72C6B00ED0FE6 /* test.json */; };
+		AA18CE3B1CFAC40500ED0FE6 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA18CE3A1CFAC40500ED0FE6 /* Constants.swift */; };
 		AA213B151CBC7F5F00910D50 /* JSON.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AA213B0A1CBC7F5F00910D50 /* JSON.framework */; };
 		AA213B2D1CBC800800910D50 /* JSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA213B251CBC800800910D50 /* JSON.swift */; };
 		AA213B2E1CBC800800910D50 /* JSONAccessors.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA213B261CBC800800910D50 /* JSONAccessors.swift */; };
@@ -98,6 +99,7 @@
 
 /* Begin PBXFileReference section */
 		AA18CE181CF72C6B00ED0FE6 /* test.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = test.json; sourceTree = "<group>"; };
+		AA18CE3A1CFAC40500ED0FE6 /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		AA213B0A1CBC7F5F00910D50 /* JSON.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = JSON.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		AA213B141CBC7F5F00910D50 /* JSONTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = JSONTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		AA213B251CBC800800910D50 /* JSON.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JSON.swift; sourceTree = "<group>"; };
@@ -230,6 +232,7 @@
 				AA213B291CBC800800910D50 /* JSONError.swift */,
 				AA213B2A1CBC800800910D50 /* JSONOptionalExtensions.swift */,
 				AA4CE86B1CC469F200A1C8EB /* JSONParser.swift */,
+				AA18CE3A1CFAC40500ED0FE6 /* Constants.swift */,
 				AAB69A9E1CC8D9C300940C5D /* JSONSerializer.swift */,
 			);
 			path = Sources;
@@ -615,6 +618,7 @@
 				AAB69A9F1CC8D9C300940C5D /* JSONSerializer.swift in Sources */,
 				AA213B2E1CBC800800910D50 /* JSONAccessors.swift in Sources */,
 				AA213B2D1CBC800800910D50 /* JSON.swift in Sources */,
+				AA18CE3B1CFAC40500ED0FE6 /* Constants.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

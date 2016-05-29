@@ -5,11 +5,11 @@ import SwiftyJSON
 import JASON
 import JSON
 
-class JSONParseTests: XCTestCase {
+class ParserTests: XCTestCase {
   
   func testParseVDKAJSON() {
     // TODO (vdka): determine why the first run of JSON.Parser.parse(_,_:) is so much slower
-    let data = jsonString.nulTerminatedUTF8
+    let data = Array(jsonString.nulTerminatedUTF8)
     try! VDKAJSON.Parser.parse(data, options: [.noSkipNull])
     measureBlock {
       try! VDKAJSON.Parser.parse(data, options: [.noSkipNull])
