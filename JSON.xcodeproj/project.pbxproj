@@ -10,6 +10,9 @@
 		AA18CE191CF72C6B00ED0FE6 /* test.json in Resources */ = {isa = PBXBuildFile; fileRef = AA18CE181CF72C6B00ED0FE6 /* test.json */; };
 		AA18CE1A1CF72C6B00ED0FE6 /* test.json in Resources */ = {isa = PBXBuildFile; fileRef = AA18CE181CF72C6B00ED0FE6 /* test.json */; };
 		AA18CE3B1CFAC40500ED0FE6 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA18CE3A1CFAC40500ED0FE6 /* Constants.swift */; };
+		AA18CE461CFC87A800ED0FE6 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA18CE3A1CFAC40500ED0FE6 /* Constants.swift */; };
+		AA18CE491CFC88C200ED0FE6 /* twitter_test.json in Resources */ = {isa = PBXBuildFile; fileRef = AA18CE471CFC88B700ED0FE6 /* twitter_test.json */; };
+		AA18CE4B1CFC8AA400ED0FE6 /* AccessBenchmarks.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA18CE4A1CFC8AA400ED0FE6 /* AccessBenchmarks.swift */; };
 		AA213B151CBC7F5F00910D50 /* JSON.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AA213B0A1CBC7F5F00910D50 /* JSON.framework */; };
 		AA213B2D1CBC800800910D50 /* JSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA213B251CBC800800910D50 /* JSON.swift */; };
 		AA213B2E1CBC800800910D50 /* JSONAccessors.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA213B261CBC800800910D50 /* JSONAccessors.swift */; };
@@ -100,6 +103,8 @@
 /* Begin PBXFileReference section */
 		AA18CE181CF72C6B00ED0FE6 /* test.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = test.json; sourceTree = "<group>"; };
 		AA18CE3A1CFAC40500ED0FE6 /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		AA18CE471CFC88B700ED0FE6 /* twitter_test.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = twitter_test.json; sourceTree = "<group>"; };
+		AA18CE4A1CFC8AA400ED0FE6 /* AccessBenchmarks.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccessBenchmarks.swift; sourceTree = "<group>"; };
 		AA213B0A1CBC7F5F00910D50 /* JSON.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = JSON.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		AA213B141CBC7F5F00910D50 /* JSONTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = JSONTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		AA213B251CBC800800910D50 /* JSON.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JSON.swift; sourceTree = "<group>"; };
@@ -278,9 +283,11 @@
 			children = (
 				AA3459841CCF836E00DD3F87 /* Frameworks */,
 				AA18CE181CF72C6B00ED0FE6 /* test.json */,
+				AA18CE471CFC88B700ED0FE6 /* twitter_test.json */,
 				AA3459711CCF6F9E00DD3F87 /* GenerateJSON.swift */,
 				AA3459721CCF6F9E00DD3F87 /* Shared.swift */,
 				AA3459781CCF7FC300DD3F87 /* ParserBenchmarks.swift */,
+				AA18CE4A1CFC8AA400ED0FE6 /* AccessBenchmarks.swift */,
 				AA3459871CCF898500DD3F87 /* SerializerBenchmarks.swift */,
 			);
 			name = PerformanceTests;
@@ -541,6 +548,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AA18CE491CFC88C200ED0FE6 /* twitter_test.json in Resources */,
 				AA3459801CCF832500DD3F87 /* JASON.framework in Resources */,
 				AA18CE1A1CF72C6B00ED0FE6 /* test.json in Resources */,
 				AA3459811CCF832500DD3F87 /* PMJSON.framework in Resources */,
@@ -638,6 +646,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				AA3459791CCF7FC300DD3F87 /* ParserBenchmarks.swift in Sources */,
+				AA18CE4B1CFC8AA400ED0FE6 /* AccessBenchmarks.swift in Sources */,
 				AA3459881CCF898500DD3F87 /* SerializerBenchmarks.swift in Sources */,
 				AA3459741CCF6F9E00DD3F87 /* Shared.swift in Sources */,
 			);
@@ -697,6 +706,7 @@
 				AAB69AA31CC8D9C300940C5D /* JSONSerializer.swift in Sources */,
 				AAFB64611CC6F0DB00C269E3 /* JSONAccessors.swift in Sources */,
 				AAFB64631CC6F0DB00C269E3 /* JSONEncodable.swift in Sources */,
+				AA18CE461CFC87A800ED0FE6 /* Constants.swift in Sources */,
 				AAFB64681CC6F0DB00C269E3 /* JSONParser.swift in Sources */,
 				AAFB645C1CC6F09500C269E3 /* main.swift in Sources */,
 				AAFB64601CC6F0DB00C269E3 /* JSON.swift in Sources */,

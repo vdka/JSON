@@ -17,6 +17,8 @@ extension JSON {
     let skipNull: Bool
     var pointer: UnsafeMutablePointer<UTF8.CodeUnit>
     var bufferPointer: UnsafeMutableBufferPointer<UTF8.CodeUnit>
+    
+    var stringBuffer: [UTF8.CodeUnit] = []
   }
 }
 
@@ -24,7 +26,7 @@ extension JSON {
 // MARK: - Initializers
 
 extension JSON.Parser {
-
+  
   // assumes data is null terminated.
   // and that the buffer will not be de-allocated before completion (handled by JSON.Parser.parse(_:,options:)
   internal init(bufferPointer: UnsafeMutableBufferPointer<UTF8.CodeUnit>, options: [Option]) {
@@ -32,6 +34,8 @@ extension JSON.Parser {
     self.bufferPointer = bufferPointer
     self.pointer = bufferPointer.baseAddress
     self.skipNull = !options.contains(.noSkipNull)
+    
+    self.skipWhitespace()
   }
 }
 
@@ -46,7 +50,6 @@ extension JSON.Parser {
     
     return try data.withUnsafeMutableBufferPointer { bufferPointer in
       var parser = self.init(bufferPointer: bufferPointer, options: options)
-      parser.skipWhitespace()
       return try parser.parseValue()
     }
   }
@@ -58,7 +61,6 @@ extension JSON.Parser {
     
     return try data.withUnsafeMutableBufferPointer { bufferPointer in
       var parser = JSON.Parser(bufferPointer: bufferPointer, options: options)
-      parser.skipWhitespace()
       return try parser.parseValue()
     }
   }
@@ -69,7 +71,6 @@ extension JSON.Parser {
     
     return try data.withUnsafeMutableBufferPointer { bufferPointer in
       var parser = JSON.Parser(bufferPointer: bufferPointer, options: options)
-      parser.skipWhitespace()
       return try parser.parseValue()
     }
   }
@@ -78,7 +79,7 @@ extension JSON.Parser {
 
 
 extension JSON.Parser {
-
+  
   // TODO: Make this work, or DEPRECATE it.
   // Screw handling errors (that requires a parser instance, we plan on reiterating the parser anyway)
   // instead we should have a validate function, which validates that JSON follows the correct form.
@@ -146,7 +147,7 @@ extension JSON.Parser {
   /**
    - precondition: `pointer` is at the beginning of a literal
    - postcondition: `pointer` will be in the next non-`whiteSpace` position
-  */
+   */
   mutating func parseValue() throws -> JSON {
     
     assert(![space, tab, cr, newline, 0].contains(pointer.memory))
@@ -210,6 +211,7 @@ extension JSON.Parser {
     }
     
     var tempArray: [JSON] = []
+    tempArray.reserveCapacity(6)
     
     repeat {
       
@@ -245,6 +247,7 @@ extension JSON.Parser {
       unsafePop()
       return .object([])
     }
+    
     var tempDict: [(String, JSON)] = []
     tempDict.reserveCapacity(6)
     
@@ -283,24 +286,6 @@ extension JSON.Parser {
     for scalar in chars {
       guard try scalar == pop() else { throw ErrorCode.invalidLiteral }
     }
-  }
-  
-  mutating func parseString() throws -> String {
-    
-    assert(peek() == quote)
-    unsafePop()
-    
-    let startAddress = pointer
-    
-    repeat {
-      // TODO: Check if we can [point|copy] the memory directly (memcpy)
-      // TODO (vdka): This will crash on ""
-      let char = try pop()
-      if char == quote && pointer.advancedBy(-2).memory != backslash {
-        pointer.advancedBy(-1).memory = 0
-        return String.fromCString(unsafeBitCast(startAddress, UnsafePointer<CChar>.self))!
-      }
-    } while true
   }
   
   mutating func parseNumber() throws -> JSON {
@@ -404,12 +389,96 @@ extension JSON.Parser {
       }
     } while true
   }
+  
+  // TODO (vdka): refactor
+  // TODO (vdka): option to _repair_ Unicode
+  mutating func parseString() throws -> String {
+    
+    assert(peek() == quote)
+    unsafePop()
+    
+    var escaped = false
+    stringBuffer.removeAll(keepCapacity: true)
+    
+    repeat {
+      
+      let codeUnit = try pop()
+      if codeUnit == backslash && !escaped {
+        
+        escaped = true
+      } else if codeUnit == quote && !escaped {
+        
+        stringBuffer.append(0)
+        guard let string = stringBuffer.withUnsafeBufferPointer({ bufferPointer in
+          return String.fromCString(unsafeBitCast(bufferPointer.baseAddress, UnsafePointer<CChar>.self))
+        }) else { throw ErrorCode.invalidUnicode }
+        
+        return string
+      } else if escaped {
+        
+        switch codeUnit {
+        case r:
+          stringBuffer.append(cr)
+          
+        case t:
+          stringBuffer.append(tab)
+          
+        case n:
+          stringBuffer.append(newline)
+          
+        case b:
+          stringBuffer.append(backspace)
+          
+        case quote:
+          stringBuffer.append(quote)
+          
+        case slash:
+          stringBuffer.append(slash)
+          
+        case backslash:
+          stringBuffer.append(backslash)
+          
+        case u:
+          let codeUnit = try parseFourHex()
+          let scalar = UnicodeScalar(codeUnit)
+          var bytes: [UTF8.CodeUnit] = []
+          UTF8.encode(scalar, output: { bytes.append($0) })
+          stringBuffer.appendContentsOf(bytes)
+          
+        default:
+          throw ErrorCode.invalidEscape
+        }
+        
+        escaped = false
+        
+      } else {
+        
+        stringBuffer.append(codeUnit)
+      }
+    } while true
+  }
 }
 
-
-// MARK: - Internal internals. could be nested functions if it didnt screw with debugger.
-
 extension JSON.Parser {
+  
+  private mutating func parseFourHex() throws -> UInt32 {
+    var codeUnit: UInt32 = 0
+    for _ in 0..<4 {
+      let c = try pop()
+      codeUnit <<= 4
+      switch c {
+      case numbers:
+        codeUnit += UInt32(c - 48)
+      case alphaNumericLower:
+        codeUnit += UInt32(c - 87)
+      case alphaNumericUpper:
+        codeUnit += UInt32(c - 55)
+      default:
+        throw ErrorCode.invalidEscape
+      }
+    }
+    return codeUnit
+  }
   
   mutating func skipColon() throws {
     skipWhitespace()
@@ -434,9 +503,11 @@ extension JSON.Parser {
     case expectedColon
     case invalidSyntax
     case invalidNumber
+    case loneLeading
     case numberOverflow
     case invalidLiteral
     case invalidUnicode
+    case invalidEscape
     case endOfStream
   }
 }
@@ -450,7 +521,7 @@ extension JSON.Parser.Error: CustomStringConvertible {
 
 extension Double {
   
-  internal func power<I: IntegerType>(base: Double, exponent: I, isNegative: Bool) -> Double {
+  internal func power<I: UnsignedIntegerType>(base: Double, exponent: I, isNegative: Bool) -> Double {
     var a: Double = self
     if isNegative {
       for _ in 0..<exponent { a /= base }

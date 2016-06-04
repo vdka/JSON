@@ -29,6 +29,32 @@ public let json: JSON = {
   return try! JSON.Parser.parse(jsonString)
 }()
 
+public let twitterJson: JSON = {
+  let bundle = NSBundle(forClass: Foo.self)
+  let path = bundle.pathForResource("twitter_test", ofType: "json")
+  let data = NSData(contentsOfFile: path!)!
+  let jsonString = String.fromCString(unsafeBitCast(data.bytes, UnsafePointer<CChar>.self))!
+  
+  return try! JSON.Parser.parse(jsonString)
+}()
+
+public let twitterJsonString: String = {
+  let bundle = NSBundle(forClass: Foo.self)
+  let path = bundle.pathForResource("twitter_test", ofType: "json")
+  let data = NSData(contentsOfFile: path!)!
+  let jsonString = String.fromCString(unsafeBitCast(data.bytes, UnsafePointer<CChar>.self))!
+  
+  return jsonString
+}()
+
+public let twitterJsonData: NSData = {
+  let bundle = NSBundle(forClass: Foo.self)
+  let path = bundle.pathForResource("twitter_test", ofType: "json")
+  let data = NSData(contentsOfFile: path!)!
+  
+  return data
+}()
+
 import JSON
 
 public typealias VDKAJSON = JSON

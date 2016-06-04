@@ -95,18 +95,18 @@ extension Person: JSONEncodable {
 
 extension Currency: JSONDecodable {}
 extension Money: JSONDecodable {
-  static func decode(json: JSON) throws -> Money {
+  init(json: JSON) throws {
     let minorUnits = try json["minorUnits"].int ?? JSON.Error.BadField("minorUnits")
     let currency: Currency = try json.get("currency")
-    return Money(minorUnits: minorUnits, currency: currency)
+    self = Money(minorUnits: minorUnits, currency: currency)
   }
 }
 
 extension Person: JSONDecodable {
-  static func decode(json: JSON) throws -> Person {
+  init(json: JSON) throws {
     let name = try json["name"].string ?? JSON.Error.BadField("name")
     let age = try json["age"].int ?? JSON.Error.BadField("age")
     let accountBalances: [Money] = try json["accountBalances"].array?.flatMap(Money.init) ?? []
-    return Person(name: name, age: age, accountBalances: accountBalances)
+    self = Person(name: name, age: age, accountBalances: accountBalances)
   }
 }

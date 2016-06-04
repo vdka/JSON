@@ -28,12 +28,16 @@ class ParserUnitTests: XCTestCase {
   //TODO: add expect(_:, toThrow:_)
   
   func expect<T: Equatable>(input: String, toEqual expected: T, line: UInt = #line, afterApplying function: (inout JSON.Parser) -> () throws -> T) {
-    var parser = JSON.Parser.init(data: input.utf8.map({ $0 }))
-    do {
-      let output = try function(&parser)()
-      XCTAssertEqual(expected, output, line: line)
-    } catch {
-      XCTFail("\(error)", line: line)
+    var data = Array(input.nulTerminatedUTF8)
+    data.withUnsafeMutableBufferPointer { bufferPointer in
+      var parser = JSON.Parser.init(bufferPointer: bufferPointer, options: [])
+  //    var parser = JSON.Parser.init(data: input.utf8.map({ $0 }))
+      do {
+        let output = try function(&parser)()
+        XCTAssertEqual(expected, output, line: line)
+      } catch {
+        XCTFail("\(error)", line: line)
+      }
     }
   }
 
@@ -88,16 +92,17 @@ class ParserUnitTests: XCTestCase {
   
   func testParseString() {
     
-    expect(surrounding("🇦🇺"), toEqual: "🇦🇺", afterApplying: JSON.Parser.parseString)
-    expect(surrounding("vdka"), toEqual: "vdka", afterApplying: JSON.Parser.parseString)
     expect(surrounding(""), toEqual: "", afterApplying: JSON.Parser.parseString)
-    expect(surrounding(" \\ "), toEqual: " \\ ", afterApplying: JSON.Parser.parseString)
-    expect(surrounding("\\\""), toEqual: "\\\"", afterApplying: JSON.Parser.parseString)
-    expect(surrounding("\\\"\t\r\n\n"), toEqual: "\\\"\t\r\n\n", afterApplying: JSON.Parser.parseString)
+    expect(surrounding("vdka"), toEqual: "vdka", afterApplying: JSON.Parser.parseString)
+    expect(surrounding(" \\\\ "), toEqual: " \\ ", afterApplying: JSON.Parser.parseString)
+    expect(surrounding("\\\""), toEqual: "\"", afterApplying: JSON.Parser.parseString)
+    expect(surrounding("\\\"\\t\\r\\n"), toEqual: "\"\t\r\n", afterApplying: JSON.Parser.parseString)
+    
+    expect(surrounding("🇦🇺"), toEqual: "🇦🇺", afterApplying: JSON.Parser.parseString)
     
   }
   
-  func testParseValue() {
+  func testParseLiterals() {
     
     expect("null", toEqual: JSON.null, afterApplying: JSON.Parser.parseValue)
     expect("true", toEqual: true, afterApplying: JSON.Parser.parseValue)
@@ -108,28 +113,28 @@ class ParserUnitTests: XCTestCase {
   func testParseObject() {
     
     expect("{}", toEqual: [:], afterApplying: JSON.Parser.parseObject)
+    expect(" {} ", toEqual: [:], afterApplying: JSON.Parser.parseObject)
     expect("{'key': 321}".substituting("'", for: "\""), toEqual: ["key": 321], afterApplying: JSON.Parser.parseObject)
     expect("{'key': 321, 'key2': true}".substituting("'", for: "\""), toEqual: ["key": 321, "key2": true], afterApplying: JSON.Parser.parseObject)
     expect("{ 'key' : 321 , 'key2' : true }".substituting("'", for: "\""), toEqual: ["key": 321, "key2": true], afterApplying: JSON.Parser.parseObject)
+    
+    expect("{'a': 1, 'b': {'c': 2}}".substituting("'", for: "\""), toEqual: ["a": 1, "b": ["c": 2] as JSON], afterApplying: JSON.Parser.parseObject)
   }
   
   func testParseArray() {
     expect("[]", toEqual: [], afterApplying: JSON.Parser.parseArray)
+    expect("[1, [2, 3]]", toEqual: [1, [2, 3] as JSON], afterApplying: JSON.Parser.parseArray)
     expect("[1, 2, 3, 4]", toEqual: [1, 2, 3, 4], afterApplying: JSON.Parser.parseArray)
     expect("[true, false, 'abc', 4, 5.0]".substituting("'", for: "\""), toEqual: [true, false, "abc", 4, 5.0], afterApplying: JSON.Parser.parseArray)
   }
   
-//  func testSkipWhitespaceOneMillionTimes() {
-//    var whiteSpace = ""
-//    whiteSpace.unicodeScalars.reserveCapacity(100_000)
-//    for _ in 0..<100_000 {
-//      whiteSpace.unicodeScalars.append(" ")
-//    }
-//    
-//    let parser = JSON.Parser(string: whiteSpace)
-//    
-//    measurePerformance {
-//      parser.skipWhitespace()
-//    }
-//  }
+  func testParseValue() {
+    expect("[true, false, 'abc', 4, 5.0]".substituting("'", for: "\""), toEqual: [true, false, "abc", 4, 5.0], afterApplying: JSON.Parser.parseValue)
+  }
+  
+  // MARK: - Test potentially troubling values
+  func testTroublingValues() {
+    expect("{'Приве́т नमस्ते שָׁלוֹם':true}".substituting("'", for: "\""), toEqual: ["Приве́т नमस्ते שָׁלוֹם": true], afterApplying: JSON.Parser.parseValue)
+    expect(surrounding("سمَـَّوُوُحخ ̷̴̐خ ̷̴̐خ ̷̴̐خ امارتيخ ̷̴̐خ"), toEqual: "سمَـَّوُوُحخ ̷̴̐خ ̷̴̐خ ̷̴̐خ امارتيخ ̷̴̐خ", afterApplying: JSON.Parser.parseString)
+  }
 }
