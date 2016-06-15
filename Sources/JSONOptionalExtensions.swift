@@ -32,8 +32,8 @@ extension Optional where Wrapped: _JSON {
     set {
       guard var a = (self as? JSON)?.array else { return }
       switch newValue {
-      case .None: a.removeAtIndex(index)
-      case .Some(let value):
+      case .none: a.remove(at: index)
+      case .some(let value):
         a[index] = value
         self = (JSON.array(a) as? Wrapped)
       }

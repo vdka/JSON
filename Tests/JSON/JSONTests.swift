@@ -30,7 +30,7 @@ class JSONTests: XCTestCase {
   
   func testSanity() {
     
-    func assertSymmetricJSONConversion(json: JSON, options: [JSON.Serializer.Option] = [], line: UInt = #line) {
+    func assertSymmetricJSONConversion(_ json: JSON, options: [JSON.Serializer.Option] = [], line: UInt = #line) {
       do {
         let json2 = try JSON.Parser.parse(json.serialized(options: options))
         XCTAssertEqual(json, json2, line: line)

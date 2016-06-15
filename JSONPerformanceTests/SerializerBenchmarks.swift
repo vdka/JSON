@@ -1,16 +1,16 @@
 
 import XCTest
-import PMJSON
-import SwiftyJSON
-import JASON
+//import PMJSON
+//import SwiftyJSON
+//import JASON
 import JSON
 
 class SerializerBenchmarks: XCTestCase {
   
   func testSerializerVDKAJSON() {
-    measureBlock {
+    measure {
       do {
-        try VDKAJSON.Serializer.serialize(json)
+        _ = try VDKAJSON.Serializer.serialize(json)
       } catch {
         if let printableError = error as? CustomStringConvertible {
           XCTFail("JSON parse error: \(printableError)")
@@ -20,9 +20,9 @@ class SerializerBenchmarks: XCTestCase {
   }
   
   func testSerializerVDKAJSONPrettyPrint() {
-    measureBlock {
+    measure {
       do {
-        try VDKAJSON.Serializer.serialize(json, options: [.prettyPrint])
+        _ = try VDKAJSON.Serializer.serialize(json, options: [.prettyPrint])
       } catch {
         if let printableError = error as? CustomStringConvertible {
           XCTFail("JSON parse error: \(printableError)")
@@ -31,35 +31,35 @@ class SerializerBenchmarks: XCTestCase {
     }
   }
   
-  func testSerializerPMJSON() {
-    let json = try! PMJSON.JSON.decode(jsonString)
-    measureBlock { 
-      PMJSON.JSON.encodeAsString(json)
-    }
-  }
-  
-  func testSerializerPMJSONPrettyPrint() {
-    let json = try! PMJSON.JSON.decode(jsonString)
-    measureBlock { 
-      PMJSON.JSON.encodeAsString(json, pretty: true)
-    }
-  }
-  
-  func testSerializerSwiftyJSON() {
-    let json = SwiftyJSON.JSON(jsonString)
-    var s: String?
-    measureBlock {
-      s = json.rawString(options: [])!
-    }
-    print(s!.characters.count)
-  }
-  
-  func testSerializerNSJSON() {
-    let json = SwiftyJSON.JSON(jsonString)
-    var s: String?
-    measureBlock {
-      s = json.rawString(options: [])!
-    }
-  }
+//  func testSerializerPMJSON() {
+//    let json = try! PMJSON.JSON.decode(jsonString)
+//    measureBlock { 
+//      PMJSON.JSON.encodeAsString(json)
+//    }
+//  }
+//  
+//  func testSerializerPMJSONPrettyPrint() {
+//    let json = try! PMJSON.JSON.decode(jsonString)
+//    measureBlock { 
+//      PMJSON.JSON.encodeAsString(json, pretty: true)
+//    }
+//  }
+//  
+//  func testSerializerSwiftyJSON() {
+//    let json = SwiftyJSON.JSON(jsonString)
+//    var s: String?
+//    measureBlock {
+//      s = json.rawString(options: [])!
+//    }
+//    print(s!.characters.count)
+//  }
+//  
+//  func testSerializerNSJSON() {
+//    let json = SwiftyJSON.JSON(jsonString)
+//    var s: String?
+//    measureBlock {
+//      s = json.rawString(options: [])!
+//    }
+//  }
   
 }

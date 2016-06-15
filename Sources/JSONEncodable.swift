@@ -32,7 +32,7 @@ extension JSON: JSONEncodable {
 // MARK: - Add `serialized` to `JSONEncodable`
 
 extension JSONEncodable {
-  public func serialized(options options: [JSON.Serializer.Option] = []) throws -> String {
+  public func serialized(options: JSON.Serializer.Option = []) throws -> String {
     return try JSON.Serializer.serialize(self.encoded(), options: options)
   }
 }
@@ -62,7 +62,7 @@ extension RawRepresentable where RawValue: JSONEncodable {
 
 // MARK: - Add encoded to Collections of JSONEncodable
 
-extension CollectionType where Generator.Element: JSONEncodable {
+extension Collection where Iterator.Element: JSONEncodable {
   public func encoded() -> JSON {
     return .array(self.map({ $0.encoded() }))
   }

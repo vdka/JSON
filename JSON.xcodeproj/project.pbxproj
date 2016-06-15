@@ -23,18 +23,11 @@
 		AA213B3B1CBC8A7B00910D50 /* JSONTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA213B3A1CBC8A7B00910D50 /* JSONTests.swift */; };
 		AA3459741CCF6F9E00DD3F87 /* Shared.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA3459721CCF6F9E00DD3F87 /* Shared.swift */; };
 		AA3459791CCF7FC300DD3F87 /* ParserBenchmarks.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA3459781CCF7FC300DD3F87 /* ParserBenchmarks.swift */; };
-		AA34597D1CCF801200DD3F87 /* JASON.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AA34597A1CCF801200DD3F87 /* JASON.framework */; };
-		AA34597E1CCF801200DD3F87 /* PMJSON.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AA34597B1CCF801200DD3F87 /* PMJSON.framework */; };
-		AA34597F1CCF801200DD3F87 /* SwiftyJSON.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AA34597C1CCF801200DD3F87 /* SwiftyJSON.framework */; };
-		AA3459801CCF832500DD3F87 /* JASON.framework in Resources */ = {isa = PBXBuildFile; fileRef = AA34597A1CCF801200DD3F87 /* JASON.framework */; };
-		AA3459811CCF832500DD3F87 /* PMJSON.framework in Resources */ = {isa = PBXBuildFile; fileRef = AA34597B1CCF801200DD3F87 /* PMJSON.framework */; };
-		AA3459821CCF832500DD3F87 /* SwiftyJSON.framework in Resources */ = {isa = PBXBuildFile; fileRef = AA34597C1CCF801200DD3F87 /* SwiftyJSON.framework */; };
 		AA3459881CCF898500DD3F87 /* SerializerBenchmarks.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA3459871CCF898500DD3F87 /* SerializerBenchmarks.swift */; };
 		AA4CE86C1CC469F200A1C8EB /* JSONParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA4CE86B1CC469F200A1C8EB /* JSONParser.swift */; };
 		AA4CE86D1CC469F200A1C8EB /* JSONParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA4CE86B1CC469F200A1C8EB /* JSONParser.swift */; };
 		AA4CE86E1CC469F200A1C8EB /* JSONParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA4CE86B1CC469F200A1C8EB /* JSONParser.swift */; };
 		AA4CE86F1CC469F200A1C8EB /* JSONParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA4CE86B1CC469F200A1C8EB /* JSONParser.swift */; };
-		AA853AE21CBE366500FD3970 /* JSON.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AA213B0A1CBC7F5F00910D50 /* JSON.framework */; };
 		AA853B131CBEA3A000FD3970 /* JSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA213B251CBC800800910D50 /* JSON.swift */; };
 		AA853B141CBEA3A000FD3970 /* JSONAccessors.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA213B261CBC800800910D50 /* JSONAccessors.swift */; };
 		AA853B151CBEA3A000FD3970 /* JSONDecodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA213B271CBC800800910D50 /* JSONDecodable.swift */; };
@@ -162,10 +155,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				AA853AE21CBE366500FD3970 /* JSON.framework in Frameworks */,
-				AA34597D1CCF801200DD3F87 /* JASON.framework in Frameworks */,
-				AA34597E1CCF801200DD3F87 /* PMJSON.framework in Frameworks */,
-				AA34597F1CCF801200DD3F87 /* SwiftyJSON.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -237,8 +226,8 @@
 				AA213B291CBC800800910D50 /* JSONError.swift */,
 				AA213B2A1CBC800800910D50 /* JSONOptionalExtensions.swift */,
 				AA4CE86B1CC469F200A1C8EB /* JSONParser.swift */,
-				AA18CE3A1CFAC40500ED0FE6 /* Constants.swift */,
 				AAB69A9E1CC8D9C300940C5D /* JSONSerializer.swift */,
+				AA18CE3A1CFAC40500ED0FE6 /* Constants.swift */,
 			);
 			path = Sources;
 			sourceTree = "<group>";
@@ -478,14 +467,16 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0730;
-				LastUpgradeCheck = 0730;
+				LastUpgradeCheck = 0800;
 				ORGANIZATIONNAME = "Ethan Jackwitz";
 				TargetAttributes = {
 					AA213B091CBC7F5F00910D50 = {
 						CreatedOnToolsVersion = 7.3;
+						LastSwiftMigration = 0800;
 					};
 					AA213B131CBC7F5F00910D50 = {
 						CreatedOnToolsVersion = 7.3;
+						LastSwiftMigration = 0800;
 					};
 					AA853ADC1CBE366500FD3970 = {
 						CreatedOnToolsVersion = 7.3;
@@ -549,10 +540,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				AA18CE491CFC88C200ED0FE6 /* twitter_test.json in Resources */,
-				AA3459801CCF832500DD3F87 /* JASON.framework in Resources */,
 				AA18CE1A1CF72C6B00ED0FE6 /* test.json in Resources */,
-				AA3459811CCF832500DD3F87 /* PMJSON.framework in Resources */,
-				AA3459821CCF832500DD3F87 /* SwiftyJSON.framework in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -838,6 +826,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.vdka.JSON;
 				PRODUCT_NAME = JSON;
 				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
 		};
@@ -856,6 +845,8 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.vdka.JSON;
 				PRODUCT_NAME = JSON;
 				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
 		};
@@ -868,6 +859,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.vdka.JSONTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
 		};
@@ -879,6 +871,8 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.vdka.JSONTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
 		};
@@ -948,6 +942,7 @@
 				PRODUCT_NAME = JSON;
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				TARGETED_DEVICE_FAMILY = 4;
 				WATCHOS_DEPLOYMENT_TARGET = 2.2;
 			};
@@ -988,6 +983,7 @@
 				PRODUCT_NAME = JSON;
 				SDKROOT = appletvos;
 				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				TARGETED_DEVICE_FAMILY = 3;
 				TVOS_DEPLOYMENT_TARGET = 9.0;
 			};
@@ -1034,6 +1030,7 @@
 				PRODUCT_NAME = JSON;
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 			};
 			name = Release;
 		};

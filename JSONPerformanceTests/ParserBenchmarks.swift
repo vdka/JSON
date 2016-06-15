@@ -1,8 +1,8 @@
 
 import XCTest
-import PMJSON
-import SwiftyJSON
-import JASON
+//import PMJSON
+//import SwiftyJSON
+//import JASON
 import JSON
 
 class ParserBenchmarks: XCTestCase {
@@ -10,19 +10,19 @@ class ParserBenchmarks: XCTestCase {
   func testParseVDKAJSON() {
     // TODO (vdka): determine why the first run of JSON.Parser.parse(_,_:) is so much slower
     let data = Array(jsonString.nulTerminatedUTF8)
-    try! VDKAJSON.Parser.parse(data, options: [.noSkipNull])
-    measureBlock {
-      try! VDKAJSON.Parser.parse(data, options: [.noSkipNull])
+    _ = try! VDKAJSON.Parser.parse(data, options: [.noSkipNull])
+    measure {
+      _ = try! VDKAJSON.Parser.parse(data, options: [.noSkipNull])
     }
   }
   
   func testParseVDKAJSONTwitterData() {
     // TODO (vdka): determine why the first run of JSON.Parser.parse(_,_:) is so much slower
     let data = Array(twitterJsonString.nulTerminatedUTF8)
-    try! VDKAJSON.Parser.parse(data, options: [.noSkipNull])
-    measureBlock {
+    _ = try! VDKAJSON.Parser.parse(data, options: [.noSkipNull])
+    measure {
       for _ in 0...100 {
-        try! VDKAJSON.Parser.parse(data, options: [.noSkipNull])
+        _ = try! VDKAJSON.Parser.parse(data, options: [.noSkipNull])
       }
     }
   }
@@ -30,41 +30,41 @@ class ParserBenchmarks: XCTestCase {
   // NSJSONSerialization
   
   func testParseNSJSON() {
-    let jsonData = jsonString.dataUsingEncoding(NSUTF8StringEncoding)!
-    measureBlock {
-      try! NSJSONSerialization.JSONObjectWithData(jsonData, options: [])
+    let jsonData = jsonString.data(using: String.Encoding.utf8)!
+    measure {
+      try! JSONSerialization.jsonObject(with: jsonData, options: [])
     }
   }
   
   func testParseNSJSONTwitter() {
-    let jsonData = twitterJsonString.dataUsingEncoding(NSUTF8StringEncoding)!
-    measureBlock {
+    let jsonData = twitterJsonString.data(using: String.Encoding.utf8)!
+    measure {
       for _ in 0...100 {
-        try! NSJSONSerialization.JSONObjectWithData(jsonData, options: [])
+        try! JSONSerialization.jsonObject(with: jsonData, options: [])
       }
     }
   }
   
-  func testParseSwiftyJSON() {
-    let jsonData = jsonString.dataUsingEncoding(NSUTF8StringEncoding)!
-    measureBlock {
-      _ = SwiftyJSON.JSON(data: jsonData)
-    }
-  }
-  
-  func testParseJASON() {
-    let jsonData = jsonString.dataUsingEncoding(NSUTF8StringEncoding)!
-    measureBlock {
-      _ = JASON.JSON(jsonData)
-    }
-  }
-  
-  // Relies upon C stdlib
-  
-  func testParsePMJSON() {
-    measureBlock {
-      try! PMJSON.JSON.decode(jsonString)
-    }
-  }
+//  func testParseSwiftyJSON() {
+//    let jsonData = jsonString.data(using: String.Encoding.utf8)!
+//    measureBlock {
+//      _ = SwiftyJSON.JSON(data: jsonData)
+//    }
+//  }
+//  
+//  func testParseJASON() {
+//    let jsonData = jsonString.data(using: String.Encoding.utf8)!
+//    measureBlock {
+//      _ = JASON.JSON(jsonData)
+//    }
+//  }
+//  
+//  // Relies upon C stdlib
+//  
+//  func testParsePMJSON() {
+//    measureBlock {
+//      try! PMJSON.JSON.decode(jsonString)
+//    }
+//  }
   
 }

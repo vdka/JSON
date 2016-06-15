@@ -17,7 +17,7 @@ class ReadmeTests: XCTestCase {
     _ = try! Money.decode(["minorUnits": 1000, "currency": "AUD"])
     _ = try! Money(json: ["minorUnits": 1000, "currency": "AUD"])
     
-    [
+    _ = [
       "name": "Harry",
       "age": 20,
       "accountBalances": [
@@ -96,7 +96,7 @@ extension Person: JSONEncodable {
 extension Currency: JSONDecodable {}
 extension Money: JSONDecodable {
   init(json: JSON) throws {
-    let minorUnits = try json["minorUnits"].int ?? JSON.Error.BadField("minorUnits")
+    let minorUnits = try json["minorUnits"].int ?? JSON.Error.badField("minorUnits")
     let currency: Currency = try json.get("currency")
     self = Money(minorUnits: minorUnits, currency: currency)
   }
@@ -104,8 +104,8 @@ extension Money: JSONDecodable {
 
 extension Person: JSONDecodable {
   init(json: JSON) throws {
-    let name = try json["name"].string ?? JSON.Error.BadField("name")
-    let age = try json["age"].int ?? JSON.Error.BadField("age")
+    let name = try json["name"].string ?? JSON.Error.badField("name")
+    let age = try json["age"].int ?? JSON.Error.badField("age")
     let accountBalances: [Money] = try json["accountBalances"].array?.flatMap(Money.init) ?? []
     self = Person(name: name, age: age, accountBalances: accountBalances)
   }

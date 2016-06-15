@@ -17,23 +17,23 @@ extension JSON {
   }
   
   /// Returns the content matching the type of its destination
-  public func get<T: JSONDecodable>(field: String) throws -> T {
-    guard let json = self[field] else { throw JSON.Error.BadField(field) }
+  public func get<T: JSONDecodable>(_ field: String) throws -> T {
+    guard let json = self[field] else { throw JSON.Error.badField(field) }
     
     return try T.decode(json)
   }
   
   /// Returns the content matching the type of its destination
-  public func get<T: RawRepresentable>(field: String) throws -> T {
-    guard let rawValue = self[field]?.value as? T.RawValue else { throw JSON.Error.BadField(field) }
-    guard let value = T(rawValue: rawValue) else { throw JSON.Error.BadValue(rawValue) }
+  public func get<T: RawRepresentable>(_ field: String) throws -> T {
+    guard let rawValue = self[field]?.value as? T.RawValue else { throw JSON.Error.badField(field) }
+    guard let value = T(rawValue: rawValue) else { throw JSON.Error.badValue(rawValue) }
     
     return value
   }
   
   /// Returns the content matching the type of its destination
-  public func get<T: protocol<RawRepresentable, JSONDecodable>>(field: String) throws -> T {
-    guard let json = self[field] else { throw JSON.Error.BadField(field) }
+  public func get<T: protocol<RawRepresentable, JSONDecodable>>(_ field: String) throws -> T {
+    guard let json = self[field] else { throw JSON.Error.badField(field) }
     
     return try T.decode(json)
   }
@@ -65,13 +65,13 @@ extension JSON {
     set {
       guard case .object(var o) = self else { return }
       defer { self = .object(o) }
-      for (i, (k, _)) in o.enumerate() where key == k {
+      for (i, (k, _)) in o.enumerated() where key == k {
         switch newValue {
         case let newValue?:
           o[i] = (k, newValue)
           
         case nil:
-          o.removeAtIndex(i)
+          o.remove(at: i)
           
         }
         return
@@ -98,11 +98,11 @@ extension JSON {
     set {
       guard case .array(var a) = self where a.indices ~= index else { return }
       switch newValue {
-      case .Some(let newValue):
+      case .some(let newValue):
         a[index] = newValue
         
-      case .None:
-        a.removeAtIndex(index)
+      case .none:
+        a.remove(at: index)
       }
       self = .array(a)
     }

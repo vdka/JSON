@@ -23,8 +23,8 @@ let json: JSON = {
       let char = chars[Int(arc4random_uniform(UInt32(chars.count)))]
       str.append(char)
     }
-    str.appendContentsOf(" ")
-    str.appendContentsOf(arc4random_uniform(10000).description)
+    str.append(" ")
+    str.append(arc4random_uniform(10000).description)
     return str
   }
   
@@ -52,10 +52,8 @@ let jsonString = try! JSON.Serializer.serialize(json)
 
 let codeUnits = jsonString.nulTerminatedUTF8
 
-try! JSON.Parser.parse(jsonString)
+_ = try! JSON.Parser.parse(jsonString)
 
-let data = jsonString.dataUsingEncoding(NSUTF8StringEncoding)!
+let data = jsonString.data(using: String.Encoding.utf8)!
 
-try! NSJSONSerialization.JSONObjectWithData(data, options: [])
-
-print("done")
+try! JSONSerialization.jsonObject(with: data)

@@ -1,6 +1,6 @@
 
 import XCTest
-import SwiftyJSON
+//import SwiftyJSON
 import JSON
 
 class AccessBenchmarks: XCTestCase {
@@ -26,7 +26,7 @@ class AccessBenchmarks: XCTestCase {
 //    let profileImageURL: String
 //    let profileBackgroundImageURL: String
     
-    enum Error: ErrorType {
+    enum Error: ErrorProtocol {
       case unknown
     }
     
@@ -72,31 +72,31 @@ class AccessBenchmarks: XCTestCase {
       self.url = nsJson["url"] as? String
     }
     
-    init?(swiftyJson: SwiftyJSON.JSON) {
-      guard
-        let id = swiftyJson["id"].int,
-        let name = swiftyJson["name"].string,
-        let screenName = swiftyJson["screen_name"].string,
-        let createdAt = swiftyJson["created_at"].string,
-        let location = swiftyJson["location"].string,
-        let protected = swiftyJson["protected"].bool,
-        let verified = swiftyJson["verified"].bool
-      else { return nil }
-      
-      self.id = id
-      self.name = name
-      self.screenName = screenName
-      self.createdAt  = createdAt
-      self.location = location
-      self.protected = protected
-      self.verified = verified
-      self.url = swiftyJson["url"].string
-    }
+//    init?(swiftyJson: SwiftyJSON.JSON) {
+//      guard
+//        let id = swiftyJson["id"].int,
+//        let name = swiftyJson["name"].string,
+//        let screenName = swiftyJson["screen_name"].string,
+//        let createdAt = swiftyJson["created_at"].string,
+//        let location = swiftyJson["location"].string,
+//        let protected = swiftyJson["protected"].bool,
+//        let verified = swiftyJson["verified"].bool
+//      else { return nil }
+//      
+//      self.id = id
+//      self.name = name
+//      self.screenName = screenName
+//      self.createdAt  = createdAt
+//      self.location = location
+//      self.protected = protected
+//      self.verified = verified
+//      self.url = swiftyJson["url"].string
+//    }
   }
 
   func testTwitterTweetMappingJSON() {
     guard let userJson = twitterJson[0]["user"] else { fatalError() }
-    measureBlock {
+    measure {
       for _ in 0...1000 {
         _ = try! User(json: userJson)
       }
@@ -104,25 +104,25 @@ class AccessBenchmarks: XCTestCase {
   }
   
   func testTwitterTweetMappingNSJSON() {
-    guard let json = try! NSJSONSerialization.JSONObjectWithData(twitterJsonData, options: []) as? [[String: AnyObject]] else { fatalError() }
+    guard let json = try! JSONSerialization.jsonObject(with: twitterJsonData, options: []) as? [[String: AnyObject]] else { fatalError() }
     guard let userJson = json[0]["user"] as? [String: AnyObject] else { fatalError() }
-    measureBlock {
+    measure {
       for _ in 0...1000 {
-        User(nsJson: userJson)!
+        _ = User(nsJson: userJson)!
       }
     }
     
   }
 
-  func testTwitterTweetMappingSwiftyJSON() {
-    let json = SwiftyJSON.JSON.init(twitterJsonData)
-    let userJson = json[0]["user"]
-    measureBlock {
-      for _ in 0...1000 {
-        User(swiftyJson: userJson)!
-      }
-    }
-  }
+//  func testTwitterTweetMappingSwiftyJSON() {
+//    let json = SwiftyJSON.JSON.init(twitterJsonData)
+//    let userJson = json[0]["user"]
+//    measureBlock {
+//      for _ in 0...1000 {
+//        User(swiftyJson: userJson)!
+//      }
+//    }
+//  }
   
   
   

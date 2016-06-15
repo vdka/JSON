@@ -5,7 +5,7 @@
 extension JSON {
   public struct Serializer {
     
-    public struct Option: OptionSetType {
+    public struct Option: OptionSet {
       public init(rawValue: UInt8) { self.rawValue = rawValue }
       public let rawValue: UInt8
       
@@ -17,7 +17,7 @@ extension JSON {
       public static let windowsLineEndings = Option(rawValue: 1 << 3)
     }
     
-    init(json: JSON, options: [Option] = []) {
+    init(json: JSON, options: Option = []) {
       self.skipNull = !options.contains(.noSkipNull)
       self.prettyPrint = options.contains(.prettyPrint)
       self.useWindowsLineEndings = options.contains(.windowsLineEndings)
@@ -30,12 +30,12 @@ extension JSON {
 }
 
 extension JSON.Serializer {
-  public static func serialize<O: OutputStreamType>(json: JSON, inout to stream: O, options: [Option]) throws {
+  public static func serialize<O: OutputStream>(_ json: JSON, to stream: inout O, options: Option) throws {
     let writer = JSON.Serializer(json: json, options: options)
     try writer.writeValue(json, to: &stream)
   }
   
-  public static func serialize(json: JSON, options: [Option] = []) throws -> String {
+  public static func serialize(_ json: JSON, options: Option = []) throws -> String {
     var s = ""
     let writer = JSON.Serializer(json: json, options: options)
     try writer.writeValue(json, to: &s)
@@ -44,7 +44,7 @@ extension JSON.Serializer {
 }
 
 extension JSON.Serializer {
-  func writeValue<O: OutputStreamType>(value: JSON, inout to stream: O, indentLevel: Int = 0) throws {
+  func writeValue<O: OutputStream>(_ value: JSON, to stream: inout O, indentLevel: Int = 0) throws {
     switch value {
     case .array(let a):
       try writeArray(a, to: &stream, indentLevel: indentLevel)
@@ -73,12 +73,12 @@ extension JSON.Serializer {
 }
 
 extension JSON.Serializer {
-  func writeNewlineIfNeeded<O: OutputStreamType>(inout to stream: O) {
+  func writeNewlineIfNeeded<O: OutputStream>(to stream: inout O) {
     guard prettyPrint else { return }
     stream.write("\n")
   }
   
-  func writeIndentIfNeeded<O: OutputStreamType>(indentLevel: Int, inout to stream: O) {
+  func writeIndentIfNeeded<O: OutputStream>(_ indentLevel: Int, to stream: inout O) {
     guard prettyPrint else { return }
     
     // TODO: Look into a more effective way of adding to a string.
@@ -91,7 +91,7 @@ extension JSON.Serializer {
 
 extension JSON.Serializer {
   
-  func writeArray<O: OutputStreamType>(a: [JSON], inout to stream: O, indentLevel: Int = 0) throws {
+  func writeArray<O: OutputStream>(_ a: [JSON], to stream: inout O, indentLevel: Int = 0) throws {
     if a.isEmpty {
       stream.write("[]")
       return
@@ -119,7 +119,7 @@ extension JSON.Serializer {
     stream.write("]")
   }
   
-  func writeObject<O: OutputStreamType>(o: [(String, JSON)], inout to stream: O, indentLevel: Int = 0) throws {
+  func writeObject<O: OutputStream>(_ o: [(String, JSON)], to stream: inout O, indentLevel: Int = 0) throws {
     if o.isEmpty {
       stream.write("{}")
       return
@@ -149,7 +149,7 @@ extension JSON.Serializer {
     stream.write("}")
   }
   
-  func writeBool<O: OutputStreamType>(b: Bool, inout to stream: O) {
+  func writeBool<O: OutputStream>(_ b: Bool, to stream: inout O) {
     switch b {
     case true:
       stream.write("true")
@@ -159,20 +159,20 @@ extension JSON.Serializer {
     }
   }
   
-  func writeNull<O: OutputStreamType>(inout to stream: O) {
+  func writeNull<O: OutputStream>(to stream: inout O) {
     stream.write("null")
   }
   
-  func writeInteger<O: OutputStreamType>(i: Int64, inout to stream: O) {
+  func writeInteger<O: OutputStream>(_ i: Int64, to stream: inout O) {
     stream.write(i.description)
   }
   
-  func writeDouble<O: OutputStreamType>(d: Double, inout to stream: O) throws {
+  func writeDouble<O: OutputStream>(_ d: Double, to stream: inout O) throws {
     guard d.isFinite else { throw JSON.Serializer.Error.invalidNumber }
     stream.write(d.description)
   }
   
-  func writeString<O: OutputStreamType>(s: String, inout to stream: O) {
+  func writeString<O: OutputStream>(_ s: String, to stream: inout O) {
     stream.write("\"")
     stream.write(s)
     stream.write("\"")
@@ -180,7 +180,7 @@ extension JSON.Serializer {
 }
 
 extension JSON.Serializer {
-  public enum Error: String, ErrorType {
+  public enum Error: String, ErrorProtocol {
     case invalidNumber
   }
 }

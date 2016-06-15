@@ -6,7 +6,7 @@ extension JSON {
   
   public struct Parser {
     
-    public struct Option: OptionSetType {
+    public struct Option: OptionSet {
       public init(rawValue: UInt8) { self.rawValue = rawValue }
       public let rawValue: UInt8
       
@@ -29,10 +29,10 @@ extension JSON.Parser {
   
   // assumes data is null terminated.
   // and that the buffer will not be de-allocated before completion (handled by JSON.Parser.parse(_:,options:)
-  internal init(bufferPointer: UnsafeMutableBufferPointer<UTF8.CodeUnit>, options: [Option]) {
+  internal init(bufferPointer: UnsafeMutableBufferPointer<UTF8.CodeUnit>, options: Option) {
     
     self.bufferPointer = bufferPointer
-    self.pointer = bufferPointer.baseAddress
+    self.pointer = bufferPointer.baseAddress!
     self.skipNull = !options.contains(.noSkipNull)
     
     self.skipWhitespace()
@@ -44,7 +44,7 @@ extension JSON.Parser {
 
 extension JSON.Parser {
   
-  public static func parse(inout data: [UTF8.CodeUnit], options: [Option] = []) throws -> JSON {
+  public static func parse(_ data: inout [UTF8.CodeUnit], options: Option = []) throws -> JSON {
     
     data.append(0)
     
@@ -54,7 +54,7 @@ extension JSON.Parser {
     }
   }
   
-  public static func parse(data: [UTF8.CodeUnit], options: [Option] = []) throws -> JSON {
+  public static func parse(_ data: [UTF8.CodeUnit], options: Option = []) throws -> JSON {
     
     var data = data
     data.append(0)
@@ -65,7 +65,7 @@ extension JSON.Parser {
     }
   }
   
-  public static func parse(string: String, options: [Option] = []) throws -> JSON {
+  public static func parse(_ string: String, options: Option = []) throws -> JSON {
     
     var data = string.nulTerminatedUTF8
     
@@ -83,13 +83,13 @@ extension JSON.Parser {
   // TODO: Make this work, or DEPRECATE it.
   // Screw handling errors (that requires a parser instance, we plan on reiterating the parser anyway)
   // instead we should have a validate function, which validates that JSON follows the correct form.
-  private mutating func handleError(error: ErrorType) throws {
+  private mutating func handleError(_ error: ErrorProtocol) throws {
     guard let code = error as? ErrorCode else {
       throw error
     }
     
-    let offset = pointer.distanceTo(bufferPointer.baseAddress)
-    print("Parsed up to: \n\(bufferPointer[0..<offset].map({ String($0) }).joinWithSeparator(""))")
+    let offset = pointer.distance(to: bufferPointer.baseAddress!)
+    print("Parsed up to: \n\(bufferPointer[0..<offset].map({ String($0) }).joined(separator: ""))")
     var line: UInt = 0
     var char: UInt = 0
     for ch in bufferPointer.prefix(offset) {
@@ -114,19 +114,21 @@ extension JSON.Parser {
 extension JSON.Parser {
   
   func peek() -> UTF8.CodeUnit {
-    return pointer.memory
+    return pointer.pointee
   }
   
   mutating func pop() throws -> UTF8.CodeUnit {
-    guard pointer.memory != 0 else { throw ErrorCode.endOfStream }
-    defer { pointer = pointer.advancedBy(1) }
-    return pointer.memory
+    guard pointer.pointee != 0 else { throw ErrorCode.endOfStream }
+    defer { pointer = pointer.advanced(by: 1) }
+    return pointer.pointee
   }
   
+  
   /// Skips null pointer check. Use should occur only after checking the result of peek()
+  @discardableResult
   mutating func unsafePop() -> UTF8.CodeUnit {
-    defer { pointer = pointer.advancedBy(1) }
-    return pointer.memory
+    defer { pointer = pointer.advanced(by: 1) }
+    return pointer.pointee
   }
 }
 
@@ -150,7 +152,7 @@ extension JSON.Parser {
    */
   mutating func parseValue() throws -> JSON {
     
-    assert(![space, tab, cr, newline, 0].contains(pointer.memory))
+    assert(![space, tab, cr, newline, 0].contains(pointer.pointee))
     
     defer { skipWhitespace() }
     switch peek() {
@@ -281,7 +283,7 @@ extension JSON.Parser {
     } while true
   }
   
-  mutating func assertFollowedBy(chars: [UTF8.CodeUnit]) throws {
+  mutating func assertFollowedBy(_ chars: [UTF8.CodeUnit]) throws {
     
     for scalar in chars {
       guard try scalar == pop() else { throw ErrorCode.invalidLiteral }
@@ -341,7 +343,8 @@ extension JSON.Parser {
         unsafePop() // remove the decimal
         seenDecimal = true
         
-      case E, e where !seenExponent:
+      case E where !seenExponent,
+           e where !seenExponent:
         
         unsafePop() // remove the 'e' || 'E'
         seenExponent = true
@@ -398,7 +401,7 @@ extension JSON.Parser {
     unsafePop()
     
     var escaped = false
-    stringBuffer.removeAll(keepCapacity: true)
+    stringBuffer.removeAll(keepingCapacity: true)
     
     repeat {
       
@@ -409,9 +412,9 @@ extension JSON.Parser {
       } else if codeUnit == quote && !escaped {
         
         stringBuffer.append(0)
-        guard let string = stringBuffer.withUnsafeBufferPointer({ bufferPointer in
-          return String.fromCString(unsafeBitCast(bufferPointer.baseAddress, UnsafePointer<CChar>.self))
-        }) else { throw ErrorCode.invalidUnicode }
+        let string = stringBuffer.withUnsafeBufferPointer { bufferPointer in
+          return String(cString: unsafeBitCast(bufferPointer.baseAddress, to: UnsafePointer<CChar>.self))
+        }
         
         return string
       } else if escaped {
@@ -442,8 +445,8 @@ extension JSON.Parser {
           let codeUnit = try parseFourHex()
           let scalar = UnicodeScalar(codeUnit)
           var bytes: [UTF8.CodeUnit] = []
-          UTF8.encode(scalar, output: { bytes.append($0) })
-          stringBuffer.appendContentsOf(bytes)
+          UTF8.encode(scalar, sendingOutputTo: { bytes.append($0) })
+          stringBuffer.append(contentsOf: bytes)
           
         default:
           throw ErrorCode.invalidEscape
@@ -491,13 +494,13 @@ extension JSON.Parser {
 
 extension JSON.Parser {
   
-  public struct Error: ErrorType {
+  public struct Error: ErrorProtocol {
     let char: UInt
     let line: UInt
     let code: ErrorCode
   }
   
-  public enum ErrorCode: String, ErrorType {
+  public enum ErrorCode: String, ErrorProtocol {
     case missingColon
     case trailingComma
     case expectedColon
@@ -521,7 +524,7 @@ extension JSON.Parser.Error: CustomStringConvertible {
 
 extension Double {
   
-  internal func power<I: UnsignedIntegerType>(base: Double, exponent: I, isNegative: Bool) -> Double {
+  internal func power(_ base: Double, exponent: UInt64, isNegative: Bool) -> Double {
     var a: Double = self
     if isNegative {
       for _ in 0..<exponent { a /= base }

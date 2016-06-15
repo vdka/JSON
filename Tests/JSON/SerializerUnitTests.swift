@@ -11,7 +11,7 @@ import XCTest
 
 class SerializerUnitTests: XCTestCase {
   
-  func expect(input: JSON, options: [JSON.Serializer.Option] = [], toEqual expected: String, line: UInt = #line) {
+  func expect(_ input: JSON, options: [JSON.Serializer.Option] = [], toEqual expected: String, line: UInt = #line) {
     do {
       let output = try JSON.Serializer.serialize(input, options: options)
       XCTAssertEqual(expected, output, line: line)

@@ -9,17 +9,17 @@
 import XCTest
 @testable import JSON
 
-func surrounding(string: String, by char: Character = "\"") -> String {
+func surrounding(_ string: String, by char: Character = "\"") -> String {
   return "\(char)\(string)\(char)"
 }
 
-func escaping(string: String) -> String {
-  return string.stringByReplacingOccurrencesOfString("'", withString: "\"")
+func escaping(_ string: String) -> String {
+  return string.replacingOccurrences(of: "'", with: "\"")
 }
 
 extension String {
-  func substituting(this: String, for that: String) -> String {
-    return self.stringByReplacingOccurrencesOfString(this, withString: that)
+  func substituting(_ this: String, for that: String) -> String {
+    return self.replacingOccurrences(of: this, with: that)
   }
 }
 
@@ -27,7 +27,7 @@ class ParserUnitTests: XCTestCase {
   
   //TODO: add expect(_:, toThrow:_)
   
-  func expect<T: Equatable>(input: String, toEqual expected: T, line: UInt = #line, afterApplying function: (inout JSON.Parser) -> () throws -> T) {
+  func expect<T: Equatable>(_ input: String, toEqual expected: T, line: UInt = #line, afterApplying function: (inout JSON.Parser) -> () throws -> T) {
     var data = Array(input.nulTerminatedUTF8)
     data.withUnsafeMutableBufferPointer { bufferPointer in
       var parser = JSON.Parser.init(bufferPointer: bufferPointer, options: [])

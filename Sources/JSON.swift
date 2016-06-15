@@ -23,7 +23,7 @@ extension JSON {
    strictly conforms to [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
    It can optionally pretty-print the output for debugging, but this comes with a non-negligible performance cost.
    */
-  public func serialized(options options: [JSON.Serializer.Option] = []) throws -> String {
+  public func serialized(options: JSON.Serializer.Option = []) throws -> String {
     return try JSON.Serializer.serialize(self, options: options)
   }
 }
