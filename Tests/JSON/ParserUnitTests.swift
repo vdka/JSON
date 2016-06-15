@@ -132,9 +132,27 @@ class ParserUnitTests: XCTestCase {
     expect("[true, false, 'abc', 4, 5.0]".substituting("'", for: "\""), toEqual: [true, false, "abc", 4, 5.0], afterApplying: JSON.Parser.parseValue)
   }
   
-  // MARK: - Test potentially troubling values
+  // MARK: - Test potentially troubling values && potential bugs
+  
   func testTroublingValues() {
     expect("{'Приве́т नमस्ते שָׁלוֹם':true}".substituting("'", for: "\""), toEqual: ["Приве́т नमस्ते שָׁלוֹם": true], afterApplying: JSON.Parser.parseValue)
+    // iPhone crash iMessage
     expect(surrounding("سمَـَّوُوُحخ ̷̴̐خ ̷̴̐خ ̷̴̐خ امارتيخ ̷̴̐خ"), toEqual: "سمَـَّوُوُحخ ̷̴̐خ ̷̴̐خ ̷̴̐خ امارتيخ ̷̴̐خ", afterApplying: JSON.Parser.parseString)
+  }
+  
+  // This should end up throwing an error?
+  func testDuplicateKeys() {
+    // Really this should probably fail to parse. But lets get to know expected behaviour
+    let json = try! JSON.Parser.parse("{'a':1,'a':2}".substituting("'", for: "\""))
+    guard case .object(let output) = json else {
+      XCTFail()
+      return
+    }
+    
+    let expectedOutput: [(String, JSON)] = [("a", 1), ("a", 2)]
+    
+    zip(output, expectedOutput).forEach { (output, expectedOutput) in
+      XCTAssert(output == expectedOutput)
+    }
   }
 }
