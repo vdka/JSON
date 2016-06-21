@@ -90,16 +90,28 @@ class ParserUnitTests: XCTestCase {
     
   }
   
+  func testLeadingZeroFailure() {
+    
+    // TODO (vdka): Strict mode should fail on this.
+    // TODO (vdka): expect throws function
+    
+    // The RFC says
+    // "Leading zeros are not allowed."
+    expect("0001", toEqual: 1, afterApplying: JSON.Parser.parseNumber)
+  }
+  
   func testParseString() {
     
     expect(surrounding(""), toEqual: "", afterApplying: JSON.Parser.parseString)
     expect(surrounding("vdka"), toEqual: "vdka", afterApplying: JSON.Parser.parseString)
-    expect(surrounding(" \\\\ "), toEqual: " \\ ", afterApplying: JSON.Parser.parseString)
-    expect(surrounding("\\\""), toEqual: "\"", afterApplying: JSON.Parser.parseString)
-    expect(surrounding("\\\"\\t\\r\\n"), toEqual: "\"\t\r\n", afterApplying: JSON.Parser.parseString)
+    
     
     expect(surrounding("🇦🇺"), toEqual: "🇦🇺", afterApplying: JSON.Parser.parseString)
     
+    // begin disgust
+    expect(surrounding(" \\\\ "), toEqual: " \\ ", afterApplying: JSON.Parser.parseString)
+    expect(surrounding("\\\""), toEqual: "\"", afterApplying: JSON.Parser.parseString)
+    expect(surrounding("\\\"\\t\\r\\n"), toEqual: "\"\t\r\n", afterApplying: JSON.Parser.parseString)
   }
   
   func testParseLiterals() {
@@ -136,13 +148,30 @@ class ParserUnitTests: XCTestCase {
   
   func testTroublingValues() {
     expect("{'Приве́т नमस्ते שָׁלוֹם':true}".substituting("'", for: "\""), toEqual: ["Приве́т नमस्ते שָׁלוֹם": true], afterApplying: JSON.Parser.parseValue)
+    
     // iPhone crash iMessage
     expect(surrounding("سمَـَّوُوُحخ ̷̴̐خ ̷̴̐خ ̷̴̐خ امارتيخ ̷̴̐خ"), toEqual: "سمَـَّوُوُحخ ̷̴̐خ ̷̴̐خ ̷̴̐خ امارتيخ ̷̴̐خ", afterApplying: JSON.Parser.parseString)
   }
   
   // This should end up throwing an error?
   func testDuplicateKeys() {
-    // Really this should probably fail to parse. But lets get to know expected behaviour
+    // [Section 4](https://tools.ietf.org/html/rfc7159#section-4) of the RFC mentions
+    /*
+     "The names within an object SHOULD be unique."
+     ...
+     "When the names within an object are not
+      unique, the behavior of software that receives such an object is
+      unpredictable.  Many implementations report the last name/value pair
+      only.  Other implementations report an error or fail to parse the
+      object, and some implementations report all of the name/value pairs,
+      including duplicates."
+    */
+    
+    // TODO (vdka): Fail on duplicates option
+    
+    // NOTE: access through the dictionary interface will return the keypair most recently inserted.
+    //  However, both keypairs are stored and accessible through pattern matching notation.
+ 
     let json = try! JSON.Parser.parse("{'a':1,'a':2}".substituting("'", for: "\""))
     guard case .object(let output) = json else {
       XCTFail()

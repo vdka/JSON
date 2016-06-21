@@ -11,7 +11,10 @@ extension JSON {
       public let rawValue: UInt8
       
       /// Do not remove null values from the resulting JSON value. Instead store `JSON.null`
-      public static let noSkipNull = Option(rawValue: 1 << 1)
+      public static let noSkipNull = Option(rawValue: 0b00000001)
+      
+      // TODO (vdka): implement 
+//      public static let noLeadingZeros = Option(rawValue: 0b00000010)
     }
     
     let skipNull: Bool

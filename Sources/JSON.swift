@@ -17,10 +17,10 @@ public enum JSON {
 // MARK: - JSON: CustomStringConvertible
 
 extension JSON {
-  
+
   /**
    Turns a nested graph of `JSON`s into a Swift `String`. This produces JSON data that
-   strictly conforms to [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
+   strictly conforms to [RFT7159](https://tools.ietf.org/html/rfc7159).
    It can optionally pretty-print the output for debugging, but this comes with a non-negligible performance cost.
    */
   public func serialized(options: JSON.Serializer.Option = []) throws -> String {
@@ -60,13 +60,13 @@ public func ==(lhs: JSON, rhs: JSON) -> Bool {
   case (.string(let l), .string(let r)): return l == r
   case (.double(let l), .double(let r)): return l == r
   case (.integer(let l), .integer(let r)): return l == r
-    
+
   case (.object(let l), .object(let r)):
     for (l, r) in zip(l, r) {
       guard l == r else { return false }
     }
     return true
-    
+
   default: return false
   }
 }
@@ -86,7 +86,7 @@ extension JSON: DictionaryLiteralConvertible {
     for (k, v) in elements {
       dict.append( (k, v.encoded()) )
     }
-    
+
     self = .object(dict)
   }
 }
@@ -109,11 +109,11 @@ extension JSON: StringLiteralConvertible {
   public init(stringLiteral value: String) {
     self = .string(value)
   }
-  
+
   public init(extendedGraphemeClusterLiteral value: String) {
     self = .string(value)
   }
-  
+
   public init(unicodeScalarLiteral value: String) {
     self = .string(value)
   }

@@ -3,6 +3,7 @@ import XCTest
 import Foundation
 @testable import JSON
 
+// TODO (vdka): update the json strings to the more readable {'a':'b'} formatting
 class JSONTests: XCTestCase {
   
   let json: JSON =
@@ -25,12 +26,13 @@ class JSONTests: XCTestCase {
     XCTAssertEqual(try JSON.Parser.parse("[1, null, 3]", options: [.noSkipNull]), [1, JSON.null, 3] as JSON)
     XCTAssertEqual(try JSON.Parser.parse("{\"a\":\"1\",\"b\":null,\"c\":1}"), ["a": "1", "c": 1] as JSON)
     XCTAssertEqual(try JSON.Parser.parse("{\"a\":\"1\",\"b\":null,\"c\":1}", options: [.noSkipNull]), ["a": "1", "b": JSON.null, "c": 1] as JSON)
+    XCTAssertEqual(try JSON.Parser.parse("{\"a\":\"1\",\"b\":null,\"c\":1}", options: [.noSkipNull]), ["a": "1", "b": JSON.null, "c": 1] as JSON)
     
   }
   
   func testSanity() {
     
-    func assertSymmetricJSONConversion(_ json: JSON, options: [JSON.Serializer.Option] = [], line: UInt = #line) {
+    func assertSymmetricJSONConversion(_ json: JSON, options: JSON.Serializer.Option = [], line: UInt = #line) {
       do {
         let json2 = try JSON.Parser.parse(json.serialized(options: options))
         XCTAssertEqual(json, json2, line: line)
@@ -89,7 +91,7 @@ class JSONTests: XCTestCase {
     
     XCTAssertEqual(json["array"][0], 1)
     json["array"][0] = 4
-    XCTAssertEqual(json["array"][0], 4)
+    XCTAssertEqual(json["array"], [4, 2, 3])
   }
 }
 
@@ -97,10 +99,11 @@ class JSONTests: XCTestCase {
   extension JSONTests: XCTestCaseProvider {
     var allTests : [(String, () throws -> Void)] {
       return [
+        ("testSerializeArray", testSerializeArray),
+        ("testParse", testParse),
         ("testSanity", testSanity),
         ("testAccessors", testAccessors),
         ("testMutation", testMutation),
-        ("testPotential32BitError", testPotential32BitError)
       ]
     }
   }

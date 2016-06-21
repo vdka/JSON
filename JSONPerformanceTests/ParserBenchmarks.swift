@@ -1,8 +1,5 @@
 
 import XCTest
-//import PMJSON
-//import SwiftyJSON
-//import JASON
 import JSON
 
 class ParserBenchmarks: XCTestCase {
@@ -27,6 +24,7 @@ class ParserBenchmarks: XCTestCase {
     }
   }
   
+/*
   // NSJSONSerialization
   
   func testParseNSJSON() {
@@ -44,27 +42,5 @@ class ParserBenchmarks: XCTestCase {
       }
     }
   }
-  
-//  func testParseSwiftyJSON() {
-//    let jsonData = jsonString.data(using: String.Encoding.utf8)!
-//    measureBlock {
-//      _ = SwiftyJSON.JSON(data: jsonData)
-//    }
-//  }
-//  
-//  func testParseJASON() {
-//    let jsonData = jsonString.data(using: String.Encoding.utf8)!
-//    measureBlock {
-//      _ = JASON.JSON(jsonData)
-//    }
-//  }
-//  
-//  // Relies upon C stdlib
-//  
-//  func testParsePMJSON() {
-//    measureBlock {
-//      try! PMJSON.JSON.decode(jsonString)
-//    }
-//  }
-  
+*/
 }
