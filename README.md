@@ -1,6 +1,6 @@
 # JSON
 
-[![Language](https://img.shields.io/badge/Swift-2.2-brightgreen.svg)](http://swift.org)
+[![Language](https://img.shields.io/badge/Swift-3-brightgreen.svg)](http://swift.org)
 [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
 
 This library makes dealing with JSON feel more _native_ to Swift.
