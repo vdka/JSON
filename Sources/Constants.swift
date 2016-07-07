@@ -34,11 +34,16 @@ let b: UTF8.CodeUnit = "b".utf8.first!
 // Number characters
 let E: UTF8.CodeUnit = "E".utf8.first!
 let zero: UTF8.CodeUnit = "0".utf8.first!
+let plus: UTF8.CodeUnit = "+".utf8.first!
 let minus: UTF8.CodeUnit = "-".utf8.first!
 let decimal: UTF8.CodeUnit = ".".utf8.first!
 let numbers: ClosedRange<UTF8.CodeUnit> = "0".utf8.first!..."9".utf8.first!
 let alphaNumericLower: ClosedRange<UTF8.CodeUnit> = "a".utf8.first!..."f".utf8.first!
 let alphaNumericUpper: ClosedRange<UTF8.CodeUnit> = "A".utf8.first!..."F".utf8.first!
+
+// Valid integer number Range
+let valid64BitInteger: ClosedRange<Int64> = Int64.min...Int64.max
+let validUnsigned64BitInteger: ClosedRange<UInt64> = UInt64.min...UInt64(Int64.max)
 
 // End of here Literals
 let rue: [UTF8.CodeUnit] = ["r".utf8.first!, "u".utf8.first!, "e".utf8.first!]

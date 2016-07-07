@@ -16,20 +16,6 @@ class JSONTests: XCTestCase {
       ] as JSON
     ]
   
-  func testSerializeArray() {
-    try XCTAssertEqual(([1, 2, 3, 4, 5] as JSON).serialized(), "[1,2,3,4,5]")
-  }
-  
-  func testParse() {
-    
-    XCTAssertEqual(try JSON.Parser.parse("[1, null, 3]"), [1, 3] as JSON)
-    XCTAssertEqual(try JSON.Parser.parse("[1, null, 3]", options: [.noSkipNull]), [1, JSON.null, 3] as JSON)
-    XCTAssertEqual(try JSON.Parser.parse("{\"a\":\"1\",\"b\":null,\"c\":1}"), ["a": "1", "c": 1] as JSON)
-    XCTAssertEqual(try JSON.Parser.parse("{\"a\":\"1\",\"b\":null,\"c\":1}", options: [.noSkipNull]), ["a": "1", "b": JSON.null, "c": 1] as JSON)
-    XCTAssertEqual(try JSON.Parser.parse("{\"a\":\"1\",\"b\":null,\"c\":1}", options: [.noSkipNull]), ["a": "1", "b": JSON.null, "c": 1] as JSON)
-    
-  }
-  
   func testSanity() {
     
     func assertSymmetricJSONConversion(_ json: JSON, options: JSON.Serializer.Option = [], line: UInt = #line) {
