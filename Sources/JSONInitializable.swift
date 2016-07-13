@@ -1,8 +1,9 @@
 
-// MARK: - JSONDecodable
+// MARK: - JSONInitializable
 
 /// Conforming types can be decoded from a JSON instance
-public protocol JSONDecodable {
+public protocol JSONInitializable {
+
   /// Initialize an instance of `Self` from JSON
   init(json: JSON) throws
 }
@@ -10,16 +11,18 @@ public protocol JSONDecodable {
 
 // MARK: - Partial implementation
 
-extension JSONDecodable {
+extension JSONInitializable {
+
   public static func decode(_ json: JSON) throws -> Self {
     return try Self(json: json)
   }
 }
 
 
-// MARK: - Bool Conformance to JSONDecodable
+// MARK: - Bool Conformance to JSONInitializable
 
-extension Bool: JSONDecodable {
+extension Bool: JSONInitializable {
+
   public init(json: JSON) throws {
     guard case .bool(let b) = json else { throw JSON.Error.badValue(json.value) }
     self = b
@@ -27,9 +30,10 @@ extension Bool: JSONDecodable {
 }
 
 
-// MARK: - String Conformance to JSONDecodable
+// MARK: - String Conformance to JSONInitializable
 
-extension String: JSONDecodable {
+extension String: JSONInitializable {
+
   public init(json: JSON) throws {
     guard case .string(let s) = json else { throw JSON.Error.badValue(json.value) }
     self = s
@@ -37,16 +41,18 @@ extension String: JSONDecodable {
 }
 
 
-// MARK: - FloatingPointTypes: JSONDecodable
+// MARK: - FloatingPointTypes: JSONInitializable
 
-extension Double: JSONDecodable {
+extension Double: JSONInitializable {
+
   public init(json: JSON) throws {
     guard case .double(let d) = json else { throw JSON.Error.badValue(json.value) }
     self = d
   }
 }
 
-extension Float: JSONDecodable {
+extension Float: JSONInitializable {
+
   public init(json: JSON) throws {
     guard case .double(let d) = json else { throw JSON.Error.badValue(json.value) }
     self = Float(d)
@@ -54,16 +60,18 @@ extension Float: JSONDecodable {
 }
 
 
-// MARK: - IntegerTypes: JSONDecodable
+// MARK: - IntegerTypes: JSONInitializable
 
-extension Int: JSONDecodable {
+extension Int: JSONInitializable {
+
   public init(json: JSON) throws {
     guard case .integer(let i) = json where Int64(Int.min) <= i && i <= Int64(Int.max) else { throw JSON.Error.badValue(json.value) }
     self = Int(i)
   }
 }
 
-extension Int64: JSONDecodable {
+extension Int64: JSONInitializable {
+
   public init(json: JSON) throws {
     guard case .integer(let i) = json else { throw JSON.Error.badValue(json.value) }
     self = i
@@ -73,10 +81,11 @@ extension Int64: JSONDecodable {
 
 // NOTE: track rdar://23433955
 
-// MARK: - Add decode to Optional JSONDecodables
+// MARK: - Add decode to Optional JSONInitializables
 
 // TODO (vdka): add init(json: JSON) throws
-extension Optional where Wrapped: JSONDecodable {
+extension Optional where Wrapped: JSONInitializable {
+
   public init(json: JSON) throws {
     guard let value = json.value as? Wrapped else { throw JSON.Error.badValue(json.value) }
     self = value
@@ -84,9 +93,10 @@ extension Optional where Wrapped: JSONDecodable {
 }
 
 
-// MARK: - Add decode to RawRepresentable JSONDecodables
+// MARK: - Add decode to RawRepresentable JSONInitializables
 
-extension RawRepresentable where RawValue: JSONDecodable {
+extension RawRepresentable where RawValue: JSONInitializable {
+
   public init(json: JSON) throws {
     guard let value = json.value as? RawValue else { throw JSON.Error.badValue(json.value) }
     self = try Self(rawValue: value) ?? JSON.Error.badValue(value)
@@ -94,12 +104,13 @@ extension RawRepresentable where RawValue: JSONDecodable {
 }
 
 
-// MARK: - Add decode to Arrays of JSONDecodable
+// MARK: - Add decode to Arrays of JSONInitializable
 
-extension Array where Element: JSONDecodable {
-  
+extension Array where Element: JSONInitializable {
+
   public init(json: JSON) throws {
     guard let array = json.array else { throw JSON.Error.badValue(json.value) }
     self = try array.map(Element.decode)
   }
 }
+

@@ -73,15 +73,15 @@
 //  }
 //}
 //
-//extension Currency: JSONEncodable {}
+//extension Currency: JSONRepresentable {}
 //
-//extension Money: JSONEncodable {
+//extension Money: JSONRepresentable {
 //  func encoded() -> JSON {
 //    return ["minorUnits": minorUnits, "currency": currency]
 //  }
 //}
 //
-//extension Person: JSONEncodable {
+//extension Person: JSONRepresentable {
 //  func encoded() -> JSON {
 //    return [
 //      "name": name,
@@ -93,8 +93,8 @@
 //  }
 //}
 //
-//extension Currency: JSONDecodable {}
-//extension Money: JSONDecodable {
+//extension Currency: JSONInitializable {}
+//extension Money: JSONInitializable {
 //  init(json: JSON) throws {
 //    let minorUnits = try json["minorUnits"].int ?? JSON.Error.badField("minorUnits")
 //    let currency: Currency = try json.get("currency")
@@ -102,7 +102,7 @@
 //  }
 //}
 //
-//extension Person: JSONDecodable {
+//extension Person: JSONInitializable {
 //  init(json: JSON) throws {
 //    let name = try json["name"].string ?? JSON.Error.badField("name")
 //    let age = try json["age"].int ?? JSON.Error.badField("age")

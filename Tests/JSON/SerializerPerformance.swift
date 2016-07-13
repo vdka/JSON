@@ -3,42 +3,56 @@ import XCTest
 import JSON
 
 let largeJsonData = loadFixture("large")
-let largeMinJsonData = loadFixture("large_min")
+let largeJsonFoundationData = loadFixtureData("large")
+
 let largeJson = try! JSON.Parser.parse(largeJsonData)
 
 class SerializerBenchmarks: XCTestCase {
 
-  func testSerializerLargeJson() {
+  override func setUp() {
+    super.setUp()
+    do {
+      _ = try JSON.Serializer.serialize(largeJson)
+    } catch {}
+  }
+
+  func testSerializerPerformance() {
+
     measure {
       do {
         _ = try JSON.Serializer.serialize(largeJson)
-      } catch {
-        if let printableError = error as? CustomStringConvertible {
-          XCTFail("JSON parse error: \(printableError)")
-        }
-      }
-    }
-  }
-  
-  func testSerializerLargeJsonPrettyPrinted() {
-    measure {
-      do {
-        _ = try JSON.Serializer.serialize(largeJson, options: [.prettyPrint])
-      } catch {
-        if let printableError = error as? CustomStringConvertible {
-          XCTFail("JSON parse error: \(printableError)")
-        }
-      }
+      } catch { XCTFail() }
     }
   }
 
-  /*
-  func testSerializerNSJSON() {
-    let json = SwiftyJSON.JSON(jsonString)
-    var s: String?
-    measureBlock {
-      s = json.rawString(options: [])!
+  func testSerializerPrettyPrintedPerformance() {
+
+    measure {
+      do {
+        _ = try JSON.Serializer.serialize(largeJson, options: [.prettyPrint])
+      } catch { XCTFail() }
     }
   }
- */
+
+  func testSerializerFoundationPerformance() {
+
+    let nsJson = try! JSONSerialization.jsonObject(with: largeJsonFoundationData, options: [])
+
+    measure {
+      do {
+        try JSONSerialization.data(withJSONObject: nsJson, options: [])
+      } catch { XCTFail() }
+    }
+  }
+
+  func testSerializerFoundationPrettyPrintedPerformance() {
+
+    let nsJson = try! JSONSerialization.jsonObject(with: largeJsonFoundationData, options: [])
+
+    measure {
+      do {
+        try JSONSerialization.data(withJSONObject: nsJson, options: .prettyPrinted)
+      } catch { XCTFail() }
+    }
+  }
 }

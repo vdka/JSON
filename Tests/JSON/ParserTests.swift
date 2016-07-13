@@ -33,7 +33,7 @@ class ParsingTests: XCTestCase {
 
   func testTrueParses() {
 
-    expect("true", toParseTo: .bool(true))
+    expect("true", toParseTo: true)
   }
 
   func testTrueThrowsOnMismatch() {
@@ -43,7 +43,7 @@ class ParsingTests: XCTestCase {
 
   func testFalseParses() {
 
-    expect("false", toParseTo: .bool(false))
+    expect("false", toParseTo: false)
   }
 
   func testBoolean_False_Mismatch() {
@@ -63,25 +63,16 @@ class ParsingTests: XCTestCase {
 
   func testArray_NullsBoolsNums_Normal_Minimal_RootParser() {
 
-    expect("[null,true,false,12,-10,-24.3,18.2e9]", toParseTo: .array([
-      JSON.null,
-      JSON.bool(true),
-      JSON.bool(false),
-      JSON.integer(12),
-      JSON.integer(-10),
-      JSON.double(-24.3),
-      JSON.double(18200000000)
-      ]))
+    expect("[null,true,false,12,-10,-24.3,18.2e9]", toParseTo:
+      [JSON.null, true, false, 12, -10, -24.3, 18200000000.0]
+    )
   }
 
   func testArray_NullsBoolsNums_Normal_MuchWhitespace() {
 
-    expect(" \t[\n  null ,true, \n-12.3 , false\r\n]\n  ", toParseTo: .array([
-      JSON.null,
-      JSON.bool(true),
-      JSON.double(-12.3),
-      JSON.bool(false)
-      ]))
+    expect(" \t[\n  null ,true, \n-12.3 , false\r\n]\n  ", toParseTo:
+      [JSON.null, true, -12.3, false]
+    )
   }
 
   func testArray_NullsAndBooleans_Bad_MissingEnd() {
@@ -106,17 +97,17 @@ class ParsingTests: XCTestCase {
 
   func testNumber_Int_Zero() {
 
-    expect("0 ", toParseTo: .integer(0))
+    expect("0 ", toParseTo: 0)
   }
 
   func testNumber_Int_One() {
 
-    expect("1", toParseTo: .integer(1))
+    expect("1", toParseTo: 1)
   }
 
   func testNumber_Int_Basic() {
 
-    expect("24", toParseTo: .integer(24))
+    expect("24", toParseTo: 24)
   }
 
   func testNumber_IntMin() {
@@ -131,22 +122,22 @@ class ParsingTests: XCTestCase {
 
   func testNumber_Int_Negative() {
 
-    expect("-32", toParseTo: .integer(-32))
+    expect("-32", toParseTo: -32)
   }
 
   func testNumber_Dbl_Basic() {
 
-    expect("46.57", toParseTo: .double(46.57))
+    expect("46.57", toParseTo: 46.57)
   }
 
   func testNumber_Dbl_ZeroSomething() {
 
-    expect("0.98", toParseTo: .double(0.98))
+    expect("0.98", toParseTo: 0.98)
   }
 
   func testNumber_Dbl_MinusZeroSomething() {
 
-    expect("-0.98", toParseTo: .double(-0.98))
+    expect("-0.98", toParseTo: -0.98)
   }
 
   func testNumber_Dbl_ThrowsOnMinus() {
@@ -161,7 +152,7 @@ class ParsingTests: XCTestCase {
 
   func testNumber_Dbl_Negative() {
 
-    expect("-24.34", toParseTo: .double(-24.34))
+    expect("-24.34", toParseTo: -24.34)
   }
 
   func testNumber_Dbl_Negative_WrongChar() {
@@ -181,39 +172,39 @@ class ParsingTests: XCTestCase {
 
   func testNumber_Double_Exp_Normal() {
 
-    expect("-24.3245e2", toParseTo: .double(-2432.45))
+    expect("-24.3245e2", toParseTo: -2432.45)
   }
 
   func testNumber_Double_Exp_Positive() {
 
-    expect("-24.3245e+2", toParseTo: .double(-2432.45))
+    expect("-24.3245e+2", toParseTo: -2432.45)
   }
 
   // TODO (vdka): floating point accuracy
   // Potential to fix through using Darwin.C.pow but, isn't that a dependency?
-  // Maybe reimplement C's discusting lookup table pow method
+  // Maybe reimplement C's gross lookup table pow method
   // http://opensource.apple.com/source/Libm/Libm-2026/Source/Intel/expf_logf_powf.c
   // http://opensource.apple.com/source/Libm/Libm-315/Source/ARM/powf.c
   // May be hard to do this fast and correct in pure swift.
   func testNumber_Double_Exp_Negative() {
 
     // FIXME (vdka): Fix floating point number types
-    expect("-24.3245e-2", toParseTo: .double(-24.3245e-2))
+    expect("-24.3245e-2", toParseTo: -24.3245e-2)
   }
 
   func testNumber_Double_ExactnessNoExponent() {
 
-    expect("-123451123442342.12124234", toParseTo: .double(-123451123442342.12124234123421123411234123412351151))
+    expect("-123451123442342.12124234", toParseTo: -123451123442342.12124234)
   }
 
   func testNumber_Double_ExactnessWithExponent() {
 
-    expect("-123456789.123456789e-150", toParseTo: .double(-123456789.123456789e-150))
+    expect("-123456789.123456789e-150", toParseTo: -123456789.123456789e-150)
   }
 
   func testNumber_Double_Exp_NoFrac() {
 
-    expect("24E2", toParseTo: .double(2400))
+    expect("24E2", toParseTo: 2400.0)
   }
 
   func testNumber_Double_Exp_TwoEs() {
@@ -223,7 +214,7 @@ class ParsingTests: XCTestCase {
 
   func testEscape_Unicode_Normal() {
 
-    expect("'\\u0048'", toParseTo: .string("H"))
+    expect("'\\u0048'", toParseTo: "H")
   }
 
   func testEscape_Unicode_InvalidUnicode_MissingDigit() {
@@ -238,84 +229,84 @@ class ParsingTests: XCTestCase {
 
   func testString_Empty() {
 
-    expect("''", toParseTo: .string(""))
+    expect("''", toParseTo: "")
   }
 
   func testString_Normal() {
 
-    expect("'hello world'", toParseTo: .string("hello world"))
+    expect("'hello world'", toParseTo: "hello world")
   }
 
   func testString_Normal_WhitespaceInside() {
 
-    expect("'he \\r\\n l \\t l \\n o wo\\rrld ' ", toParseTo: .string("he \r\n l \t l \n o wo\rrld "))
+    expect("'he \\r\\n l \\t l \\n o wo\\rrld '", toParseTo: "he \r\n l \t l \n o wo\rrld ")
   }
 
   func testString_StartEndWithSpaces() {
 
-    expect("'  hello world  '", toParseTo: .string("  hello world  "))
+    expect("'  hello world  '", toParseTo: "  hello world  ")
   }
 
   func testString_Unicode_RegularChar() {
 
-    expect("'hel\\u006co world'", toParseTo: .string("hello world"))
+    expect("'hel\\u006co world'", toParseTo: "hello world")
   }
 
   func testString_Unicode_SpecialCharacter_CoolA() {
 
-    expect("'h\\u01cdw'", toParseTo: .string("hǍw"))
+    expect("'h\\u01cdw'", toParseTo: "hǍw")
   }
 
   func testString_Unicode_SpecialCharacter_HebrewShin() {
 
-    expect("'h\\u05e9w'", toParseTo: .string("hשw"))
+    expect("'h\\u05e9w'", toParseTo: "hשw")
   }
 
   func testString_Unicode_SpecialCharacter_QuarterTo() {
 
-    expect("'h\\u25d5w'", toParseTo: .string("h◕w"))
+    expect("'h\\u25d5w'", toParseTo: "h◕w")
   }
 
   func testString_Unicode_SpecialCharacter_EmojiSimple() {
 
-    expect("'h\\ud83d\\ude3bw'", toParseTo: .string("h😻w"))
+    expect("'h\\ud83d\\ude3bw'", toParseTo: "h😻w")
   }
 
   func testString_Unicode_SpecialCharacter_EmojiComplex() {
 
-    expect("'h\\ud83c\\udde8\\ud83c\\uddffw'", toParseTo: .string("h🇨🇿w"))
+    expect("'h\\ud83c\\udde8\\ud83c\\uddffw'", toParseTo: "h🇨🇿w")
   }
 
   func testString_SpecialCharacter_QuarterTo() {
 
-    expect("'h◕w'", toParseTo: .string("h◕w"))
+    expect("'h◕w'", toParseTo: "h◕w")
   }
 
   func testString_SpecialCharacter_EmojiSimple() {
 
-    expect("'h😻w'", toParseTo: .string("h😻w"))
+    expect("'h😻w'", toParseTo: "h😻w")
   }
 
   func testString_SpecialCharacter_EmojiComplex() {
 
-    expect("'h🇨🇿w'", toParseTo: .string("h🇨🇿w"))
+    expect("'h🇨🇿w'", toParseTo: "h🇨🇿w")
   }
 
   func testObject_Empty() {
 
-    expect("{}", toParseTo: .object([]))
+    expect("{}", toParseTo: [:])
   }
 
   func testObject_Example1() {
     expect("{\t'hello': 'wor🇨🇿ld', \n\t 'val': 1234, 'many': [\n-12.32, null, 'yo'\r], 'emptyDict': {}, 'dict': {'arr':[]}, 'name': true}", toParseTo:
-      .object([
-        ("hello", .string("wor🇨🇿ld")),
-        ("val", .integer(1234)),
-        ("many", .array([.double(-12.32), .null, .string("yo")])),
-        ("emptyDict", .object([])),
-        ("dict", .object([("arr", .array([]))])),
-        ("name", .bool(true))
-        ])
+      [
+        "hello": "wor🇨🇿ld",
+        "val": 1234,
+        "many": [-12.32, JSON.null, "yo"] as JSON,
+        "emptyDict": [:] as JSON,
+        "dict": ["arr": [] as JSON] as JSON,
+        "name": true
+      ]
     )
   }
 
@@ -325,39 +316,6 @@ class ParsingTests: XCTestCase {
     expect("0xbadf00d", toThrow: JSON.Parser.Error(byteOffset: 1, reason: .invalidNumber))
   }
 }
-
-//  // This should end up throwing an error?
-//  func testDuplicateKeys() {
-//    // [Section 4](https://tools.ietf.org/html/rfc7159#section-4) of the RFC mentions
-//    /*
-//     "The names within an object SHOULD be unique."
-//     ...
-//     "When the names within an object are not
-//      unique, the behavior of software that receives such an object is
-//      unpredictable.  Many implementations report the last name/value pair
-//      only.  Other implementations report an error or fail to parse the
-//      object, and some implementations report all of the name/value pairs,
-//      including duplicates."
-//    */
-//    
-//    // TODO (vdka): Fail on duplicates option
-//    
-//    // NOTE: access through the dictionary interface will return the keypair most recently inserted.
-//    //  However, both keypairs are stored and accessible through pattern matching notation.
-// 
-//    let json = try! JSON.Parser.parse("{'a':1,'a':2}".substituting("'", for: "\""))
-//    guard case .object(let output) = json else {
-//      XCTFail()
-//      return
-//    }
-//    
-//    let expectedOutput: [(String, JSON)] = [("a", 1), ("a", 2)]
-//    
-//    zip(output, expectedOutput).forEach { (output, expectedOutput) in
-//      XCTAssert(output == expectedOutput)
-//    }
-//  }
-//}
 
 extension ParsingTests {
 

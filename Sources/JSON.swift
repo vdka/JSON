@@ -4,7 +4,7 @@
 
 /// Any value that can be expressed in JSON has a representation in `JSON`.
 public enum JSON {
-  case object([(String, JSON)])
+  case object([String: JSON])
   case array([JSON])
   case null
   case bool(Bool)
@@ -54,19 +54,13 @@ extension JSON: CustomDebugStringConvertible {
 extension JSON: Equatable {}
 public func ==(lhs: JSON, rhs: JSON) -> Bool {
   switch (lhs, rhs) {
+  case (.object(let l), .object(let r)): return l == r
+  case (.array(let l), .array(let r)): return l == r
   case (.null, .null): return true
   case (.bool(let l), .bool(let r)): return l == r
-  case (.array(let l), .array(let r)): return l == r
   case (.string(let l), .string(let r)): return l == r
   case (.double(let l), .double(let r)): return l == r
   case (.integer(let l), .integer(let r)): return l == r
-
-  case (.object(let l), .object(let r)):
-    for (l, r) in zip(l, r) {
-      guard l == r else { return false }
-    }
-    return true
-
   default: return false
   }
 }
@@ -75,16 +69,18 @@ public func ==(lhs: JSON, rhs: JSON) -> Bool {
 // MARK: - JSON LiteralConvertible conformance
 
 extension JSON: ArrayLiteralConvertible {
-  public init(arrayLiteral elements: JSONEncodable...) {
+  public init(arrayLiteral elements: JSONRepresentable...) {
     self = .array(elements.map(JSON.init))
   }
 }
 
 extension JSON: DictionaryLiteralConvertible {
-  public init(dictionaryLiteral elements: (String, JSONEncodable)...) {
-    var dict: [(String, JSON)] = []
-    for (k, v) in elements {
-      dict.append( (k, v.encoded()) )
+  public init(dictionaryLiteral elements: (String, JSONRepresentable)...) {
+
+    var dict: [String: JSON] = [:]
+
+    for (key, value) in elements {
+      dict[key] = value.encoded()
     }
 
     self = .object(dict)

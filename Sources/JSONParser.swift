@@ -1,4 +1,5 @@
 
+import Darwin.C
 
 // MARK: - JSON.Parser
 
@@ -217,12 +218,10 @@ extension JSON.Parser {
 
     guard peek() != objectClose else {
       unsafePop()
-      return .object([])
+      return .object([:])
     }
 
-    var tempDict: [(String, JSON)] = []
-    tempDict.reserveCapacity(6)
-
+    var tempDict: [String: JSON] = Dictionary(minimumCapacity: 6)
     var wasComma = false
 
     repeat {
@@ -252,7 +251,7 @@ extension JSON.Parser {
           break
 
         default:
-          tempDict.append( (key, value) )
+          tempDict[key] = value
         }
 
       case objectClose:
@@ -437,7 +436,8 @@ extension JSON.Parser {
       let number = Double(negative ? -1 : 1) * (Double(significand) + Double(mantisa ?? 0) / divisor)
 
       if let exponent = exponent {
-        return .double(number.power(10, exponent: exponent, isNegative: negativeExponent))
+        return .double(Double(number) * pow(10, negativeExponent ? -Double(exponent) : Double(exponent)))
+//        return .double(number.power(10, exponent: exponent, isNegative: negativeExponent))
       } else {
         return .double(number)
       }
