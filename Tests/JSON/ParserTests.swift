@@ -77,7 +77,7 @@ class ParsingTests: XCTestCase {
 
   func testArray_NullsAndBooleans_Bad_MissingEnd() {
 
-    expect("[\n  null ,true, \nfalse\r\n\n  ", toThrowWithReason: .expectedComma)
+    expect("[\n  null ,true, \nfalse\r\n\n  ", toThrowWithReason: .endOfStream)
   }
 
   func testArray_NullsAndBooleans_Bad_MissingComma() {
