@@ -32,7 +32,7 @@ extension JSON {
   }
 
   /// Returns the content matching the type of its destination
-  public func get<T: protocol<RawRepresentable, JSONInitializable>>(_ field: String) throws -> T {
+  public func get<T: RawRepresentable & JSONInitializable>(_ field: String) throws -> T {
     guard let json = self[field] else { throw JSON.Error.badField(field) }
 
     return try T.decode(json)
@@ -67,13 +67,13 @@ extension JSON {
    */
   public subscript(index: Int) -> JSON? {
     get {
-      guard case .array(let a) = self where a.indices ~= index else { return nil }
+      guard case .array(let a) = self, a.indices ~= index else { return nil }
       return a[index]
     }
 
     // TODO: Testing for nested objects
     set {
-      guard case .array(var a) = self where a.indices ~= index else { return }
+      guard case .array(var a) = self, a.indices ~= index else { return }
       switch newValue {
       case .some(let newValue):
         a[index] = newValue
@@ -145,7 +145,7 @@ extension JSON {
   /// Returns this enum's associated `Int64` value as an `Int` iff `self == .integer(_)`, `nil` otherwise.
   public var int: Int? {
     // where clause protects against RunTime crashes where the value of i won't fit within a native Int
-    guard case .integer(let i) = self where Int64(Int.min) <= i && i <= Int64(Int.max) else { return nil }
+    guard case .integer(let i) = self, Int64(Int.min) <= i && i <= Int64(Int.max) else { return nil }
     return Int(i)
   }
 

@@ -125,6 +125,16 @@ class ParsingTests: XCTestCase {
     expect("-32", toParseTo: -32)
   }
 
+  func testNumber_Int_LeadingZero() {
+
+    expect("007", toThrowWithReason: .invalidNumber)
+  }
+
+  func testNumber_Dbl_LeadingZero() {
+
+    expect("006.123", toThrowWithReason: .invalidNumber)
+  }
+
   func testNumber_Dbl_Basic() {
 
     expect("46.57", toParseTo: 46.57)

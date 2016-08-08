@@ -35,10 +35,14 @@ extension JSON.Parser {
 
   // assumes data is null terminated.
   // and that the buffer will not be de-allocated before completion (handled by JSON.Parser.parse(_:,options:)
-  internal init(bufferPointer: UnsafeBufferPointer<UTF8.CodeUnit>, options: Option) {
+  internal init(bufferPointer: UnsafeBufferPointer<UTF8.CodeUnit>, options: Option) throws {
 
     self.buffer = bufferPointer
-    self.pointer = bufferPointer.baseAddress!
+
+    guard let pointer = bufferPointer.baseAddress, buffer.endAddress != bufferPointer.baseAddress else { throw Error(byteOffset: 0, reason: .emptyStream) }
+
+    // This can be unwrapped unsafely because
+    self.pointer = pointer
     self.skipNull = options.contains(.skipNull)
 
     self.skipWhitespace()
@@ -52,13 +56,9 @@ extension JSON.Parser {
 
   public static func parse(_ data: [UTF8.CodeUnit], options: Option = []) throws -> JSON {
 
-    guard data.count > 0 else { throw Error(byteOffset: 0, reason: .emptyStream) }
-
-    let data = data
-
     return try data.withUnsafeBufferPointer { bufferPointer in
 
-      var parser = self.init(bufferPointer: bufferPointer, options: options)
+      var parser = try self.init(bufferPointer: bufferPointer, options: options)
 
       do {
 
@@ -350,7 +350,7 @@ extension JSON.Parser {
       return true
     }()
 
-    guard let next = peek() where numbers ~= next else { throw Error.Reason.invalidNumber }
+    guard let next = peek(), numbers ~= next else { throw Error.Reason.invalidNumber }
 
     var significand: UInt64 = 0
     var mantisa: UInt64 = 0
@@ -392,7 +392,7 @@ extension JSON.Parser {
 
         unsafePop()
         seenDecimal = true
-        guard let next = peek() where numbers ~= next else { throw Error.Reason.invalidNumber }
+        guard let next = peek(), numbers ~= next else { throw Error.Reason.invalidNumber }
 
       case E? where !seenExponent,
            e? where !seenExponent:
@@ -409,7 +409,7 @@ extension JSON.Parser {
           unsafePop()
         }
 
-        guard let next = peek() where numbers ~= next else { throw Error.Reason.invalidNumber }
+        guard let next = peek(), numbers ~= next else { throw Error.Reason.invalidNumber }
 
       case nil, comma?, objectClose?, arrayClose?, space?, newline?, formfeed?, tab?, cr?:
 
@@ -513,7 +513,7 @@ extension JSON.Parser {
         case u:
           let scalar = try parseUnicodeScalar()
           var bytes: [UTF8.CodeUnit] = []
-          UTF8.encode(scalar, sendingOutputTo: { bytes.append($0) })
+          UTF8.encode(scalar, into: { bytes.append($0) })
           stringBuffer.append(contentsOf: bytes)
 
         default:
@@ -596,13 +596,13 @@ extension JSON.Parser {
 
 extension JSON.Parser {
 
-  public struct Error: ErrorProtocol {
+  public struct Error: Swift.Error {
 
     public var byteOffset: Int
 
     public var reason: Reason
 
-    public enum Reason: ErrorProtocol {
+    public enum Reason: Swift.Error {
 
       case endOfStream
       case emptyStream
@@ -631,9 +631,9 @@ public func == (lhs: JSON.Parser.Error, rhs: JSON.Parser.Error) -> Bool {
 
 extension UnsafeBufferPointer {
 
-  var endAddress: UnsafePointer<Element>? {
+  var endAddress: UnsafePointer<Element> {
 
-    return baseAddress?.advanced(by: endIndex)
+    return baseAddress!.advanced(by: endIndex)
   }
 }
 
@@ -661,4 +661,3 @@ extension Double {
     return a
   }
 }
-

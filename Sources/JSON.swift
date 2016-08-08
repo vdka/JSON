@@ -33,7 +33,7 @@ extension JSON: CustomStringConvertible {
     do {
       return try self.serialized()
     } catch {
-      return String(error)
+      return String(describing: error)
     }
   }
 }
@@ -43,7 +43,7 @@ extension JSON: CustomDebugStringConvertible {
     do {
       return try self.serialized(options: [.prettyPrint, .noSkipNull])
     } catch {
-      return String(error)
+      return String(describing: error)
     }
   }
 }
@@ -68,13 +68,13 @@ public func ==(lhs: JSON, rhs: JSON) -> Bool {
 
 // MARK: - JSON LiteralConvertible conformance
 
-extension JSON: ArrayLiteralConvertible {
+extension JSON: ExpressibleByArrayLiteral {
   public init(arrayLiteral elements: JSONRepresentable...) {
     self = .array(elements.map(JSON.init))
   }
 }
 
-extension JSON: DictionaryLiteralConvertible {
+extension JSON: ExpressibleByDictionaryLiteral {
   public init(dictionaryLiteral elements: (String, JSONRepresentable)...) {
 
     var dict: [String: JSON] = [:]
@@ -87,21 +87,21 @@ extension JSON: DictionaryLiteralConvertible {
   }
 }
 
-extension JSON: IntegerLiteralConvertible {
+extension JSON: ExpressibleByIntegerLiteral {
   public init(integerLiteral value: IntegerLiteralType) {
     let val = Int64(value)
     self = .integer(val)
   }
 }
 
-extension JSON: FloatLiteralConvertible {
+extension JSON: ExpressibleByFloatLiteral {
   public init(floatLiteral value: FloatLiteralType) {
     let val = Double(value)
     self = .double(val)
   }
 }
 
-extension JSON: StringLiteralConvertible {
+extension JSON: ExpressibleByStringLiteral {
   public init(stringLiteral value: String) {
     self = .string(value)
   }
@@ -115,13 +115,13 @@ extension JSON: StringLiteralConvertible {
   }
 }
 
-extension JSON: NilLiteralConvertible {
+extension JSON: ExpressibleByNilLiteral {
   public init(nilLiteral: ()) {
     self = .null
   }
 }
 
-extension JSON: BooleanLiteralConvertible {
+extension JSON: ExpressibleByBooleanLiteral {
   public init(booleanLiteral value: Bool) {
     self = .bool(value)
   }

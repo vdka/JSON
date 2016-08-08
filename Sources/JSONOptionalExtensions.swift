@@ -26,7 +26,7 @@ extension Optional where Wrapped: _JSON {
   public subscript(index: Int) -> JSON? {
     get {
       guard let `self` = self as? JSON else { return nil }
-      guard case .array(let a) = self where a.indices ~= index else { return nil }
+      guard case .array(let a) = self, a.indices ~= index else { return nil }
       return a[index]
     }
 

@@ -30,7 +30,7 @@ extension JSON {
 }
 
 extension JSON.Serializer {
-  public static func serialize<O: OutputStream>(_ json: JSON, to stream: inout O, options: Option) throws {
+  public static func serialize<O: TextOutputStream>(_ json: JSON, to stream: inout O, options: Option) throws {
     let writer = JSON.Serializer(json: json, options: options)
     try writer.writeValue(json, to: &stream)
   }
@@ -44,7 +44,7 @@ extension JSON.Serializer {
 }
 
 extension JSON.Serializer {
-  func writeValue<O: OutputStream>(_ value: JSON, to stream: inout O, indentLevel: Int = 0) throws {
+  func writeValue<O: TextOutputStream>(_ value: JSON, to stream: inout O, indentLevel: Int = 0) throws {
     switch value {
     case .array(let a):
       try writeArray(a, to: &stream, indentLevel: indentLevel)
@@ -73,12 +73,12 @@ extension JSON.Serializer {
 }
 
 extension JSON.Serializer {
-  func writeNewlineIfNeeded<O: OutputStream>(to stream: inout O) {
+  func writeNewlineIfNeeded<O: TextOutputStream>(to stream: inout O) {
     guard prettyPrint else { return }
     stream.write("\n")
   }
 
-  func writeIndentIfNeeded<O: OutputStream>(_ indentLevel: Int, to stream: inout O) {
+  func writeIndentIfNeeded<O: TextOutputStream>(_ indentLevel: Int, to stream: inout O) {
     guard prettyPrint else { return }
 
     // TODO: Look into a more effective way of adding to a string.
@@ -91,7 +91,7 @@ extension JSON.Serializer {
 
 extension JSON.Serializer {
 
-  func writeArray<O: OutputStream>(_ a: [JSON], to stream: inout O, indentLevel: Int = 0) throws {
+  func writeArray<O: TextOutputStream>(_ a: [JSON], to stream: inout O, indentLevel: Int = 0) throws {
     if a.isEmpty {
       stream.write("[]")
       return
@@ -119,7 +119,7 @@ extension JSON.Serializer {
     stream.write("]")
   }
 
-  func writeObject<O: OutputStream>(_ o: [String: JSON], to stream: inout O, indentLevel: Int = 0) throws {
+  func writeObject<O: TextOutputStream>(_ o: [String: JSON], to stream: inout O, indentLevel: Int = 0) throws {
     if o.isEmpty {
       stream.write("{}")
       return
@@ -149,7 +149,7 @@ extension JSON.Serializer {
     stream.write("}")
   }
 
-  func writeBool<O: OutputStream>(_ b: Bool, to stream: inout O) {
+  func writeBool<O: TextOutputStream>(_ b: Bool, to stream: inout O) {
     switch b {
     case true:
       stream.write("true")
@@ -159,20 +159,20 @@ extension JSON.Serializer {
     }
   }
 
-  func writeNull<O: OutputStream>(to stream: inout O) {
+  func writeNull<O: TextOutputStream>(to stream: inout O) {
     stream.write("null")
   }
 
-  func writeInteger<O: OutputStream>(_ i: Int64, to stream: inout O) {
+  func writeInteger<O: TextOutputStream>(_ i: Int64, to stream: inout O) {
     stream.write(i.description)
   }
 
-  func writeDouble<O: OutputStream>(_ d: Double, to stream: inout O) throws {
+  func writeDouble<O: TextOutputStream>(_ d: Double, to stream: inout O) throws {
     guard d.isFinite else { throw JSON.Serializer.Error.invalidNumber }
     stream.write(d.description)
   }
 
-  func writeString<O: OutputStream>(_ s: String, to stream: inout O) {
+  func writeString<O: TextOutputStream>(_ s: String, to stream: inout O) {
     stream.write("\"")
     stream.write(s)
     stream.write("\"")
@@ -180,7 +180,7 @@ extension JSON.Serializer {
 }
 
 extension JSON.Serializer {
-  public enum Error: String, ErrorProtocol {
+  public enum Error: String, Swift.Error {
     case invalidNumber
   }
 }

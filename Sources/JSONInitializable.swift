@@ -65,7 +65,7 @@ extension Float: JSONInitializable {
 extension Int: JSONInitializable {
 
   public init(json: JSON) throws {
-    guard case .integer(let i) = json where Int64(Int.min) <= i && i <= Int64(Int.max) else { throw JSON.Error.badValue(json.value) }
+    guard case .integer(let i) = json, Int64(Int.min) <= i && i <= Int64(Int.max) else { throw JSON.Error.badValue(json.value) }
     self = Int(i)
   }
 }
@@ -99,7 +99,10 @@ extension RawRepresentable where RawValue: JSONInitializable {
 
   public init(json: JSON) throws {
     guard let value = json.value as? RawValue else { throw JSON.Error.badValue(json.value) }
-    self = try Self(rawValue: value) ?? JSON.Error.badValue(value)
+    guard let o = Self(rawValue: value) else {
+      throw JSON.Error.badValue(value)
+    }
+    self = o
   }
 }
 
