@@ -227,6 +227,11 @@ class ParsingTests: XCTestCase {
     expect("'\\u0048'", toParseTo: "H")
   }
 
+  func testEscape_Unicode_Complex() {
+
+    expect("'\\ud83d\\ude24'", toParseTo: "\u{1F624}")
+  }
+
   func testEscape_Unicode_InvalidUnicode_MissingDigit() {
 
     expect("'\\u048'", toThrowWithReason: .invalidEscape)
