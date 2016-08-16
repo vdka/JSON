@@ -137,7 +137,7 @@ extension Array where Element: JSONInitializable {
 
   public init(json: JSON) throws {
     guard let array = json.array else { throw JSON.Error.badValue(json) }
-    self = try array.map(Element.decode)
+    self = try array.map(Element.init(json:))
   }
 
   public static func decode(json: JSON) throws -> [Element] {

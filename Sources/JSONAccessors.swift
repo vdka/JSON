@@ -7,13 +7,13 @@ extension JSON {
   public func get<T: JSONInitializable>(_ field: String) throws -> T {
     guard let json = self[field] else { throw JSON.Error.badField(field) }
 
-    return try T.decode(json)
+    return try T(json: json)
   }
 
   public func get<T: JSONInitializable>(_ field: String) throws -> [T] {
     guard let array = self[field].array else { throw JSON.Error.badField(field) }
 
-    return try array.map(T.decode)
+    return try array.map(T.init(json:))
   }
 
   // TODO(vdka): Using Any here will likely be a slow down
@@ -36,7 +36,7 @@ extension JSON {
     //let rawValue: T.RawValue = try self.get(field)
     //guard let value = T(rawValue: rawValue) else { throw JSON.Error.badValue(rawValue) }
 
-    return try array.map(T.decode)
+    return try array.map(T.init(json:))
   }
 
   // NOTE: This is the most constrained version therefore the compiler should use this in the case of a RawRepresentable & JSONInitializable
@@ -45,14 +45,14 @@ extension JSON {
   public func get<T: RawRepresentable & JSONInitializable>(_ field: String) throws -> T {
     guard let json = self[field] else { throw JSON.Error.badField(field) }
 
-    return try T.decode(json)
+    return try T(json: json)
   }
 
   /// Returns the content matching the type of its destination
   public func get<T: RawRepresentable & JSONInitializable>(_ field: String) throws -> [T] {
     guard let array = self[field].array else { throw JSON.Error.badField(field) }
 
-    return try array.map(T.decode)
+    return try array.map(T.init(json:))
   }
 }
 

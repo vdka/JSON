@@ -2,7 +2,6 @@
 import XCTest
 import JSON
 
-// TODO (vdka): determine why the first run of JSON.Parser.parse(_,_:) is so much slower
 class ParserBenchmarks: XCTestCase {
   
   func testParseLargeJson() {
@@ -10,7 +9,9 @@ class ParserBenchmarks: XCTestCase {
     let data = loadFixture("large")
 
     measure {
-      _ = try! JSON.Parser.parse(data)
+      for _ in 0..<5 {
+        _ = try! JSON.Parser.parse(data)
+      }
     }
   }
 
@@ -19,7 +20,9 @@ class ParserBenchmarks: XCTestCase {
     let data = loadFixture("large_min")
 
     measure {
-      _ = try! JSON.Parser.parse(data)
+      for _ in 0..<5 {
+        _ = try! JSON.Parser.parse(data)
+      }
     }
   }
 
@@ -31,7 +34,9 @@ class ParserBenchmarks: XCTestCase {
     let data = loadFixtureData("large")
 
     measure {
-      try! JSONSerialization.jsonObject(with: data, options: [])
+      for _ in 0..<5 {
+        try! JSONSerialization.jsonObject(with: data, options: [])
+      }
     }
   }
 
@@ -40,7 +45,9 @@ class ParserBenchmarks: XCTestCase {
     let data = loadFixtureData("large_min")
 
     measure {
-      try! JSONSerialization.jsonObject(with: data, options: [])
+      for _ in 0..<5 {
+        try! JSONSerialization.jsonObject(with: data, options: [])
+      }
     }
   }
 }
