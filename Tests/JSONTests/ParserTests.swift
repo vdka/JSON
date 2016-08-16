@@ -1,10 +1,3 @@
-//
-//  ParserTests.swift
-//  JSON
-//
-//  Created by Ethan Jackwitz on 4/19/16.
-//  Copyright © 2016 Ethan Jackwitz. All rights reserved.
-//
 
 import XCTest
 @testable import JSON

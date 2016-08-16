@@ -2,14 +2,17 @@
 import XCTest
 import JSON
 
+fileprivate let n = 5
+
 class ParserBenchmarks: XCTestCase {
-  
+
+
   func testParseLargeJson() {
 
     let data = loadFixture("large")
 
     measure {
-      for _ in 0..<5 {
+      for _ in 0..<n {
         _ = try! JSON.Parser.parse(data)
       }
     }
@@ -20,8 +23,27 @@ class ParserBenchmarks: XCTestCase {
     let data = loadFixture("large_min")
 
     measure {
-      for _ in 0..<5 {
+      for _ in 0..<n {
         _ = try! JSON.Parser.parse(data)
+      }
+    }
+  }
+
+  func testParseLargeJsonToUsers() {
+
+    let data = loadFixture("large")
+
+    measure {
+      for _ in 0..<n {
+
+        let json = try! JSON.Parser.parse(data)
+
+        guard case .array(let usersJson) = json else {
+          XCTFail()
+          return
+        }
+
+        _ = try! usersJson.map(User.init(json:))
       }
     }
   }
@@ -34,7 +56,7 @@ class ParserBenchmarks: XCTestCase {
     let data = loadFixtureData("large")
 
     measure {
-      for _ in 0..<5 {
+      for _ in 0..<n {
         try! JSONSerialization.jsonObject(with: data, options: [])
       }
     }
@@ -45,8 +67,27 @@ class ParserBenchmarks: XCTestCase {
     let data = loadFixtureData("large_min")
 
     measure {
-      for _ in 0..<5 {
+      for _ in 0..<n {
         try! JSONSerialization.jsonObject(with: data, options: [])
+      }
+    }
+  }
+
+  func testParseLargeJsonToUsers_Foundation() {
+
+    let data = loadFixtureData("large")
+
+    measure {
+      for _ in 0..<n {
+
+        let json = try! JSONSerialization.jsonObject(with: data)
+
+        guard let usersJson = json as? [Any] else {
+          XCTFail()
+          return
+        }
+
+        _ = try! usersJson.map(User.init(foundationJSON:))
       }
     }
   }
@@ -65,25 +106,3 @@ extension ParserBenchmarks: XCTestCaseProvider {
   }
 }
 #endif
-
-func urlForFixture(_ name: String) -> URL {
-
-  let parent = (#file).components(separatedBy: "/").dropLast().joined(separator: "/")
-  let url = URL(string: "file://\(parent)/Fixtures/\(name).json")!
-  print("Loading fixture from url \(url)")
-  return url
-}
-
-func loadFixture(_ name: String) -> [UInt8] {
-
-  let url = urlForFixture(name)
-  let data = Array(try! String(contentsOf: url).utf8)
-  return data
-}
-
-func loadFixtureData(_ name: String) -> Foundation.Data {
-
-  let url = urlForFixture(name)
-  let data = try! Foundation.Data(contentsOf: url)
-  return data
-}

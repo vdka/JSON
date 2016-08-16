@@ -3,10 +3,72 @@
 
 extension JSON {
 
+  public func get<T: JSONInitializable>() throws -> T {
+    return try T(json: self)
+  }
+
+  public func get<T: JSONInitializable>() throws -> T? {
+    return try T(json: self)
+  }
+
+  public func get<T: JSONInitializable>() throws -> [T] {
+    guard case .array(let array) = self else { throw JSON.Error.badValue(self) }
+
+    return try array.map(T.init(json:))
+  }
+
+  public func get<T: RawRepresentable>() throws -> T
+    where T.RawValue: JSONInitializable
+  {
+    return try T(json: self)
+  }
+
+  public func get<T: RawRepresentable>() throws -> T?
+    where T.RawValue: JSONInitializable
+  {
+    return try T(json: self)
+  }
+
+  public func get<T: RawRepresentable>() throws -> [T]
+    where T.RawValue: JSONInitializable
+  {
+    guard case .array(let array) = self else { throw JSON.Error.badValue(self) }
+
+    return try array.map(T.init(json:))
+  }
+
+  public func get<T: RawRepresentable & JSONInitializable>() throws -> T {
+
+    return try T(json: self)
+  }
+
+
+  public func get<T: RawRepresentable & JSONInitializable>() throws -> T?
+    where T.RawValue: JSONInitializable
+  {
+    return try T(json: self)
+  }
+
+  /// Returns the content matching the type of its destination
+  public func get<T: RawRepresentable & JSONInitializable>() throws -> [T] {
+    guard case .array(let array) = self else { throw JSON.Error.badValue(self) }
+
+    return try array.map(T.init(json:))
+  }
+}
+
+
+extension JSON {
+
   /// Returns the content matching the type of its destination
   public func get<T: JSONInitializable>(_ field: String) throws -> T {
     guard let json = self[field] else { throw JSON.Error.badField(field) }
 
+    return try T(json: json)
+  }
+
+  public func get<T: JSONInitializable>(_ field: String) throws -> T? {
+    guard let json = self[field] else { throw JSON.Error.badField(field) }
     return try T(json: json)
   }
 
@@ -22,7 +84,7 @@ extension JSON {
     where T.RawValue: JSONInitializable
   {
     let rawValue: T.RawValue = try self.get(field)
-    guard let value = T(rawValue: rawValue) else { throw JSON.Error.badValue(rawValue) }
+    guard let value = T(rawValue: rawValue) else { throw JSON.Error.badField(field) }
 
     return value
   }
@@ -33,8 +95,6 @@ extension JSON {
     where T.RawValue: JSONInitializable
   {
     guard let array = self[field].array else { throw JSON.Error.badField(field) }
-    //let rawValue: T.RawValue = try self.get(field)
-    //guard let value = T(rawValue: rawValue) else { throw JSON.Error.badValue(rawValue) }
 
     return try array.map(T.init(json:))
   }

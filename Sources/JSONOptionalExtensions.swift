@@ -9,6 +9,7 @@ extension JSON: _JSON {}
 extension Optional where Wrapped: _JSON {
 
   /// returns the `JSON` value for key iff `Wrapped == JSON.object(_)` and there is a value for the key
+  /// - Note: you will get better performance if you chain your subscript eg. ["key"]?.string This is because the compiler will retain more type information.
   public subscript(key: String) -> JSON? {
     get {
       return object?[key]

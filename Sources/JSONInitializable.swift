@@ -79,24 +79,6 @@ extension Int64: JSONInitializable {
 }
 
 
-extension JSON {
-
-  // TODO(vdka): Find a way to keep the Option<Wrapped: JSONInitializable> functionality without any `Any`s
-  /// The raw value associated with this JSON
-  public var value: Any? {
-    switch self {
-    case .array(let a): return a
-    case .object(let o): return o
-
-    case .null: return nil
-    case .bool(let b): return b
-    case .string(let s): return s
-    case .double(let d): return d
-    case .integer(let i): return Int(i)
-    }
-  }
-}
-
 // NOTE: track rdar://23433955
 
 // MARK: - Add decode to Optional JSONInitializables
@@ -105,8 +87,7 @@ extension JSON {
 extension Optional where Wrapped: JSONInitializable {
 
   public init(json: JSON) throws {
-    guard let value = json.value as? Wrapped else { throw JSON.Error.badValue(json) }
-    self = value
+    self = try Wrapped(json: json)
   }
 
   public static func decode(json: JSON) throws -> Optional<Wrapped> {
@@ -120,9 +101,8 @@ extension Optional where Wrapped: JSONInitializable {
 extension RawRepresentable where RawValue: JSONInitializable {
 
   public init(json: JSON) throws {
-    guard let value = json.value as? RawValue else { throw JSON.Error.badValue(json) }
-    guard let o = Self(rawValue: value) else { throw JSON.Error.badValue(value) }
-    self = o
+    guard let value = try Self(rawValue: RawValue(json: json)) else { throw JSON.Error.badValue(json) }
+    self = value
   }
 
   public static func decode(json: JSON) throws -> Self {

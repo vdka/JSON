@@ -3,7 +3,6 @@ import XCTest
 import Foundation
 @testable import JSON
 
-// TODO (vdka): update the json strings to the more readable {'a':'b'} formatting
 class JSONTests: XCTestCase {
   
   let json: JSON =

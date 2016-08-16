@@ -1,13 +1,42 @@
-# JSON
 
-[![Language](https://img.shields.io/badge/Swift-3-brightgreen.svg)](http://swift.org)
 
-This is Not just Another Swift JSON Package. This is _**the**_ Swift JSON Package.
-When you are transforming directly to models this framework is [faster](https://github.com/vdka/JSONBenchmarks) than `Foundation.JSONSerialization`.
+import XCTest
+import Foundation
+@testable import JSON
 
-Type safety can get you a long way, lets see how you can use it for your applications.
+class ModelMappingTests: XCTestCase {
 
-```swift
+  let json: JSON = {
+    let bytes = loadFixture("large")
+    return try! JSON.Parser.parse(bytes)
+  }()
+
+  func testMapToModels() {
+
+    guard let userJson = json.array?.first else {
+      XCTFail()
+      return
+    }
+
+    _ = try! User(json: userJson)
+  }
+  
+}
+
+#if os(Linux)
+  extension JSONTests: XCTestCaseProvider {
+    var allTests : [(String, () throws -> Void)] {
+      return [
+        ("testSerializeArray", testSerializeArray),
+        ("testParse", testParse),
+        ("testSanity", testSanity),
+        ("testAccessors", testAccessors),
+        ("testMutation", testMutation),
+      ]
+    }
+  }
+#endif
+
 enum Currency: String { case AUD, EUR, GBP, USD }
 
 struct Money {
@@ -58,11 +87,4 @@ extension Person: JSONConvertible {
     self.petName          = try json.get("petName")
   }
 }
-```
 
-## Alternative Access Patterns
-
-#### Subscripting
-`json["pet"]?["vets"]?[0]?["name"]?.string`
-
- `json["pet"]["vets"][0]["name"].string` is also valid however this one has to perform runtime type checks making it much slower. This will probably be deprecated at least until we can constrain Generic Type extensions to Specific types.
