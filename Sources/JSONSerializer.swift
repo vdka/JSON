@@ -10,11 +10,13 @@ extension JSON {
       public let rawValue: UInt8
 
       /// Serialize `JSON.null` instead of skipping it
-      public static let noSkipNull = Option(rawValue: 1 << 1)
+      public static let noSkipNull          = Option(rawValue: 0b0001)
+
       /// Serialize with formatting for user readability
-      public static let prettyPrint = Option(rawValue: 1 << 2)
-      /// When specified with `.prettyPrint` will use windows style newlines for formatting. Boo.
-      public static let windowsLineEndings = Option(rawValue: 1 << 3)
+      public static let prettyPrint         = Option(rawValue: 0b0010)
+      
+      /// will use windows style newlines for formatting. Boo. Implies `.prettyPrint`
+      public static let windowsLineEndings  = Option(rawValue: 0b0110)
     }
 
     init(json: JSON, options: Option = []) {

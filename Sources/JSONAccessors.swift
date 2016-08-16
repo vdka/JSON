@@ -2,19 +2,6 @@
 // MARK: - JSON Accessors
 
 extension JSON {
-  /// The raw value associated with this JSON
-  public var value: Any? {
-    switch self {
-    case .array(let a): return a
-    case .object(let o): return o
-
-    case .null: return nil
-    case .bool(let b): return b
-    case .string(let s): return s
-    case .double(let d): return d
-    case .integer(let i): return Int(i)
-    }
-  }
 
   /// Returns the content matching the type of its destination
   public func get<T: JSONInitializable>(_ field: String) throws -> T {
@@ -23,19 +10,49 @@ extension JSON {
     return try T.decode(json)
   }
 
+  public func get<T: JSONInitializable>(_ field: String) throws -> [T] {
+    guard let array = self[field].array else { throw JSON.Error.badField(field) }
+
+    return try array.map(T.decode)
+  }
+
+  // TODO(vdka): Using Any here will likely be a slow down
   /// Returns the content matching the type of its destination
-  public func get<T: RawRepresentable>(_ field: String) throws -> T {
-    guard let rawValue = self[field]?.value as? T.RawValue else { throw JSON.Error.badField(field) }
+  public func get<T: RawRepresentable>(_ field: String) throws -> T
+    where T.RawValue: JSONInitializable
+  {
+    let rawValue: T.RawValue = try self.get(field)
     guard let value = T(rawValue: rawValue) else { throw JSON.Error.badValue(rawValue) }
 
     return value
   }
+
+  // TODO(vdka): Using Any here will likely be a slow down
+  /// Returns the content matching the type of its destination
+  public func get<T: RawRepresentable>(_ field: String) throws -> [T]
+    where T.RawValue: JSONInitializable
+  {
+    guard let array = self[field].array else { throw JSON.Error.badField(field) }
+    //let rawValue: T.RawValue = try self.get(field)
+    //guard let value = T(rawValue: rawValue) else { throw JSON.Error.badValue(rawValue) }
+
+    return try array.map(T.decode)
+  }
+
+  // NOTE: This is the most constrained version therefore the compiler should use this in the case of a RawRepresentable & JSONInitializable
 
   /// Returns the content matching the type of its destination
   public func get<T: RawRepresentable & JSONInitializable>(_ field: String) throws -> T {
     guard let json = self[field] else { throw JSON.Error.badField(field) }
 
     return try T.decode(json)
+  }
+
+  /// Returns the content matching the type of its destination
+  public func get<T: RawRepresentable & JSONInitializable>(_ field: String) throws -> [T] {
+    guard let array = self[field].array else { throw JSON.Error.badField(field) }
+
+    return try array.map(T.decode)
   }
 }
 
@@ -144,7 +161,7 @@ extension JSON {
 
   /// Returns this enum's associated `Int64` value as an `Int` iff `self == .integer(_)`, `nil` otherwise.
   public var int: Int? {
-    // where clause protects against RunTime crashes where the value of i won't fit within a native Int
+    // We need to do this safety check because on a 32bit platform Swift's `Int` type is actually an Int32
     guard case .integer(let i) = self, Int64(Int.min) <= i && i <= Int64(Int.max) else { return nil }
     return Int(i)
   }
@@ -153,16 +170,5 @@ extension JSON {
   public var float: Float? {
     guard case .double(let d) = self else { return nil }
     return Float(d)
-  }
-}
-
-
-// MARK: JSON Accessors calling into Element.decode(json: JSON)
-
-extension JSON {
-
-  /// Calls `try? T.decode(self)`
-  func typed<T: JSONInitializable>() -> T? {
-    return try? T.decode(self)
   }
 }

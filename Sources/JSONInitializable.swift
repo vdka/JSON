@@ -24,7 +24,7 @@ extension JSONInitializable {
 extension Bool: JSONInitializable {
 
   public init(json: JSON) throws {
-    guard case .bool(let b) = json else { throw JSON.Error.badValue(json.value) }
+    guard case .bool(let b) = json else { throw JSON.Error.badValue(json) }
     self = b
   }
 }
@@ -35,7 +35,7 @@ extension Bool: JSONInitializable {
 extension String: JSONInitializable {
 
   public init(json: JSON) throws {
-    guard case .string(let s) = json else { throw JSON.Error.badValue(json.value) }
+    guard case .string(let s) = json else { throw JSON.Error.badValue(json) }
     self = s
   }
 }
@@ -46,7 +46,7 @@ extension String: JSONInitializable {
 extension Double: JSONInitializable {
 
   public init(json: JSON) throws {
-    guard case .double(let d) = json else { throw JSON.Error.badValue(json.value) }
+    guard case .double(let d) = json else { throw JSON.Error.badValue(json) }
     self = d
   }
 }
@@ -54,7 +54,7 @@ extension Double: JSONInitializable {
 extension Float: JSONInitializable {
 
   public init(json: JSON) throws {
-    guard case .double(let d) = json else { throw JSON.Error.badValue(json.value) }
+    guard case .double(let d) = json else { throw JSON.Error.badValue(json) }
     self = Float(d)
   }
 }
@@ -65,7 +65,7 @@ extension Float: JSONInitializable {
 extension Int: JSONInitializable {
 
   public init(json: JSON) throws {
-    guard case .integer(let i) = json, Int64(Int.min) <= i && i <= Int64(Int.max) else { throw JSON.Error.badValue(json.value) }
+    guard case .integer(let i) = json, Int64(Int.min) <= i && i <= Int64(Int.max) else { throw JSON.Error.badValue(json) }
     self = Int(i)
   }
 }
@@ -73,11 +73,29 @@ extension Int: JSONInitializable {
 extension Int64: JSONInitializable {
 
   public init(json: JSON) throws {
-    guard case .integer(let i) = json else { throw JSON.Error.badValue(json.value) }
+    guard case .integer(let i) = json else { throw JSON.Error.badValue(json) }
     self = i
   }
 }
 
+
+extension JSON {
+
+  // TODO(vdka): Find a way to keep the Option<Wrapped: JSONInitializable> functionality without any `Any`s
+  /// The raw value associated with this JSON
+  public var value: Any? {
+    switch self {
+    case .array(let a): return a
+    case .object(let o): return o
+
+    case .null: return nil
+    case .bool(let b): return b
+    case .string(let s): return s
+    case .double(let d): return d
+    case .integer(let i): return Int(i)
+    }
+  }
+}
 
 // NOTE: track rdar://23433955
 
@@ -87,8 +105,12 @@ extension Int64: JSONInitializable {
 extension Optional where Wrapped: JSONInitializable {
 
   public init(json: JSON) throws {
-    guard let value = json.value as? Wrapped else { throw JSON.Error.badValue(json.value) }
+    guard let value = json.value as? Wrapped else { throw JSON.Error.badValue(json) }
     self = value
+  }
+
+  public static func decode(json: JSON) throws -> Optional<Wrapped> {
+    return try Optional<Wrapped>(json: json)
   }
 }
 
@@ -98,11 +120,13 @@ extension Optional where Wrapped: JSONInitializable {
 extension RawRepresentable where RawValue: JSONInitializable {
 
   public init(json: JSON) throws {
-    guard let value = json.value as? RawValue else { throw JSON.Error.badValue(json.value) }
-    guard let o = Self(rawValue: value) else {
-      throw JSON.Error.badValue(value)
-    }
+    guard let value = json.value as? RawValue else { throw JSON.Error.badValue(json) }
+    guard let o = Self(rawValue: value) else { throw JSON.Error.badValue(value) }
     self = o
+  }
+
+  public static func decode(json: JSON) throws -> Self {
+    return try Self(json: json)
   }
 }
 
@@ -112,8 +136,11 @@ extension RawRepresentable where RawValue: JSONInitializable {
 extension Array where Element: JSONInitializable {
 
   public init(json: JSON) throws {
-    guard let array = json.array else { throw JSON.Error.badValue(json.value) }
+    guard let array = json.array else { throw JSON.Error.badValue(json) }
     self = try array.map(Element.decode)
   }
-}
 
+  public static func decode(json: JSON) throws -> [Element] {
+    return try Array<Element>(json: json)
+  }
+}

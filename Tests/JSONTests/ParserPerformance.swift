@@ -9,7 +9,6 @@ class ParserBenchmarks: XCTestCase {
 
     let data = loadFixture("large")
 
-    _ = try! JSON.Parser.parse(data)
     measure {
       _ = try! JSON.Parser.parse(data)
     }
@@ -19,7 +18,6 @@ class ParserBenchmarks: XCTestCase {
 
     let data = loadFixture("large_min")
 
-    _ = try! JSON.Parser.parse(data)
     measure {
       _ = try! JSON.Parser.parse(data)
     }

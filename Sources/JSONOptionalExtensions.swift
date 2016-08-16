@@ -102,16 +102,3 @@ extension Optional where Wrapped: _JSON {
     return self.float
   }
 }
-
-
-// MARK: JSON Accessors calling into Element.decode(json: JSON)
-
-extension Optional where Wrapped: _JSON {
-
-  /// Calls `try? T.decode(self)`
-  func typed<T: JSONInitializable>() -> T? {
-    guard let `self` = self as? JSON else { return nil }
-    return self.typed()
-  }
-}
-

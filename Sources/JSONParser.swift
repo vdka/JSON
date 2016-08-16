@@ -12,11 +12,10 @@ extension JSON {
       public let rawValue: UInt8
 
       /// Do not remove null values from the resulting JSON value. Instead store `JSON.null`
-      public static let skipNull = Option(rawValue: 0b01)
-      public static let allowFragments = Option(rawValue: 0b10)
+      public static let skipNull        = Option(rawValue: 0b0001)
 
-      // TODO (vdka): implement
-//      public static let noLeadingZeros = Option(rawValue: 0b00000010)
+      /// Allows Parser to return top level objects that are not container types `{}` | `[]` as per RFC7159
+      public static let allowFragments  = Option(rawValue: 0b0010)
     }
 
     let skipNull: Bool
@@ -46,6 +45,10 @@ extension JSON.Parser {
     self.skipNull = options.contains(.skipNull)
 
     self.skipWhitespace()
+
+    if !options.contains(.allowFragments) {
+      guard let firstToken = peek(), firstToken == objectOpen || firstToken == arrayOpen else { throw Error.Reason.fragmentedJson }
+    }
   }
 }
 
@@ -72,29 +75,7 @@ extension JSON.Parser {
 
         guard parser.pointer == parser.buffer.endAddress else { throw Error.Reason.invalidSyntax }
 
-        switch rootValue {
-        case .object(_), .array(_):
-          return rootValue
-
-        case .string(_) where options.contains(.allowFragments):
-          return rootValue
-
-        case .bool(_) where options.contains(.allowFragments):
-          return rootValue
-
-        case .integer(_) where options.contains(.allowFragments):
-          return rootValue
-
-        case .double(_) where options.contains(.allowFragments):
-          return rootValue
-
-        case .null where options.contains(.allowFragments):
-          return rootValue
-
-        default:
-          throw Error.Reason.fragmentedJson
-        }
-
+        return rootValue
       } catch let error as Error.Reason {
 
         guard let baseAddress = parser.buffer.baseAddress else { throw error }
@@ -118,11 +99,11 @@ extension JSON.Parser {
 
 extension JSON.Parser {
 
-  func peek() -> UTF8.CodeUnit? {
-    guard pointer < buffer.endAddress else {
+  func peek(aheadBy n: Int = 0) -> UTF8.CodeUnit? {
+    guard pointer.advanced(by: n) < buffer.endAddress else {
       return nil
     }
-    return pointer.pointee
+    return pointer.advanced(by: n).pointee
   }
 
   mutating func pop() throws -> UTF8.CodeUnit {
@@ -337,6 +318,8 @@ extension JSON.Parser {
     } while true
   }
 
+
+  // TODO(vdka): No leading 0's it's against the spec.
   mutating func parseNumber() throws -> JSON {
 
     assert(numbers ~= peek()! || minus == peek()!)
@@ -351,6 +334,11 @@ extension JSON.Parser {
     }()
 
     guard let next = peek(), numbers ~= next else { throw Error.Reason.invalidNumber }
+    // Checks for leading zero's on numbers that are not '0' or '0.x'
+    if next == zero {
+      guard let following = peek(aheadBy: 1) else { return .integer(0) }
+      guard following == decimal || following.isTerminator else { throw Error.Reason.invalidNumber }
+    }
 
     var significand: UInt64 = 0
     var mantisa: UInt64 = 0
@@ -411,7 +399,10 @@ extension JSON.Parser {
 
         guard let next = peek(), numbers ~= next else { throw Error.Reason.invalidNumber }
 
-      case nil, comma?, objectClose?, arrayClose?, space?, newline?, formfeed?, tab?, cr?:
+      case let value? where value.isTerminator:
+        fallthrough
+
+      case nil:
 
         return try constructNumber(
           significand: significand,
@@ -642,6 +633,14 @@ extension UTF8.CodeUnit {
 
   var isWhitespace: Bool {
     if self == space || self == tab || self == cr || self == newline || self == formfeed {
+      return true
+    } else {
+      return false
+    }
+  }
+
+  var isTerminator: Bool {
+    if self.isWhitespace || self == comma || self == objectClose || self == arrayClose {
       return true
     } else {
       return false

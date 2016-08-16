@@ -61,6 +61,16 @@ class ParsingTests: XCTestCase {
     expect("[ null ]", toParseTo: [JSON.null])
   }
 
+  func testArray_ZeroBegining() {
+
+    expect("[0, 1] ", toParseTo: [0, 1])
+  }
+
+  func testArray_ZeroBeginingWithWhitespace() {
+
+    expect("[0            , 1] ", toParseTo: [0, 1])
+  }
+
   func testArray_NullsBoolsNums_Normal_Minimal_RootParser() {
 
     expect("[null,true,false,12,-10,-24.3,18.2e9]", toParseTo:
@@ -123,6 +133,11 @@ class ParsingTests: XCTestCase {
   func testNumber_Int_Negative() {
 
     expect("-32", toParseTo: -32)
+  }
+
+  func testNumber_Int_Garbled() {
+
+    expect("42-4", toThrowWithReason: .invalidNumber)
   }
 
   func testNumber_Int_LeadingZero() {
@@ -328,7 +343,7 @@ class ParsingTests: XCTestCase {
   func testDetailedError() {
 
     expect("false blah", toThrow: JSON.Parser.Error(byteOffset: 6, reason: .invalidSyntax))
-    expect("0xbadf00d", toThrow: JSON.Parser.Error(byteOffset: 1, reason: .invalidNumber))
+    expect("0xbadf00d", toThrow: JSON.Parser.Error(byteOffset: 0, reason: .invalidNumber))
   }
 }
 
