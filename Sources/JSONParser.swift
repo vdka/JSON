@@ -24,6 +24,12 @@ extension JSON {
 
     /// Used to reduce the number of alloc's for parsing subsequent strings
     var stringBuffer: [UTF8.CodeUnit] = []
+
+    var objectBuffer: [[String: JSON]] = [[:]]
+    var arrayBuffer:  [[JSON]] = [[]]
+
+    var objectBufferDepth = -1
+    var arrayBufferDepth  = -1
   }
 }
 
@@ -34,6 +40,7 @@ extension JSON.Parser {
 
   // assumes data is null terminated.
   // and that the buffer will not be de-allocated before completion (handled by JSON.Parser.parse(_:,options:)
+  // This is the only actual initializer
   internal init(bufferPointer: UnsafeBufferPointer<UTF8.CodeUnit>, options: Option) throws {
 
     self.buffer = bufferPointer
@@ -207,7 +214,18 @@ extension JSON.Parser {
       return .object([:])
     }
 
-    var tempDict: [String: JSON] = Dictionary(minimumCapacity: 6)
+    objectBufferDepth += 1
+
+    if objectBuffer.count <= objectBufferDepth {
+      var tempDict: [String: JSON] = Dictionary(minimumCapacity: 6)  // TODO(vdka): Make this configurable after some benchmarking
+      objectBuffer.append(tempDict)
+    }
+
+    defer {
+      objectBuffer[objectBufferDepth].removeAll(keepingCapacity: true)
+      objectBufferDepth -= 1
+    }
+
     var wasComma = false
 
     repeat {
@@ -223,7 +241,7 @@ extension JSON.Parser {
 
       case quote?:
 
-        if tempDict.count > 0 && !wasComma {
+        if objectBuffer[objectBufferDepth].count > 0 && !wasComma {
           throw Error.Reason.expectedComma
         }
 
@@ -237,7 +255,7 @@ extension JSON.Parser {
           break
 
         default:
-          tempDict[key] = value
+          objectBuffer[objectBufferDepth][key] = value
         }
 
       case objectClose?:
@@ -245,7 +263,7 @@ extension JSON.Parser {
         guard !wasComma else { throw Error.Reason.trailingComma }
 
         unsafePop()
-        return .object(tempDict)
+        return .object(objectBuffer[objectBufferDepth])
 
       case nil:
         throw Error.Reason.endOfStream
@@ -269,8 +287,18 @@ extension JSON.Parser {
       return .array([])
     }
 
-    var tempArray: [JSON] = []
-    tempArray.reserveCapacity(6)
+    arrayBufferDepth += 1
+
+    if arrayBuffer.count <= arrayBufferDepth {
+      var tempArray: [JSON] = []
+      tempArray.reserveCapacity(6) // TODO(vdka): Make this configurable after some benchmarking
+      arrayBuffer.append(tempArray)
+    }
+
+    defer {
+      arrayBuffer[arrayBufferDepth].removeAll(keepingCapacity: true)
+      arrayBufferDepth -= 1
+    }
 
     var wasComma = false
 
@@ -280,7 +308,7 @@ extension JSON.Parser {
       case comma?:
 
         guard !wasComma else { throw Error.Reason.invalidSyntax }
-        guard tempArray.count > 0 else { throw Error.Reason.invalidSyntax }
+        guard !arrayBuffer[arrayBufferDepth].isEmpty else { throw Error.Reason.invalidSyntax }
 
         wasComma = true
         try skipComma()
@@ -290,14 +318,14 @@ extension JSON.Parser {
         guard !wasComma else { throw Error.Reason.trailingComma }
 
         _ = try pop()
-        return .array(tempArray)
+        return .array(arrayBuffer[arrayBufferDepth])
 
       case nil:
         throw Error.Reason.endOfStream
 
       default:
 
-        if tempArray.count > 0 && !wasComma {
+        if arrayBuffer[arrayBufferDepth].count > 0 && !wasComma {
           throw Error.Reason.expectedComma
         }
 
@@ -312,7 +340,7 @@ extension JSON.Parser {
           }
 
         default:
-          tempArray.append(value)
+          arrayBuffer[arrayBufferDepth].append(value)
         }
       }
     } while true
