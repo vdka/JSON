@@ -6,6 +6,7 @@ This is Not just Another Swift JSON Package. This is _**the**_ Swift JSON Packag
 When you are transforming directly to models this framework is [faster](https://github.com/vdka/JSONBenchmarks) than `Foundation.JSONSerialization`.
 
 Time to Parse and initialize a struct from a sample 432KB JSON file.
+
 |          | Foundation | vdka/json |
 |:---------|-----------:|----------:|
 | **Time** | `149.7ms`  | `27.03ms` |
