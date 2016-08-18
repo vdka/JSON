@@ -29,6 +29,15 @@ class ParserBenchmarks: XCTestCase {
     }
   }
 
+  func testParseInsaneJson() {
+
+    let data = loadFixture("insane")
+
+    measure {
+      _ = try! JSON.Parser.parse(data)
+    }
+  }
+
   func testParseLargeJsonToUsers() {
 
     let data = loadFixture("large")
