@@ -587,7 +587,7 @@ extension JSON.Parser {
 
 extension JSON.Parser {
 
-  public struct Error: Swift.Error {
+  public struct Error: Swift.Error, Equatable {
 
     public var byteOffset: Int
 
@@ -608,15 +608,12 @@ extension JSON.Parser {
       case invalidUnicode
       case fragmentedJson
     }
+
+    public static func == (lhs: JSON.Parser.Error, rhs: JSON.Parser.Error) -> Bool {
+      return lhs.byteOffset == rhs.byteOffset && lhs.reason == rhs.reason
+    }
   }
 }
-
-extension JSON.Parser.Error: Equatable {}
-
-public func == (lhs: JSON.Parser.Error, rhs: JSON.Parser.Error) -> Bool {
-  return lhs.byteOffset == rhs.byteOffset && lhs.reason == rhs.reason
-}
-
 
 // MARK: - Stdlib extensions
 
@@ -634,29 +631,16 @@ extension UTF8.CodeUnit {
   var isWhitespace: Bool {
     if self == space || self == tab || self == cr || self == newline || self == formfeed {
       return true
-    } else {
-      return false
     }
+
+    return false
   }
 
   var isTerminator: Bool {
     if self.isWhitespace || self == comma || self == objectClose || self == arrayClose {
       return true
-    } else {
-      return false
     }
-  }
-}
 
-extension Double {
-
-  internal func power(_ base: Double, exponent: UInt64, isNegative: Bool) -> Double {
-    var a: Double = self
-    if isNegative {
-      for _ in 0..<exponent { a /= base }
-    } else {
-      for _ in 0..<exponent { a *= base }
-    }
-    return a
+    return false
   }
 }

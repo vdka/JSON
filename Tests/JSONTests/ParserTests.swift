@@ -235,9 +235,19 @@ class ParsingTests: XCTestCase {
     expect("'\\u0048'", toParseTo: "H")
   }
 
+  func testEscape_Unicode_Invalid() {
+
+    expect("'\\uD83d\\udQ24'", toThrowWithReason: .invalidEscape)
+  }
+
   func testEscape_Unicode_Complex() {
 
     expect("'\\ud83d\\ude24'", toParseTo: "\u{1F624}")
+  }
+
+  func testEscape_Unicode_Complex_MixedCase() {
+
+    expect("'\\uD83d\\udE24'", toParseTo: "\u{1F624}")
   }
 
   func testEscape_Unicode_InvalidUnicode_MissingDigit() {
@@ -258,6 +268,11 @@ class ParsingTests: XCTestCase {
   func testString_Normal() {
 
     expect("'hello world'", toParseTo: "hello world")
+  }
+
+  func testString_Normal_Backslashes() {
+
+    expect("'C:\\\\\\\\share\\path\\file'", toParseTo: "C:\\\\share\\path\\file")
   }
 
   func testString_Normal_WhitespaceInside() {
