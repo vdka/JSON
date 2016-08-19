@@ -1,11 +1,23 @@
 
 import Darwin.C
 
+// TODO(vdka): Determine the approach for using OpenSwift streams without actually depending upon them.
+//  Thinking declare a JSON.Parser.Stream that is this protocol (the minimum require information to parse from a stream)
+//  Consumers would then be able to implement the protocol with whatever Type they want to use.
+// NOTE(vdka): Could maybe conform an Array to simplify code in the future
+public protocol UTF8Stream {
+
+  func read(to sync: ([UTF8.CodeUnit]) -> Void, length: Int) throws -> Int
+}
+
 // MARK: - JSON.Parser
 
 extension JSON {
 
   public struct Parser {
+
+    // TODO(vdka): rename
+    static let chunkSize = 512
 
     public struct Option: OptionSet {
       public init(rawValue: UInt8) { self.rawValue = rawValue }
@@ -19,8 +31,17 @@ extension JSON {
     }
 
     let skipNull: Bool
-    var pointer: UnsafePointer<UTF8.CodeUnit>
-    var buffer: UnsafeBufferPointer<UTF8.CodeUnit>
+
+    var index: Int
+    //var buffer: UnsafeBufferPointer<UTF8.CodeUnit>
+
+    // Buffer is used for the parser to read from
+    var buffer: [UTF8.CodeUnit]
+
+    // Stream buffer is used for the stream to read into!
+    var streamBuffer: [UTF8.CodeUnit]
+
+    var stream: UTF8Stream?
 
     /// Used to reduce the number of alloc's for parsing subsequent strings
     var stringBuffer: [UTF8.CodeUnit] = []
@@ -32,16 +53,23 @@ extension JSON {
 
 extension JSON.Parser {
 
-  // assumes data is null terminated.
-  // and that the buffer will not be de-allocated before completion (handled by JSON.Parser.parse(_:,options:)
-  internal init(bufferPointer: UnsafeBufferPointer<UTF8.CodeUnit>, options: Option) throws {
+  internal init(buffer: [UTF8.CodeUnit]?, stream: UTF8Stream?, options: Option) throws {
 
-    self.buffer = bufferPointer
+    if let buffer = buffer {
+      self.buffer = buffer
+      self.streamBuffer = []
+    } else {
+      var buffer: [UTF8.CodeUnit] = []
+      // TODO(vdka): Find a good default buffer size?
+      buffer.reserveCapacity(JSON.Parser.chunkSize)
+      self.buffer = buffer
+      self.streamBuffer = buffer
+    }
 
-    guard let pointer = bufferPointer.baseAddress, buffer.endAddress != bufferPointer.baseAddress else { throw Error(byteOffset: 0, reason: .emptyStream) }
+    self.index = buffer!.startIndex
 
-    // This can be unwrapped unsafely because
-    self.pointer = pointer
+    self.stream = stream
+
     self.skipNull = options.contains(.skipNull)
 
     self.skipWhitespace()
@@ -57,33 +85,56 @@ extension JSON.Parser {
 
 extension JSON.Parser {
 
-  public static func parse(_ data: [UTF8.CodeUnit], options: Option = []) throws -> JSON {
+  public static func parse(_ stream: UTF8Stream, options: Option = []) throws -> JSON {
 
-    return try data.withUnsafeBufferPointer { bufferPointer in
+    var parser = try JSON.Parser(buffer: nil, stream: stream, options: options)
 
-      var parser = try self.init(bufferPointer: bufferPointer, options: options)
+    do {
 
-      do {
+      let rootValue = try parser.parseValue()
+      parser.skipWhitespace()
 
-        parser.skipWhitespace()
+      // TODO(vkda): option to skip the trailing data check, useful for say streams see Jay's model
+      //  Find a way to implement the above TODO ensuring we are at the end of the buffer will not work here.
+      //  We could check that the input stream is _drained_
 
-        let rootValue = try parser.parseValue()
+      return rootValue
 
-        // TODO (vkda): option to skip the trailing data check, useful for say streams see Jay's model
+    } catch let error as Error.Reason {
 
-        parser.skipWhitespace()
-
-        guard parser.pointer == parser.buffer.endAddress else { throw Error.Reason.invalidSyntax }
-
-        return rootValue
-      } catch let error as Error.Reason {
-
-        guard let baseAddress = parser.buffer.baseAddress else { throw error }
-
-        throw Error(byteOffset: baseAddress.distance(to: parser.pointer), reason: error)
-      }
+      // TODO(vdka): return to throwing _useful_ errors. with context
+      throw Error(byteOffset: 0, reason: error)
     }
   }
+
+  public static func parse(_ buffer: [UTF8.CodeUnit], options: Option = []) throws -> JSON {
+
+
+    do {
+
+      guard !buffer.isEmpty else { throw Error.Reason.emptyStream }
+
+      var parser = try JSON.Parser(buffer: buffer, stream: nil, options: options)
+      
+      let rootValue = try parser.parseValue()
+      parser.skipWhitespace()
+
+      // TODO(vkda): option to skip the trailing data check, useful for say streams see Jay's model
+      //  Find a way to implement the above TODO ensuring we are at the end of the buffer will not work here.
+      //  We could check that the input stream is _drained_
+
+      return rootValue
+
+    } catch let error as Error.Reason {
+
+      // TODO(vdka): return to throwing _useful_ errors. with context
+      throw Error(byteOffset: 0, reason: error)
+    }
+  }
+
+  // NOTE(vdka): This is probably a bit too easy to get wrong and should not be public.
+  /// - Parameter stream: When given a stream the parser will call stream.read whenever the data runs out.
+  // public static func parse(_ data: [UTF8.CodeUnit] = [], options: Option = []) throws -> JSON {
 
   public static func parse(_ string: String, options: Option = []) throws -> JSON {
 
@@ -99,23 +150,56 @@ extension JSON.Parser {
 
 extension JSON.Parser {
 
+  /// This *shall* only be called when the input buffer we are reading from has been read to the end.
+  mutating func read() throws {
+
+    guard let stream = stream else { throw Error.Reason.endOfStream }
+
+    func insertIntoBuffer(_ bytes: [UTF8.CodeUnit]) {
+
+      streamBuffer.removeAll(keepingCapacity: true)
+      streamBuffer.append(contentsOf: bytes)
+    }
+
+    // Read `chundkSize` bytes from the stream, inserting them into my buffer
+
+    _ = try stream.read(to: insertIntoBuffer, length: JSON.Parser.chunkSize)
+
+    index = buffer.startIndex
+  }
+
+  // If when we peek ahead we see a nil value then we need to wait for the stream to send us more data. If we have one that is.
   func peek(aheadBy n: Int = 0) -> UTF8.CodeUnit? {
-    guard pointer.advanced(by: n) < buffer.endAddress else {
+
+    guard index.advanced(by: n) < buffer.endIndex else {
       return nil
     }
-    return pointer.advanced(by: n).pointee
+
+    return buffer[index.advanced(by: n)]
   }
 
   mutating func pop() throws -> UTF8.CodeUnit {
-    guard pointer != buffer.endAddress else { throw Error.Reason.endOfStream }
-    defer { pointer = pointer.advanced(by: 1) }
-    return pointer.pointee
+
+    // TODO(vdka): there is at least the crashing case where peek probably should handle this? because peek(aheadBy n:_) is gonna cause issues.
+    guard index < buffer.endIndex else {
+      try read()
+      buffer = streamBuffer
+      index = 0
+      return buffer[index]
+    }
+
+    defer { index = index.advanced(by: 1) }
+    return buffer[index]
+
   }
 
   @discardableResult
   mutating func unsafePop() -> UTF8.CodeUnit {
-    defer { pointer = pointer.advanced(by: 1) }
-    return pointer.pointee
+    defer { index = index.advanced(by: 1) }
+    return buffer[index]
+
+    // defer { pointer = pointer.advanced(by: 1) }
+    // return pointer.pointee
   }
 }
 
@@ -123,7 +207,7 @@ extension JSON.Parser {
 
   mutating func skipWhitespace() {
 
-    while pointer.pointee.isWhitespace && pointer != buffer.endAddress {
+    while index != buffer.endIndex && buffer[index].isWhitespace {
 
       unsafePop()
     }
@@ -138,7 +222,7 @@ extension JSON.Parser {
    */
   mutating func parseValue() throws -> JSON {
 
-    assert(!pointer.pointee.isWhitespace)
+    assert(!buffer[index].isWhitespace)
 
     defer { skipWhitespace() }
     switch peek() {
@@ -191,7 +275,12 @@ extension JSON.Parser {
   mutating func assertFollowedBy(_ chars: [UTF8.CodeUnit]) throws {
 
     for scalar in chars {
-      guard try scalar == pop() else { throw Error.Reason.invalidLiteral }
+
+      let got = try pop()
+
+      guard try scalar == got else {
+        throw Error.Reason.invalidLiteral
+      }
     }
   }
 
@@ -333,9 +422,10 @@ extension JSON.Parser {
       return true
     }()
 
-    guard let next = peek(), numbers ~= next else { throw Error.Reason.invalidNumber }
+    guard let next = peek() else { throw Error.Reason.invalidNumber }
     // Checks for leading zero's on numbers that are not '0' or '0.x'
     if next == zero {
+      // look at 
       guard let following = peek(aheadBy: 1) else { return .integer(0) }
       guard following == decimal || following.isTerminator else { throw Error.Reason.invalidNumber }
     }
@@ -615,16 +705,8 @@ extension JSON.Parser {
   }
 }
 
+
 // MARK: - Stdlib extensions
-
-extension UnsafeBufferPointer {
-
-  var endAddress: UnsafePointer<Element> {
-
-    return baseAddress!.advanced(by: endIndex)
-  }
-}
-
 
 extension UTF8.CodeUnit {
 
