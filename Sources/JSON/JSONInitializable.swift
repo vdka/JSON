@@ -1,4 +1,5 @@
 
+
 // MARK: - JSONInitializable
 
 /// Conforming types can be decoded from a JSON instance

@@ -428,13 +428,8 @@ extension JSON.Parser {
 
       let number = Double(negative ? -1 : 1) * (Double(significand) + Double(mantisa ?? 0) / divisor)
 
-      if let exponent = exponent {
-        return .double(Double(number) * pow(10, negativeExponent ? -Double(exponent) : Double(exponent)))
-//        return .double(number.power(10, exponent: exponent, isNegative: negativeExponent))
-      } else {
-        return .double(number)
-      }
-
+      guard let exponent = exponent else { return .double(number) }
+      return .double(Double(number) * pow(10, negativeExponent ? -Double(exponent) : Double(exponent)))
     } else {
 
       switch significand {
@@ -448,7 +443,7 @@ extension JSON.Parser {
         return .integer(-Int64(significand))
 
       default:
-        throw Error.Reason.invalidNumber
+        throw Error.Reason.numberOverflow
       }
     }
   }

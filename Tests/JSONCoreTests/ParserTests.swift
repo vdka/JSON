@@ -1,6 +1,6 @@
 
 import XCTest
-@testable import JSON
+@testable import JSONCore
 
 class ParsingTests: XCTestCase {
 
@@ -14,6 +14,9 @@ class ParsingTests: XCTestCase {
     expect("{'hello':'world'} blah", toThrowWithReason: .invalidSyntax)
   }
 
+
+  // MARK: - Null
+
   func testNullParses() {
 
     expect("null", toParseTo: .null)
@@ -23,6 +26,9 @@ class ParsingTests: XCTestCase {
 
     expect("nall", toThrowWithReason: .invalidLiteral)
   }
+
+
+  // MARK: - Bools
 
   func testTrueParses() {
 
@@ -43,6 +49,9 @@ class ParsingTests: XCTestCase {
 
     expect("fals ", toThrowWithReason: .invalidLiteral)
   }
+
+
+  // MARK: - Arrays
 
   func testArray_JustComma() {
 
@@ -98,6 +107,9 @@ class ParsingTests: XCTestCase {
     expect("[\n  null ,true, \nfalse\r\n, ]\n  ", toThrowWithReason: .trailingComma)
   }
 
+
+  // MARK: - Numbers
+
   func testNumber_Int_Zero() {
 
     expect("0 ", toParseTo: 0)
@@ -136,6 +148,11 @@ class ParsingTests: XCTestCase {
   func testNumber_Int_LeadingZero() {
 
     expect("007", toThrowWithReason: .invalidNumber)
+  }
+
+  func testNumber_Int_Overflow() {
+
+    expect((UInt64(Int64.max) + 1).description, toThrowWithReason: .numberOverflow)
   }
 
   func testNumber_Dbl_LeadingZero() {
@@ -230,6 +247,9 @@ class ParsingTests: XCTestCase {
     expect("-24.3245eE2", toThrowWithReason: .invalidNumber)
   }
 
+
+  // MARK: - Strings & Unicode
+
   func testEscape_Unicode_Normal() {
 
     expect("'\\u0048'", toParseTo: "H")
@@ -272,7 +292,8 @@ class ParsingTests: XCTestCase {
 
   func testString_Normal_Backslashes() {
 
-    expect("'C:\\\\\\\\share\\path\\file'", toParseTo: "C:\\\\share\\path\\file")
+    // This looks insane and kinda is. The rule is the right side just halve, the left side quarter. Needs more here Strings
+    expect("'C:\\\\\\\\share\\\\path\\\\file'", toParseTo: "C:\\\\share\\path\\file")
   }
 
   func testString_Normal_WhitespaceInside() {
