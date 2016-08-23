@@ -106,15 +106,10 @@ extension JSON.Parser {
     return pointer.advanced(by: n).pointee
   }
 
-  /// - Precondition: pointer != buffer.endAddress
-  mutating func pop() throws -> UTF8.CodeUnit {
-    assert(pointer != buffer.endAddress)
-    defer { pointer = pointer.advanced(by: 1) }
-    return pointer.pointee
-  }
-
+  /// - Precondition: pointer != buffer.endAddress. It is assumed before calling pop that you have
   @discardableResult
-  mutating func unsafePop() -> UTF8.CodeUnit {
+  mutating func pop() -> UTF8.CodeUnit {
+    assert(pointer != buffer.endAddress)
     defer { pointer = pointer.advanced(by: 1) }
     return pointer.pointee
   }
@@ -126,7 +121,7 @@ extension JSON.Parser {
 
     while pointer.pointee.isWhitespace && pointer != buffer.endAddress {
 
-      unsafePop()
+      pop()
     }
   }
 }
@@ -165,19 +160,19 @@ extension JSON.Parser {
 
     case f?:
 
-      unsafePop()
+      pop()
       try assertFollowedBy(alse)
       return .bool(false)
 
     case t?:
 
-      unsafePop()
+      pop()
       try assertFollowedBy(rue)
       return .bool(true)
 
     case n?:
 
-      unsafePop()
+      pop()
       try assertFollowedBy(ull)
       return .null
 
@@ -189,19 +184,19 @@ extension JSON.Parser {
   mutating func assertFollowedBy(_ chars: [UTF8.CodeUnit]) throws {
 
     for scalar in chars {
-      guard try scalar == pop() else { throw Error.Reason.invalidLiteral }
+      guard scalar == pop() else { throw Error.Reason.invalidLiteral }
     }
   }
 
   mutating func parseObject() throws -> JSON {
 
     assert(peek() == objectOpen)
-    unsafePop()
+    pop()
 
     skipWhitespace()
 
     guard peek() != objectClose else {
-      unsafePop()
+      pop()
       return .object([:])
     }
 
@@ -216,7 +211,7 @@ extension JSON.Parser {
         guard !wasComma else { throw Error.Reason.trailingComma }
 
         wasComma = true
-        unsafePop()
+        pop()
         skipWhitespace()
 
       case quote?:
@@ -227,7 +222,7 @@ extension JSON.Parser {
 
         let key = try parseString()
         skipWhitespace()
-        guard try pop() == colon else { throw Error.Reason.expectedColon }
+        guard pop() == colon else { throw Error.Reason.expectedColon }
         skipWhitespace()
         let value = try parseValue()
         wasComma = false
@@ -244,7 +239,7 @@ extension JSON.Parser {
 
         guard !wasComma else { throw Error.Reason.trailingComma }
 
-        unsafePop()
+        pop()
         return .object(tempDict)
 
       default:
@@ -256,13 +251,13 @@ extension JSON.Parser {
   mutating func parseArray() throws -> JSON {
 
     assert(peek() == arrayOpen)
-    unsafePop()
+    pop()
 
     skipWhitespace()
 
     // Saves the allocation of the tempArray
     guard peek() != arrayClose else {
-      unsafePop()
+      pop()
       return .array([])
     }
 
@@ -286,7 +281,7 @@ extension JSON.Parser {
 
         guard !wasComma else { throw Error.Reason.trailingComma }
 
-        _ = try pop()
+        _ = pop()
         return .array(tempArray)
 
       case nil:
@@ -327,7 +322,7 @@ extension JSON.Parser {
 
     let negative: Bool = {
       guard minus == peek() else { return false }
-      unsafePop()
+      pop()
       return true
     }()
 
@@ -335,7 +330,7 @@ extension JSON.Parser {
     // Checks for leading zero's on numbers that are not '0' or '0.x'
     if next == zero {
       guard let following = peek(aheadBy: 1) else {
-        unsafePop()
+        pop()
         return .integer(0)
       }
       guard following == decimal || following.isTerminator else { throw Error.Reason.invalidNumber }
@@ -356,7 +351,7 @@ extension JSON.Parser {
         (significand, didOverflow) = UInt64.multiplyWithOverflow(significand, 10)
         guard !didOverflow else { throw Error.Reason.numberOverflow }
 
-        (significand, didOverflow) = UInt64.addWithOverflow(significand, UInt64(unsafePop() - zero))
+        (significand, didOverflow) = UInt64.addWithOverflow(significand, UInt64(pop() - zero))
         guard !didOverflow else { throw Error.Reason.numberOverflow }
 
       case numbers? where seenDecimal && !seenExponent:
@@ -366,7 +361,7 @@ extension JSON.Parser {
         (mantisa, didOverflow) = UInt64.multiplyWithOverflow(mantisa, 10)
         guard !didOverflow else { throw Error.Reason.numberOverflow }
 
-        (mantisa, didOverflow) = UInt64.addWithOverflow(mantisa, UInt64(unsafePop() - zero))
+        (mantisa, didOverflow) = UInt64.addWithOverflow(mantisa, UInt64(pop() - zero))
         guard !didOverflow else { throw Error.Reason.numberOverflow }
 
       case numbers? where seenExponent:
@@ -374,28 +369,28 @@ extension JSON.Parser {
         (exponent, didOverflow) = UInt64.multiplyWithOverflow(exponent, 10)
         guard !didOverflow else { throw Error.Reason.numberOverflow }
 
-        (exponent, didOverflow) = UInt64.addWithOverflow(exponent, UInt64(unsafePop() - zero))
+        (exponent, didOverflow) = UInt64.addWithOverflow(exponent, UInt64(pop() - zero))
         guard !didOverflow else { throw Error.Reason.numberOverflow }
 
       case decimal? where !seenExponent && !seenDecimal:
 
-        unsafePop()
+        pop()
         seenDecimal = true
         guard let next = peek(), numbers ~= next else { throw Error.Reason.invalidNumber }
 
       case E? where !seenExponent,
            e? where !seenExponent:
 
-        unsafePop()
+        pop()
         seenExponent = true
 
         if peek() == minus {
 
           negativeExponent = true
-          unsafePop()
+          pop()
         } else if peek() == plus {
 
-          unsafePop()
+          pop()
         }
 
         guard let next = peek(), numbers ~= next else { throw Error.Reason.invalidNumber }
@@ -454,14 +449,14 @@ extension JSON.Parser {
   mutating func parseString() throws -> String {
 
     assert(peek() == quote)
-    unsafePop()
+    pop()
 
     var escaped = false
     stringBuffer.removeAll(keepingCapacity: true)
 
     repeat {
 
-      let codeUnit = try pop()
+      let codeUnit = pop()
       if codeUnit == backslash && !escaped {
 
         escaped = true
@@ -526,7 +521,7 @@ extension JSON.Parser {
 
     var codeUnit: UInt16 = 0
     for _ in 0..<4 {
-      let c = try pop()
+      let c = pop()
       codeUnit <<= 4
       switch c {
       case numbers:
@@ -553,7 +548,7 @@ extension JSON.Parser {
 
     if UTF16.isLeadSurrogate(codeUnit) {
 
-      guard try pop() == backslash && pop() == u else { throw Error.Reason.endOfStream }
+      guard pop() == backslash && pop() == u else { throw Error.Reason.endOfStream }
       let trailingSurrogate = try parseUnicodeEscape()
       buffer.append(trailingSurrogate)
     }
@@ -574,7 +569,7 @@ extension JSON.Parser {
   /// - Precondition: pointer will be on a comma character.
   mutating func skipComma() throws {
     assert(peek() == comma)
-    unsafePop()
+    pop()
     skipWhitespace()
   }
 }
