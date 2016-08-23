@@ -9,6 +9,11 @@ class ParsingTests: XCTestCase {
     expect("", toThrowWithReason: .emptyStream)
   }
 
+  func test_CompletelyWrong() {
+
+    expect("<XML>", toThrowWithReason: .invalidSyntax)
+  }
+
   func testExtraTokensThrow() {
 
     expect("{'hello':'world'} blah", toThrowWithReason: .invalidSyntax)
@@ -25,6 +30,27 @@ class ParsingTests: XCTestCase {
   func testNullThrowsOnMismatch() {
 
     expect("nall", toThrowWithReason: .invalidLiteral)
+  }
+
+  func testNullSkipInObject() {
+
+    expect("{'key': null}", toParseTo: [:], withOptions: .skipNull)
+  }
+
+  func testNullSkipInArray() {
+
+    expect("['someString', true, null, 1]", toParseTo: ["someString", true, 1], withOptions: .skipNull)
+  }
+
+  func testNullSkipFragment() {
+
+    // not sure what to expect here. but so long as it's consistent.
+    expect("null", toParseTo: .null, withOptions: [.skipNull, .allowFragments])
+  }
+
+  func testFragmentNormallyThrows() {
+
+    expect("'frag out'", toThrowWithReason: .fragmentedJson, withOptions: [])
   }
 
 
@@ -110,9 +136,14 @@ class ParsingTests: XCTestCase {
 
   // MARK: - Numbers
 
-  func testNumber_Int_Zero() {
+  func testNumber_Int_ZeroWithTrailingWhitespace() {
 
     expect("0 ", toParseTo: 0)
+  }
+
+  func testNumber_Int_Zero() {
+
+    expect("0", toParseTo: 0)
   }
 
   func testNumber_Int_One() {
@@ -152,7 +183,20 @@ class ParsingTests: XCTestCase {
 
   func testNumber_Int_Overflow() {
 
-    expect((UInt64(Int64.max) + 1).description, toThrowWithReason: .numberOverflow)
+    expect("9223372036854775808", toThrowWithReason: .numberOverflow)
+    expect("18446744073709551616", toThrowWithReason: .numberOverflow)
+    expect("18446744073709551616", toThrowWithReason: .numberOverflow)
+  }
+
+
+  func testNumber_Double_Overflow() {
+
+    expect("18446744073709551616.0", toThrowWithReason: .numberOverflow)
+    expect("1.18446744073709551616", toThrowWithReason: .numberOverflow)
+    expect("1e18446744073709551616", toThrowWithReason: .numberOverflow)
+    expect("184467440737095516106.0", toThrowWithReason: .numberOverflow)
+    expect("1.184467440737095516106", toThrowWithReason: .numberOverflow)
+    expect("1e184467440737095516106", toThrowWithReason: .numberOverflow)
   }
 
   func testNumber_Dbl_LeadingZero() {
@@ -292,7 +336,7 @@ class ParsingTests: XCTestCase {
 
   func testString_Normal_Backslashes() {
 
-    // This looks insane and kinda is. The rule is the right side just halve, the left side quarter. Needs more here Strings
+    // This looks insane and kinda is. The rule is the right side just halve, the left side quarter.
     expect("'C:\\\\\\\\share\\\\path\\\\file'", toParseTo: "C:\\\\share\\path\\file")
   }
 
@@ -304,6 +348,16 @@ class ParsingTests: XCTestCase {
   func testString_StartEndWithSpaces() {
 
     expect("'  hello world  '", toParseTo: "  hello world  ")
+  }
+
+  func testString_Unicode_NoTrailingSurrogate() {
+
+    expect("'\\ud83d'", toThrowWithReason: .endOfStream)
+  }
+
+  func testString_Unicode_InvalidTrailingSurrogate() {
+
+    expect("'\\ud83d\\u0040'", toThrowWithReason: .invalidUnicode)
   }
 
   func testString_Unicode_RegularChar() {
@@ -351,9 +405,63 @@ class ParsingTests: XCTestCase {
     expect("'h🇨🇿w'", toParseTo: "h🇨🇿w")
   }
 
+  func testString_BackspaceEscape() {
+
+    expect("'\\b'", toParseTo: String(UnicodeScalar(backspace)).encoded())
+  }
+
+  func testEscape_FormFeed() {
+
+    expect("'\\f'", toParseTo: String(UnicodeScalar(formfeed)).encoded())
+
+  }
+
+  func testString_ContainingEscapedQuotes() {
+
+    expect("'\\\"\\\"'", toParseTo: "\"\"")
+  }
+
+  func testString_ContainingSlash() {
+
+    expect("'http:\\/\\/example.com'", toParseTo: "http://example.com")
+  }
+
+  func testString_ContainingInvalidEscape() {
+
+    expect("'\\a'", toThrowWithReason: .invalidEscape)
+  }
+
+
+  // MARK: - Objects
+
   func testObject_Empty() {
 
     expect("{}", toParseTo: [:])
+  }
+
+  func testObject_JustComma() {
+
+    expect("{,}", toThrowWithReason: .trailingComma)
+  }
+
+  func testObject_SyntaxError() {
+
+    expect("{'hello': 'failure'; 'goodbye': true}", toThrowWithReason: .invalidSyntax)
+  }
+
+  func testObject_TrailingComma() {
+
+    expect("{'someKey': true,,}", toThrowWithReason: .trailingComma)
+  }
+
+  func testObject_MissingComma() {
+
+    expect("{'someKey': true 'someOther': false}", toThrowWithReason: .expectedComma)
+  }
+
+  func testObject_MissingColon() {
+
+    expect("{'someKey' true}", toThrowWithReason: .expectedColon)
   }
 
   func testObject_Example1() {
@@ -378,7 +486,8 @@ class ParsingTests: XCTestCase {
 
 extension ParsingTests {
 
-  func expect(_ input: String, toThrowWithReason expectedError: JSON.Parser.Error.Reason, file: StaticString = #file, line: UInt = #line) {
+  func expect(_ input: String, toThrowWithReason expectedError: JSON.Parser.Error.Reason, withOptions options: JSON.Parser.Option = [.allowFragments],
+              file: StaticString = #file, line: UInt = #line) {
 
     let input = input.replacingOccurrences(of: "'", with: "\"")
 
@@ -386,7 +495,7 @@ extension ParsingTests {
 
     do {
 
-      let val = try JSON.Parser.parse(data, options: .allowFragments)
+      let val = try JSON.Parser.parse(data, options: options)
 
       XCTFail("expected to throw \(expectedError) but got \(val)", file: file, line: line)
     } catch let error as JSON.Parser.Error {
@@ -398,7 +507,8 @@ extension ParsingTests {
     }
   }
 
-  func expect(_ input: String, toThrow expectedError: JSON.Parser.Error, file: StaticString = #file, line: UInt = #line) {
+  func expect(_ input: String, toThrow expectedError: JSON.Parser.Error, withOptions options: JSON.Parser.Option = [.allowFragments],
+              file: StaticString = #file, line: UInt = #line) {
 
     let input = input.replacingOccurrences(of: "'", with: "\"")
 
@@ -406,7 +516,7 @@ extension ParsingTests {
 
     do {
 
-      let val = try JSON.Parser.parse(data, options: .allowFragments)
+      let val = try JSON.Parser.parse(data, options: options)
 
       XCTFail("expected to throw \(expectedError) but got \(val)", file: file, line: line)
     } catch let error as JSON.Parser.Error {
@@ -418,14 +528,15 @@ extension ParsingTests {
     }
   }
 
-  func expect(_ input: String, toParseTo expected: JSON, file: StaticString = #file, line: UInt = #line) {
+  func expect(_ input: String, toParseTo expected: JSON, withOptions options: JSON.Parser.Option = [.allowFragments],
+              file: StaticString = #file, line: UInt = #line) {
 
     let input = input.replacingOccurrences(of: "'", with: "\"")
 
     let data = Array(input.utf8)
 
     do {
-      let output = try JSON.Parser.parse(data, options: .allowFragments)
+      let output = try JSON.Parser.parse(data, options: options)
 
       XCTAssertEqual(output, expected, file: file, line: line)
     } catch {

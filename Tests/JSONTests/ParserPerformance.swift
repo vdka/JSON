@@ -37,6 +37,26 @@ class ParserBenchmarks: XCTestCase {
       _ = try! JSON.Parser.parse(data)
     }
   }
+
+  func testParseLargeJsonToUsers() {
+
+    let data = loadFixture("large")
+
+    measure {
+      for _ in 0..<n {
+
+        let json = try! JSON.Parser.parse(data)
+
+        guard case .array(let usersJson) = json else {
+          XCTFail()
+          return
+        }
+
+        _ = try! usersJson.map(User.init(json:))
+      }
+    }
+  }
+
   // Foundation.JSONSerialization
   
   func testParseLargeJson_Foundation() {
@@ -60,6 +80,35 @@ class ParserBenchmarks: XCTestCase {
       }
     }
   }
+
+  func testParseInsaneJson_Foundation() {
+
+    let data = loadFixtureData("insane")
+
+    measure {
+      _ = try! JSONSerialization.jsonObject(with: data)
+    }
+  }
+
+  func testParseLargeJsonToUsers_Foundation() {
+
+    let data = loadFixtureData("large")
+
+    measure {
+      for _ in 0..<n {
+
+        let json = try! JSONSerialization.jsonObject(with: data)
+
+        guard let usersJson = json as? [Any] else {
+          XCTFail()
+          return
+        }
+
+        _ = try! usersJson.map(User.init(foundationJSON:))
+      }
+    }
+  }
+
 }
 
 #if os(Linux)

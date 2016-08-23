@@ -43,12 +43,6 @@ extension JSON.Parser {
     // This can be unwrapped unsafely because
     self.pointer = pointer
     self.skipNull = options.contains(.skipNull)
-
-    self.skipWhitespace()
-
-    if !options.contains(.allowFragments) {
-      guard let firstToken = peek(), firstToken == objectOpen || firstToken == arrayOpen else { throw Error.Reason.fragmentedJson }
-    }
   }
 }
 
@@ -61,11 +55,18 @@ extension JSON.Parser {
 
     return try data.withUnsafeBufferPointer { bufferPointer in
 
-      var parser = try self.init(bufferPointer: bufferPointer, options: options)
+      var parser = try JSON.Parser(bufferPointer: bufferPointer, options: options)
+
+      parser.skipWhitespace()
 
       do {
 
-        parser.skipWhitespace()
+        if !options.contains(.allowFragments) {
+          // if we don't allow fragments then ensure the first token is opening an Array or an Object
+          guard let firstToken = parser.peek(), firstToken == objectOpen || firstToken == arrayOpen else {
+            throw Error.Reason.fragmentedJson
+          }
+        }
 
         let rootValue = try parser.parseValue()
 
@@ -78,9 +79,8 @@ extension JSON.Parser {
         return rootValue
       } catch let error as Error.Reason {
 
-        guard let baseAddress = parser.buffer.baseAddress else { throw error }
-
-        throw Error(byteOffset: baseAddress.distance(to: parser.pointer), reason: error)
+        // We unwrap here because on we do this check prior to the do { } catch { } block.
+        throw Error(byteOffset: parser.buffer.baseAddress!.distance(to: parser.pointer), reason: error)
       }
     }
   }
@@ -106,8 +106,9 @@ extension JSON.Parser {
     return pointer.advanced(by: n).pointee
   }
 
+  /// - Precondition: pointer != buffer.endAddress
   mutating func pop() throws -> UTF8.CodeUnit {
-    guard pointer != buffer.endAddress else { throw Error.Reason.endOfStream }
+    assert(pointer != buffer.endAddress)
     defer { pointer = pointer.advanced(by: 1) }
     return pointer.pointee
   }
@@ -180,9 +181,6 @@ extension JSON.Parser {
       try assertFollowedBy(ull)
       return .null
 
-    case nil:
-      throw Error.Reason.endOfStream
-
     default:
       throw Error.Reason.invalidSyntax
     }
@@ -228,7 +226,9 @@ extension JSON.Parser {
         }
 
         let key = try parseString()
-        try skipColon()
+        skipWhitespace()
+        guard try pop() == colon else { throw Error.Reason.expectedColon }
+        skipWhitespace()
         let value = try parseValue()
         wasComma = false
 
@@ -246,9 +246,6 @@ extension JSON.Parser {
 
         unsafePop()
         return .object(tempDict)
-
-      case nil:
-        throw Error.Reason.endOfStream
 
       default:
         throw Error.Reason.invalidSyntax
@@ -309,6 +306,7 @@ extension JSON.Parser {
         case .null where skipNull:
           if peek() == comma {
             try skipComma()
+            wasComma = true
           }
 
         default:
@@ -336,7 +334,10 @@ extension JSON.Parser {
     guard let next = peek(), numbers ~= next else { throw Error.Reason.invalidNumber }
     // Checks for leading zero's on numbers that are not '0' or '0.x'
     if next == zero {
-      guard let following = peek(aheadBy: 1) else { return .integer(0) }
+      guard let following = peek(aheadBy: 1) else {
+        unsafePop()
+        return .integer(0)
+      }
       guard following == decimal || following.isTerminator else { throw Error.Reason.invalidNumber }
     }
 
@@ -487,6 +488,9 @@ extension JSON.Parser {
         case b:
           stringBuffer.append(backspace)
 
+        case f:
+          stringBuffer.append(formfeed)
+
         case quote:
           stringBuffer.append(quote)
 
@@ -549,7 +553,7 @@ extension JSON.Parser {
 
     if UTF16.isLeadSurrogate(codeUnit) {
 
-      guard try pop() == backslash && pop() == u else { throw Error.Reason.invalidUnicode }
+      guard try pop() == backslash && pop() == u else { throw Error.Reason.endOfStream }
       let trailingSurrogate = try parseUnicodeEscape()
       buffer.append(trailingSurrogate)
     }
@@ -567,15 +571,10 @@ extension JSON.Parser {
     }
   }
 
-  mutating func skipColon() throws {
-    skipWhitespace()
-    guard case colon = try pop() else { throw Error.Reason.expectedColon }
-    skipWhitespace()
-  }
-
+  /// - Precondition: pointer will be on a comma character.
   mutating func skipComma() throws {
-    skipWhitespace()
-    guard case comma = try pop() else { throw Error.Reason.expectedComma }
+    assert(peek() == comma)
+    unsafePop()
     skipWhitespace()
   }
 }
