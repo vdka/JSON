@@ -11,7 +11,7 @@ extension JSON {
       public init(rawValue: UInt8) { self.rawValue = rawValue }
       public let rawValue: UInt8
 
-      /// Do not remove null values from the resulting JSON value. Instead store `JSON.null`
+      /// Omit null values from `JSON.object`s & `JSON.array`s
       public static let skipNull        = Option(rawValue: 0b0001)
 
       /// Allows Parser to return top level objects that are not container types `{}` | `[]` as per RFC7159
@@ -311,8 +311,6 @@ extension JSON.Parser {
     } while true
   }
 
-
-  // TODO(vdka): No leading 0's it's against the spec.
   mutating func parseNumber() throws -> JSON {
 
     assert(numbers ~= peek()! || minus == peek()!)
@@ -446,6 +444,7 @@ extension JSON.Parser {
 
   // TODO (vdka): refactor
   // TODO (vdka): option to _repair_ Unicode
+  // NOTE(vdka): Not sure I ever will get to refactoring this, I just don't find Swift's String _comfortable_ to work with at a byte level.
   mutating func parseString() throws -> String {
 
     assert(peek() == quote)
