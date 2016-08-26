@@ -16,9 +16,14 @@ extension JSON {
 
       /// Allows Parser to return top level objects that are not container types `{}` | `[]` as per RFC7159
       public static let allowFragments  = Option(rawValue: 0b0010)
+
+      /// Allow the Parser to remove comments
+      public static let allowComments   = Option(rawValue: 0b0100)
     }
 
     let omitNulls: Bool
+    let allowComments: Bool
+
     var pointer: UnsafePointer<UTF8.CodeUnit>
     var buffer: UnsafeBufferPointer<UTF8.CodeUnit>
 
@@ -42,7 +47,9 @@ extension JSON.Parser {
 
     // This can be unwrapped unsafely because
     self.pointer = pointer
+
     self.omitNulls = options.contains(.omitNulls)
+    self.allowComments = options.contains(.allowComments)
   }
 }
 
@@ -175,6 +182,39 @@ extension JSON.Parser {
       pop()
       try assertFollowedBy(ull)
       return .null
+
+    case slash? where allowComments:
+      pop()
+      guard let next = peek() else { throw Error.Reason.invalidSyntax }
+
+      if next == slash {
+        while let next = peek() {
+          pop()
+          if next == newline {
+            break
+          }
+        }
+
+        // try again this time maybe we won't have a comment.
+        skipWhitespace()
+        return try parseValue()
+      }
+      if next == star {
+        while let next = peek() {
+          pop()
+
+          if next == star && peek() == slash {
+            break
+          }
+        }
+
+        // try again this time maybe we won't have a comment.
+        skipWhitespace()
+        return try parseValue()
+      }
+
+      throw Error.Reason.invalidSyntax
+
 
     default:
       throw Error.Reason.invalidSyntax

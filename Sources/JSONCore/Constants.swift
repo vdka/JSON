@@ -10,6 +10,8 @@ let quote: UTF8.CodeUnit = "\"".utf8.first!
 let slash: UTF8.CodeUnit = "/".utf8.first!
 let backslash: UTF8.CodeUnit = "\\".utf8.first!
 
+let star: UTF8.CodeUnit = "*".utf8.first!
+
 // whitespace characters
 let space: UTF8.CodeUnit = " ".utf8.first!
 let tab: UTF8.CodeUnit = "\t".utf8.first!
