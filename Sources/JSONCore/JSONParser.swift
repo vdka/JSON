@@ -12,13 +12,13 @@ extension JSON {
       public let rawValue: UInt8
 
       /// Omit null values from `JSON.object`s & `JSON.array`s
-      public static let skipNull        = Option(rawValue: 0b0001)
+      public static let omitNulls       = Option(rawValue: 0b0001)
 
       /// Allows Parser to return top level objects that are not container types `{}` | `[]` as per RFC7159
       public static let allowFragments  = Option(rawValue: 0b0010)
     }
 
-    let skipNull: Bool
+    let omitNulls: Bool
     var pointer: UnsafePointer<UTF8.CodeUnit>
     var buffer: UnsafeBufferPointer<UTF8.CodeUnit>
 
@@ -42,7 +42,7 @@ extension JSON.Parser {
 
     // This can be unwrapped unsafely because
     self.pointer = pointer
-    self.skipNull = options.contains(.skipNull)
+    self.omitNulls = options.contains(.omitNulls)
   }
 }
 
@@ -228,7 +228,7 @@ extension JSON.Parser {
         wasComma = false
 
         switch value {
-        case .null where skipNull:
+        case .null where omitNulls:
           break
 
         default:
@@ -298,7 +298,7 @@ extension JSON.Parser {
         wasComma = false
 
         switch value {
-        case .null where skipNull:
+        case .null where omitNulls:
           if peek() == comma {
             try skipComma()
             wasComma = true

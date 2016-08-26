@@ -34,18 +34,18 @@ class ParsingTests: XCTestCase {
 
   func testNullSkipInObject() {
 
-    expect("{'key': null}", toParseTo: [:], withOptions: .skipNull)
+    expect("{'key': null}", toParseTo: [:], withOptions: .omitNulls)
   }
 
   func testNullSkipInArray() {
 
-    expect("['someString', true, null, 1]", toParseTo: ["someString", true, 1], withOptions: .skipNull)
+    expect("['someString', true, null, 1]", toParseTo: ["someString", true, 1], withOptions: .omitNulls)
   }
 
   func testNullSkipFragment() {
 
     // not sure what to expect here. but so long as it's consistent.
-    expect("null", toParseTo: .null, withOptions: [.skipNull, .allowFragments])
+    expect("null", toParseTo: .null, withOptions: [.omitNulls, .allowFragments])
   }
 
   func testFragmentNormallyThrows() {
