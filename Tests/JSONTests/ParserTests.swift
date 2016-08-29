@@ -477,9 +477,32 @@ class ParsingTests: XCTestCase {
     )
   }
 
-  func testComment_strip() {
+  func testLineComment_start() {
 
     expect("// This is a comment\n{'key':true}", toParseTo: ["key": true], withOptions: .allowComments)
+  }
+
+
+  func testLineComment_endWithNewline() {
+
+    expect("{'key':true}// This is a comment\n", toParseTo: ["key": true], withOptions: .allowComments)
+  }
+
+  func testLineComment_end() {
+
+    expect("{'key':true}// This is a comment", toParseTo: ["key": true], withOptions: .allowComments)
+    expect("{'key':true}\n// This is a comment", toParseTo: ["key": true], withOptions: .allowComments)
+  }
+
+  func testBlockComment_start() {
+
+    expect("/* This is a comment */{'key':true}", toParseTo: ["key": true], withOptions: .allowComments)
+  }
+
+  func testBlockComment_end() {
+
+    expect("{'key':true}/* This is a comment */", toParseTo: ["key": true], withOptions: .allowComments)
+    expect("{'key':true}\n/* This is a comment */", toParseTo: ["key": true], withOptions: .allowComments)
   }
 
   func testDetailedError() {

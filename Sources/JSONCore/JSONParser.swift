@@ -65,6 +65,10 @@ extension JSON.Parser {
       var parser = try JSON.Parser(bufferPointer: bufferPointer, options: options)
 
       parser.skipWhitespace()
+      if options.contains(.allowComments) {
+        _ = try? parser.skipComments()
+      }
+      parser.skipWhitespace()
 
       do {
 
@@ -79,6 +83,10 @@ extension JSON.Parser {
 
         // TODO (vkda): option to skip the trailing data check, useful for say streams see Jay's model
 
+        parser.skipWhitespace()
+        if options.contains(.allowComments) {
+          _ = try? parser.skipComments()
+        }
         parser.skipWhitespace()
 
         guard parser.pointer == parser.buffer.endAddress else { throw Error.Reason.invalidSyntax }
@@ -132,10 +140,15 @@ extension JSON.Parser {
     }
   }
 
+  /// - Precondition: peek() == slash
+  /// - Postcondition: Both comments and whitespace will be skipped and peek() *will* be at the next meaningfull token
   mutating func skipComments() throws {
-    assert(pointer.pointee == slash)
 
+    // Pop off the first slash
+    guard let char = peek(), char == slash else { throw Error.Reason.invalidSyntax }
     pop()
+
+    // ensure we have a second character
     guard let next = peek() else { throw Error.Reason.invalidSyntax }
 
     if next == slash {
@@ -146,6 +159,7 @@ extension JSON.Parser {
         }
       }
       skipWhitespace()
+      return
     }
     if next == star {
       while let next = peek() {
@@ -156,6 +170,7 @@ extension JSON.Parser {
         }
       }
       skipWhitespace()
+      return
     }
 
     throw Error.Reason.invalidSyntax
