@@ -131,6 +131,35 @@ extension JSON.Parser {
       pop()
     }
   }
+
+  mutating func skipComments() throws {
+    assert(pointer.pointee == slash)
+
+    pop()
+    guard let next = peek() else { throw Error.Reason.invalidSyntax }
+
+    if next == slash {
+      while let next = peek() {
+        pop()
+        if next == newline {
+          break
+        }
+      }
+      skipWhitespace()
+    }
+    if next == star {
+      while let next = peek() {
+        pop()
+
+        if next == star && peek() == slash {
+          break
+        }
+      }
+      skipWhitespace()
+    }
+
+    throw Error.Reason.invalidSyntax
+  }
 }
 
 extension JSON.Parser {
@@ -184,37 +213,8 @@ extension JSON.Parser {
       return .null
 
     case slash? where allowComments:
-      pop()
-      guard let next = peek() else { throw Error.Reason.invalidSyntax }
-
-      if next == slash {
-        while let next = peek() {
-          pop()
-          if next == newline {
-            break
-          }
-        }
-
-        // try again this time maybe we won't have a comment.
-        skipWhitespace()
-        return try parseValue()
-      }
-      if next == star {
-        while let next = peek() {
-          pop()
-
-          if next == star && peek() == slash {
-            break
-          }
-        }
-
-        // try again this time maybe we won't have a comment.
-        skipWhitespace()
-        return try parseValue()
-      }
-
-      throw Error.Reason.invalidSyntax
-
+      try skipComments()
+      return try parseValue()
 
     default:
       throw Error.Reason.invalidSyntax

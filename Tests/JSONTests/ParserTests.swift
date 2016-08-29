@@ -477,6 +477,11 @@ class ParsingTests: XCTestCase {
     )
   }
 
+  func testComment_strip() {
+
+    expect("// This is a comment\n{'key':true}", toParseTo: ["key": true], withOptions: .allowComments)
+  }
+
   func testDetailedError() {
 
     expect("false blah", toThrow: JSON.Parser.Error(byteOffset: 6, reason: .invalidSyntax))
