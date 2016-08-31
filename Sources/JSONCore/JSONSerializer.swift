@@ -176,7 +176,30 @@ extension JSON.Serializer {
 
   func writeString<O: TextOutputStream>(_ s: String, to stream: inout O) {
     stream.write("\"")
-    stream.write(s)
+    for char in s.unicodeScalars {
+
+      switch char.value {
+      case numericCast(backspace):
+        stream.write("\\b")
+
+      case numericCast(tab):
+        stream.write("\\t")
+
+      case numericCast(newline):
+        stream.write("\\n")
+
+      case numericCast(formfeed):
+        stream.write("\\f")
+
+      case numericCast(cr):
+        stream.write("\\r")
+
+      default:
+
+        let character = Character(char)
+        character.write(to: &stream)
+      }
+    }
     stream.write("\"")
   }
 }
