@@ -294,6 +294,16 @@ class ParsingTests: XCTestCase {
 
   // MARK: - Strings & Unicode
 
+  func testEscape_Solidus() {
+
+    expect("'\\/'", toParseTo: "/")
+  }
+
+  func testLonelyReverseSolidus() {
+
+    expect("'\\'", toThrowWithReason: .invalidEscape)
+  }
+
   func testEscape_Unicode_Normal() {
 
     expect("'\\u0048'", toParseTo: "H")

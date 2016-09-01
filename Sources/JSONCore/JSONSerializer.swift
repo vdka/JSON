@@ -14,7 +14,7 @@ extension JSON {
 
       /// Serialize with formatting for user readability
       public static let prettyPrint         = Option(rawValue: 0b0010)
-      
+
       /// will use windows style newlines for formatting. Boo. Implies `.prettyPrint`
       public static let windowsLineEndings  = Option(rawValue: 0b0110)
     }
@@ -174,25 +174,58 @@ extension JSON.Serializer {
     stream.write(d.description)
   }
 
+  // Section 7 of the RFC says
+  // > "...characters that must be escaped: quotation mark, reverse solidus, and the control characters (U+0000 through U+001F)"
+  // `http://rfc7159.net/rfc7159#rfc.section.7`
+
+  /// - [x] Quote
+  /// - [x] ReverseSolidus
+  /// - [ ] Control Characters
+
+  static let controlCharacters: ClosedRange<UTF32.CodeUnit> = (0...0x1F)
+
   func writeString<O: TextOutputStream>(_ s: String, to stream: inout O) {
     stream.write("\"")
     for char in s.unicodeScalars {
 
       switch char.value {
-      case numericCast(backspace):
-        stream.write("\\b")
+      case numericCast(quote):
+        stream.write("\\\"")
 
-      case numericCast(tab):
-        stream.write("\\t")
+      case numericCast(backslash):
+        stream.write("\\\\")
 
-      case numericCast(newline):
-        stream.write("\\n")
+      case JSON.Serializer.controlCharacters:
 
-      case numericCast(formfeed):
-        stream.write("\\f")
+        // If possible escape in the I ima
+        switch char.value {
+        case numericCast(backspace):
+          stream.write("\\b")
 
-      case numericCast(cr):
-        stream.write("\\r")
+        case numericCast(formfeed):
+          stream.write("\\f")
+
+        case numericCast(newline):
+          stream.write("\\n")
+
+        case numericCast(cr):
+          stream.write("\\r")
+
+        case numericCast(tab):
+          stream.write("\\t")
+
+        default:
+          stream.write("\\u")
+          let str = String(char.value, radix: 16)
+          let chars = Array(str.characters)
+          for index in (0..<4).reversed() {
+            if chars.indices.contains(index) {
+              stream.write(String(chars[index]))
+            } else {
+              stream.write("0")
+            }
+          }
+        }
 
       default:
 

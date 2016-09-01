@@ -510,7 +510,8 @@ extension JSON.Parser {
 
     repeat {
 
-      let codeUnit = pop()
+      guard let codeUnit = peek() else { throw Error.Reason.invalidEscape }
+      pop()
       if codeUnit == backslash && !escaped {
 
         escaped = true
