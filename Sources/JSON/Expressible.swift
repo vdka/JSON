@@ -89,7 +89,7 @@ extension JSON: CustomStringConvertible {
 extension JSON: CustomDebugStringConvertible {
   public var debugDescription: String {
     do {
-      return try self.serialized(options: [.prettyPrint, .noSkipNull])
+      return try self.serialized(options: .prettyPrint)
     } catch {
       return String(describing: error)
     }

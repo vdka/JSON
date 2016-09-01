@@ -9,8 +9,8 @@ extension JSON {
       public init(rawValue: UInt8) { self.rawValue = rawValue }
       public let rawValue: UInt8
 
-      /// Serialize `JSON.null` instead of skipping it
-      public static let noSkipNull          = Option(rawValue: 0b0001)
+      /// Do not include nulls in the serialized output
+      public static let omitNulls           = Option(rawValue: 0b0001)
 
       /// Serialize with formatting for user readability
       public static let prettyPrint         = Option(rawValue: 0b0010)
@@ -20,12 +20,12 @@ extension JSON {
     }
 
     init(json: JSON, options: Option = []) {
-      self.skipNull = !options.contains(.noSkipNull)
+      self.omitNull = options.contains(.omitNulls)
       self.prettyPrint = options.contains(.prettyPrint)
       self.useWindowsLineEndings = options.contains(.windowsLineEndings)
     }
 
-    let skipNull: Bool
+    let omitNull: Bool
     let prettyPrint: Bool
     let useWindowsLineEndings: Bool
   }
@@ -60,7 +60,7 @@ extension JSON.Serializer {
     case .integer(let i):
       writeInteger(i, to: &stream)
 
-    case .null where !skipNull:
+    case .null where !omitNull:
       writeNull(to: &stream)
 
     case .string(let s):
@@ -105,7 +105,7 @@ extension JSON.Serializer {
     var nullsFound = 0
     for v in a {
       defer { i += 1 }
-      if skipNull && v == .null {
+      if omitNull && v == .null {
         nullsFound += 1
         continue
       }
@@ -133,7 +133,7 @@ extension JSON.Serializer {
     var nullsFound = 0
     for (key, value) in o {
       defer { i += 1 }
-      if skipNull && value == .null {
+      if omitNull && value == .null {
         nullsFound += 1
         continue
       }
@@ -174,14 +174,6 @@ extension JSON.Serializer {
     stream.write(d.description)
   }
 
-  // Section 7 of the RFC says
-  // > "...characters that must be escaped: quotation mark, reverse solidus, and the control characters (U+0000 through U+001F)"
-  // `http://rfc7159.net/rfc7159#rfc.section.7`
-
-  /// - [x] Quote
-  /// - [x] ReverseSolidus
-  /// - [ ] Control Characters
-
   static let controlCharacters: ClosedRange<UTF32.CodeUnit> = (0...0x1F)
 
   func writeString<O: TextOutputStream>(_ s: String, to stream: inout O) {
@@ -216,14 +208,13 @@ extension JSON.Serializer {
 
         default:
           stream.write("\\u")
-          let str = String(char.value, radix: 16)
-          let chars = Array(str.characters)
-          for index in (0..<4).reversed() {
-            if chars.indices.contains(index) {
-              stream.write(String(chars[index]))
-            } else {
-              stream.write("0")
-            }
+          let str = String(char.value, radix: 16, uppercase: true)
+          if str.characters.count == 1 {
+
+            stream.write("000\(str)")
+          } else {
+
+            stream.write("00\(str)")
           }
         }
 
