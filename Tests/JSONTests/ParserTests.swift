@@ -495,6 +495,7 @@ class ParsingTests: XCTestCase {
 
   func testLineComment_endWithNewline() {
 
+    expect("// This is a comment\n{'key':true}", toParseTo: ["key": true], withOptions: .allowComments)
     expect("{'key':true}// This is a comment\n", toParseTo: ["key": true], withOptions: .allowComments)
   }
 
@@ -513,6 +514,11 @@ class ParsingTests: XCTestCase {
 
     expect("{'key':true}/* This is a comment */", toParseTo: ["key": true], withOptions: .allowComments)
     expect("{'key':true}\n/* This is a comment */", toParseTo: ["key": true], withOptions: .allowComments)
+  }
+
+  func testBlockCommentNested() {
+
+    expect("[true]/* a /* b */ /* c */ d */", toParseTo: [true], withOptions: .allowComments)
   }
 
   func testDetailedError() {

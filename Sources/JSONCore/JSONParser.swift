@@ -72,14 +72,15 @@ extension JSON.Parser {
 
       do {
 
+        let rootValue = try parser.parseValue()
+
         if !options.contains(.allowFragments) {
-          // if we don't allow fragments then ensure the first token is opening an Array or an Object
-          guard let firstToken = parser.peek(), firstToken == objectOpen || firstToken == arrayOpen else {
-            throw Error.Reason.fragmentedJson
+          switch rootValue {
+          case .array(_), .object(_): break
+
+          default: throw Error.Reason.fragmentedJson
           }
         }
-
-        let rootValue = try parser.parseValue()
 
         // TODO (vkda): option to skip the trailing data check, useful for say streams see Jay's model
 
@@ -121,6 +122,14 @@ extension JSON.Parser {
     return pointer.advanced(by: n).pointee
   }
 
+  func hasPrefix(_ prefix: [UTF8.CodeUnit]) -> Bool {
+
+    for (index, byte) in prefix.enumerated() {
+      guard byte == peek(aheadBy: index) else { return false }
+    }
+    return true
+  }
+
   /// - Precondition: pointer != buffer.endAddress. It is assumed before calling pop that you have
   @discardableResult
   mutating func pop() -> UTF8.CodeUnit {
@@ -145,35 +154,38 @@ extension JSON.Parser {
   mutating func skipComments() throws {
 
     // Pop off the first slash
-    guard let char = peek(), char == slash else { throw Error.Reason.invalidSyntax }
-    pop()
 
-    // ensure we have a second character
-    guard let next = peek() else { throw Error.Reason.invalidSyntax }
+    if hasPrefix(lineComment) {
 
-    if next == slash {
-      while let next = peek() {
+      while let char = peek(), char != newline {
+
         pop()
-        if next == newline {
-          break
-        }
       }
-      skipWhitespace()
-      return
-    }
-    if next == star {
-      while let next = peek() {
+    } else if hasPrefix(blockCommentStart) {
+
+      var depth: UInt = 0
+      repeat {
+
+        guard peek() != nil else {
+          throw Error.Reason.unmatchedComment
+        }
+
+        if hasPrefix(blockCommentEnd) {
+
+          depth -= 1
+        } else if hasPrefix(blockCommentStart) {
+
+          depth += 1
+        }
+
         pop()
+      } while depth > 0
+      // pop that last '/' char
+      pop()
+    } else {
 
-        if next == star && peek() == slash {
-          break
-        }
-      }
-      skipWhitespace()
-      return
+      throw Error.Reason.invalidSyntax
     }
-
-    throw Error.Reason.invalidSyntax
   }
 }
 
@@ -651,6 +663,7 @@ extension JSON.Parser {
       case invalidLiteral
       case invalidUnicode
       case fragmentedJson
+      case unmatchedComment
     }
 
     public static func == (lhs: JSON.Parser.Error, rhs: JSON.Parser.Error) -> Bool {

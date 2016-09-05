@@ -51,3 +51,8 @@ let validUnsigned64BitInteger: ClosedRange<UInt64> = UInt64.min...UInt64(Int64.m
 let rue: [UTF8.CodeUnit] = ["r".utf8.first!, "u".utf8.first!, "e".utf8.first!]
 let alse: [UTF8.CodeUnit] = ["a".utf8.first!, "l".utf8.first!, "s".utf8.first!, "e".utf8.first!]
 let ull: [UTF8.CodeUnit] = ["u".utf8.first!, "l".utf8.first!, "l".utf8.first!]
+
+// Comment stuff
+let lineComment: [UTF8.CodeUnit] = ["/".utf8.first!, "/".utf8.first!]
+let blockCommentStart: [UTF8.CodeUnit] = ["/".utf8.first!, "*".utf8.first!]
+let blockCommentEnd: [UTF8.CodeUnit] = ["*".utf8.first!, "/".utf8.first!]
