@@ -61,12 +61,25 @@ extension RawRepresentable where RawValue: JSONRepresentable {
 }
 
 
-// MARK: - Add encoded to Collections of JSONRepresentable
+// MARK: - Add encoded to Sequences of JSONRepresentable
 
-extension Collection where Iterator.Element: JSONRepresentable {
+extension Sequence where Iterator.Element: JSONRepresentable {
 
   public func encoded() -> JSON {
     return .array(self.map({ $0.encoded() }))
+  }
+}
+
+// MARK: - Add encoded to Sequences of [String: JSONRepresentable]
+
+extension Sequence where Iterator.Element == (key: String, value: JSONRepresentable) {
+  
+  public func encoded() -> JSON {
+    var encoded: [String: JSON] = [:]
+    for (key, value) in self {
+      encoded[key] = value.encoded()
+    }
+    return .object(encoded)
   }
 }
 
