@@ -1,7 +1,9 @@
 # Mac OS X
 .DS_Store
-JSONPerformanceTests/test.json
-*.xcodeproj
+
+## Test Resources (no need for consumers to download huge test dependency files)
+## Would be nice to have someway to include these anyway
+#Tests/JSONTests/Fixtures/*
 
 # Created by https://www.gitignore.io/api/xcode
 
@@ -36,5 +38,3 @@ xcuserdata/
 
 ## Carthage
 /Carthage
-
-JSONPerformanceTests/1.json
