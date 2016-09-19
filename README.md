@@ -12,6 +12,8 @@ Time to Parse and initialize a struct from a sample 432KB JSON file.
 | **Time** | `149.7ms`  | `27.03ms` |
 | **LOC**  | `71`       | `35`      |
 
+Tests run on Darwin (Linux Foundation is even slower) built with `-Ounchecked`
+
 Type safety can get you a long way, lets see how you can use it for your applications.
 
 ```swift
