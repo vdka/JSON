@@ -163,7 +163,11 @@ extension JSON.Parser {
       }
     } else if hasPrefix(blockCommentStart) {
 
-      var depth: UInt = 0
+      // don't be mislead by `/*/`.
+      pop() // '/'
+      pop() // '*'
+
+      var depth: UInt = 1
       repeat {
 
         guard peek() != nil else {
