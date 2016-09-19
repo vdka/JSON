@@ -1,6 +1,6 @@
 
 import XCTest
-@testable import JSONCore
+@testable import JSON
 
 class ParsingTests: XCTestCase {
 
@@ -417,12 +417,16 @@ class ParsingTests: XCTestCase {
 
   func testString_BackspaceEscape() {
 
-    expect("'\\b'", toParseTo: String(UnicodeScalar(backspace)).encoded())
+    let backspace = Character(UnicodeScalar(0x08))
+
+    expect("'\\b'", toParseTo: String(backspace).encoded())
   }
 
   func testEscape_FormFeed() {
 
-    expect("'\\f'", toParseTo: String(UnicodeScalar(formfeed)).encoded())
+    let formfeed = Character(UnicodeScalar(0x0C))
+
+    expect("'\\f'", toParseTo: String(formfeed).encoded())
 
   }
 
@@ -529,8 +533,8 @@ class ParsingTests: XCTestCase {
 
   func testDetailedError() {
 
-    expect("false blah", toThrow: JSON.Parser.Error(byteOffset: 6, reason: .invalidSyntax))
-    expect("0xbadf00d", toThrow: JSON.Parser.Error(byteOffset: 0, reason: .invalidNumber))
+    expect("0xbadf00d", toThrowAtByteOffset: 0, withReason: .invalidNumber)
+    expect("false blah", toThrowAtByteOffset: 6, withReason: .invalidSyntax)
   }
 }
 
@@ -557,7 +561,8 @@ extension ParsingTests {
     }
   }
 
-  func expect(_ input: String, toThrow expectedError: JSON.Parser.Error, withOptions options: JSON.Parser.Option = [.allowFragments],
+  func expect(_ input: String, toThrowAtByteOffset expectedOffset: Int, withReason expectedReason: JSON.Parser.Error.Reason,
+              withOptions options: JSON.Parser.Option = [.allowFragments],
               file: StaticString = #file, line: UInt = #line) {
 
     let input = input.replacingOccurrences(of: "'", with: "\"")
@@ -568,13 +573,14 @@ extension ParsingTests {
 
       let val = try JSON.Parser.parse(data, options: options)
 
-      XCTFail("expected to throw \(expectedError) but got \(val)", file: file, line: line)
+      XCTFail("expected to throw with reason \(expectedReason) but got \(val)", file: file, line: line)
     } catch let error as JSON.Parser.Error {
 
-      XCTAssertEqual(error, expectedError, file: file, line: line)
+
+      XCTAssertEqual(error.byteOffset, expectedOffset, file: file, line: line)
     } catch {
 
-      XCTFail("expected to throw \(expectedError) but got a different error type!.")
+      XCTFail("expected to throw JSON.Parser.Error but got a different error type!.")
     }
   }
 

@@ -1,6 +1,6 @@
 
 import XCTest
-import JSONCore
+import JSON
 
 fileprivate let n = 5
 

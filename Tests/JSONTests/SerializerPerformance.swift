@@ -1,6 +1,6 @@
 
 import XCTest
-import JSONCore
+import JSON
 
 let largeJsonData = loadFixture("large")
 let largeJsonFoundationData = loadFixtureData("large")

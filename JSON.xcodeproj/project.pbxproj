@@ -12,7 +12,6 @@
 		AAEA16BD1D8F81D9000F73A7 /* JSONParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = __PBXFileRef_Sources/JSONCore/JSONParser.swift /* JSONParser.swift */; };
 		AAEA16BE1D8F81D9000F73A7 /* JSONSerializer.swift in Sources */ = {isa = PBXBuildFile; fileRef = __PBXFileRef_Sources/JSONCore/JSONSerializer.swift /* JSONSerializer.swift */; };
 		AAEA16C01D8F9215000F73A7 /* CoreExport.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAEA16BF1D8F9215000F73A7 /* CoreExport.swift */; };
-		_LinkFileRef_JSONCore_via_JSONTests /* JSONCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = "_____Product_JSONCore" /* JSONCore.framework */; };
 		_LinkFileRef_JSON_via_JSONTests /* JSON.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = "_____Product_JSON" /* JSON.framework */; };
 		__src_cc_ref_Sources/JSON/Expressible.swift /* Expressible.swift in Sources */ = {isa = PBXBuildFile; fileRef = __PBXFileRef_Sources/JSON/Expressible.swift /* Expressible.swift */; };
 		__src_cc_ref_Sources/JSON/JSONAccessors.swift /* JSONAccessors.swift in Sources */ = {isa = PBXBuildFile; fileRef = __PBXFileRef_Sources/JSON/JSONAccessors.swift /* JSONAccessors.swift */; };
@@ -27,11 +26,9 @@
 		__src_cc_ref_Sources/JSONCore/JSONSerializer.swift /* JSONSerializer.swift in Sources */ = {isa = PBXBuildFile; fileRef = __PBXFileRef_Sources/JSONCore/JSONSerializer.swift /* JSONSerializer.swift */; };
 		__src_cc_ref_Tests/JSONTests/FixtureSupport.swift /* FixtureSupport.swift in Sources */ = {isa = PBXBuildFile; fileRef = __PBXFileRef_Tests/JSONTests/FixtureSupport.swift /* FixtureSupport.swift */; };
 		__src_cc_ref_Tests/JSONTests/ModelMapTests.swift /* ModelMapTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = __PBXFileRef_Tests/JSONTests/ModelMapTests.swift /* ModelMapTests.swift */; };
-		__src_cc_ref_Tests/JSONTests/ParseToModelPerformance.swift /* ParseToModelPerformance.swift in Sources */ = {isa = PBXBuildFile; fileRef = __PBXFileRef_Tests/JSONTests/ParseToModelPerformance.swift /* ParseToModelPerformance.swift */; };
 		__src_cc_ref_Tests/JSONTests/ParserPerformance.swift /* ParserPerformance.swift in Sources */ = {isa = PBXBuildFile; fileRef = __PBXFileRef_Tests/JSONTests/ParserPerformance.swift /* ParserPerformance.swift */; };
 		__src_cc_ref_Tests/JSONTests/ParserTests.swift /* ParserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = __PBXFileRef_Tests/JSONTests/ParserTests.swift /* ParserTests.swift */; };
 		__src_cc_ref_Tests/JSONTests/PublicAPITests.swift /* PublicAPITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = __PBXFileRef_Tests/JSONTests/PublicAPITests.swift /* PublicAPITests.swift */; };
-		__src_cc_ref_Tests/JSONTests/ReadmeTests.swift /* ReadmeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = __PBXFileRef_Tests/JSONTests/ReadmeTests.swift /* ReadmeTests.swift */; };
 		__src_cc_ref_Tests/JSONTests/SerializerPerformance.swift /* SerializerPerformance.swift in Sources */ = {isa = PBXBuildFile; fileRef = __PBXFileRef_Tests/JSONTests/SerializerPerformance.swift /* SerializerPerformance.swift */; };
 		__src_cc_ref_Tests/JSONTests/SerializerTests.swift /* SerializerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = __PBXFileRef_Tests/JSONTests/SerializerTests.swift /* SerializerTests.swift */; };
 		__src_cc_ref_Tests/JSONTests/UserModel.swift /* UserModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = __PBXFileRef_Tests/JSONTests/UserModel.swift /* UserModel.swift */; };
@@ -71,11 +68,9 @@
 		__PBXFileRef_Sources/JSONCore/JSONSerializer.swift /* JSONSerializer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONSerializer.swift; sourceTree = "<group>"; };
 		__PBXFileRef_Tests/JSONTests/FixtureSupport.swift /* FixtureSupport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FixtureSupport.swift; sourceTree = "<group>"; };
 		__PBXFileRef_Tests/JSONTests/ModelMapTests.swift /* ModelMapTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelMapTests.swift; sourceTree = "<group>"; };
-		__PBXFileRef_Tests/JSONTests/ParseToModelPerformance.swift /* ParseToModelPerformance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParseToModelPerformance.swift; sourceTree = "<group>"; };
 		__PBXFileRef_Tests/JSONTests/ParserPerformance.swift /* ParserPerformance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParserPerformance.swift; sourceTree = "<group>"; };
 		__PBXFileRef_Tests/JSONTests/ParserTests.swift /* ParserTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParserTests.swift; sourceTree = "<group>"; };
 		__PBXFileRef_Tests/JSONTests/PublicAPITests.swift /* PublicAPITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublicAPITests.swift; sourceTree = "<group>"; };
-		__PBXFileRef_Tests/JSONTests/ReadmeTests.swift /* ReadmeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadmeTests.swift; sourceTree = "<group>"; };
 		__PBXFileRef_Tests/JSONTests/SerializerPerformance.swift /* SerializerPerformance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SerializerPerformance.swift; sourceTree = "<group>"; };
 		__PBXFileRef_Tests/JSONTests/SerializerTests.swift /* SerializerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SerializerTests.swift; sourceTree = "<group>"; };
 		__PBXFileRef_Tests/JSONTests/UserModel.swift /* UserModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserModel.swift; sourceTree = "<group>"; };
@@ -104,7 +99,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 0;
 			files = (
-				_LinkFileRef_JSONCore_via_JSONTests /* JSONCore.framework in Frameworks */,
 				_LinkFileRef_JSON_via_JSONTests /* JSON.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -196,9 +190,7 @@
 				__PBXFileRef_Tests/JSONTests/ModelMapTests.swift /* ModelMapTests.swift */,
 				__PBXFileRef_Tests/JSONTests/ParserPerformance.swift /* ParserPerformance.swift */,
 				__PBXFileRef_Tests/JSONTests/ParserTests.swift /* ParserTests.swift */,
-				__PBXFileRef_Tests/JSONTests/ParseToModelPerformance.swift /* ParseToModelPerformance.swift */,
 				__PBXFileRef_Tests/JSONTests/PublicAPITests.swift /* PublicAPITests.swift */,
-				__PBXFileRef_Tests/JSONTests/ReadmeTests.swift /* ReadmeTests.swift */,
 				__PBXFileRef_Tests/JSONTests/SerializerPerformance.swift /* SerializerPerformance.swift */,
 				__PBXFileRef_Tests/JSONTests/SerializerTests.swift /* SerializerTests.swift */,
 				__PBXFileRef_Tests/JSONTests/UserModel.swift /* UserModel.swift */,
@@ -336,9 +328,7 @@
 				__src_cc_ref_Tests/JSONTests/ModelMapTests.swift /* ModelMapTests.swift in Sources */,
 				__src_cc_ref_Tests/JSONTests/ParserPerformance.swift /* ParserPerformance.swift in Sources */,
 				__src_cc_ref_Tests/JSONTests/ParserTests.swift /* ParserTests.swift in Sources */,
-				__src_cc_ref_Tests/JSONTests/ParseToModelPerformance.swift /* ParseToModelPerformance.swift in Sources */,
 				__src_cc_ref_Tests/JSONTests/PublicAPITests.swift /* PublicAPITests.swift in Sources */,
-				__src_cc_ref_Tests/JSONTests/ReadmeTests.swift /* ReadmeTests.swift in Sources */,
 				__src_cc_ref_Tests/JSONTests/SerializerPerformance.swift /* SerializerPerformance.swift in Sources */,
 				__src_cc_ref_Tests/JSONTests/SerializerTests.swift /* SerializerTests.swift in Sources */,
 				__src_cc_ref_Tests/JSONTests/UserModel.swift /* UserModel.swift in Sources */,
@@ -364,6 +354,7 @@
 		_ReleaseConf_JSON /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
 				APPLICATION_EXTENSION_API_ONLY = YES;
 				DEVELOPMENT_TEAM = "";
 				ENABLE_TESTABILITY = YES;
@@ -385,6 +376,7 @@
 		_ReleaseConf_JSONCore /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
 				APPLICATION_EXTENSION_API_ONLY = YES;
 				DEVELOPMENT_TEAM = "";
 				ENABLE_TESTABILITY = YES;
@@ -404,10 +396,12 @@
 		_ReleaseConf_JSONTests /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
+				APPLICATION_EXTENSION_API_ONLY = NO;
 				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
 				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks";
 				INFOPLIST_FILE = JSON.xcodeproj/JSONTests_Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "@loader_path/Frameworks";
 				OTHER_LDFLAGS = "$(inherited)";
 				OTHER_SWIFT_FLAGS = "$(inherited)";
 				SWIFT_VERSION = 3.0;
@@ -417,6 +411,7 @@
 		"___DebugConf_JSON" /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
 				APPLICATION_EXTENSION_API_ONLY = YES;
 				DEVELOPMENT_TEAM = "";
 				ENABLE_TESTABILITY = YES;
@@ -438,6 +433,7 @@
 		"___DebugConf_JSONCore" /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
 				APPLICATION_EXTENSION_API_ONLY = YES;
 				DEVELOPMENT_TEAM = "";
 				ENABLE_TESTABILITY = YES;
@@ -458,10 +454,12 @@
 		"___DebugConf_JSONTests" /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
+				APPLICATION_EXTENSION_API_ONLY = NO;
 				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
 				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks";
 				INFOPLIST_FILE = JSON.xcodeproj/JSONTests_Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "@loader_path/Frameworks";
 				OTHER_LDFLAGS = "$(inherited)";
 				OTHER_SWIFT_FLAGS = "$(inherited)";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
