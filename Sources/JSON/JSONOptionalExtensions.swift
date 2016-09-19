@@ -1,4 +1,5 @@
 
+
 /// WARNING: Internal type. Used to constrain an extension on Optional to be sudo non Generic.
 public protocol _JSON {}
 extension JSON: _JSON {}

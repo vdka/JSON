@@ -1,4 +1,5 @@
 
+
 // MARK: - JSONRepresentable
 
 /// Used to declare that that a type can be represented as JSON

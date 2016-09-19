@@ -11,6 +11,7 @@
 		AAEA16BC1D8F81D9000F73A7 /* JSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = __PBXFileRef_Sources/JSONCore/JSON.swift /* JSON.swift */; };
 		AAEA16BD1D8F81D9000F73A7 /* JSONParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = __PBXFileRef_Sources/JSONCore/JSONParser.swift /* JSONParser.swift */; };
 		AAEA16BE1D8F81D9000F73A7 /* JSONSerializer.swift in Sources */ = {isa = PBXBuildFile; fileRef = __PBXFileRef_Sources/JSONCore/JSONSerializer.swift /* JSONSerializer.swift */; };
+		AAEA16C01D8F9215000F73A7 /* CoreExport.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAEA16BF1D8F9215000F73A7 /* CoreExport.swift */; };
 		_LinkFileRef_JSONCore_via_JSONTests /* JSONCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = "_____Product_JSONCore" /* JSONCore.framework */; };
 		_LinkFileRef_JSON_via_JSONTests /* JSON.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = "_____Product_JSON" /* JSON.framework */; };
 		__src_cc_ref_Sources/JSON/Expressible.swift /* Expressible.swift in Sources */ = {isa = PBXBuildFile; fileRef = __PBXFileRef_Sources/JSON/Expressible.swift /* Expressible.swift */; };
@@ -54,6 +55,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		AAEA16BF1D8F9215000F73A7 /* CoreExport.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreExport.swift; sourceTree = "<group>"; };
 		__PBXFileRef_JSON.xcodeproj/Configs/Project.xcconfig /* JSON.xcodeproj/Configs/Project.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = JSON.xcodeproj/Configs/Project.xcconfig; sourceTree = "<group>"; };
 		__PBXFileRef_Package.swift /* Package.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Package.swift; sourceTree = "<group>"; };
 		__PBXFileRef_Sources/JSON/Expressible.swift /* Expressible.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Expressible.swift; sourceTree = "<group>"; };
@@ -169,6 +171,7 @@
 				__PBXFileRef_Sources/JSON/JSONInitializable.swift /* JSONInitializable.swift */,
 				__PBXFileRef_Sources/JSON/JSONOptionalExtensions.swift /* JSONOptionalExtensions.swift */,
 				__PBXFileRef_Sources/JSON/JSONRepresentable.swift /* JSONRepresentable.swift */,
+				AAEA16BF1D8F9215000F73A7 /* CoreExport.swift */,
 			);
 			name = JSON;
 			path = Sources/JSON;
@@ -301,6 +304,7 @@
 			files = (
 				__src_cc_ref_Sources/JSON/Expressible.swift /* Expressible.swift in Sources */,
 				__src_cc_ref_Sources/JSON/JSONAccessors.swift /* JSONAccessors.swift in Sources */,
+				AAEA16C01D8F9215000F73A7 /* CoreExport.swift in Sources */,
 				AAEA16BE1D8F81D9000F73A7 /* JSONSerializer.swift in Sources */,
 				__src_cc_ref_Sources/JSON/JSONConvertible.swift /* JSONConvertible.swift in Sources */,
 				AAEA16BC1D8F81D9000F73A7 /* JSON.swift in Sources */,
