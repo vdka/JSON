@@ -491,7 +491,6 @@ class ParsingTests: XCTestCase {
     )
   }
 
-  // NOTE(vdka): Need to add special handling for this.
   func testTrollBlockComment() {
 
     expect("/*/ {'key':'harry'}", toThrowWithReason: .invalidSyntax, withOptions: .allowComments)

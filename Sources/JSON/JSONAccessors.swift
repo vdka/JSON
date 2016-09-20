@@ -8,6 +8,7 @@ extension JSON {
     return try T(json: self)
   }
 
+  /// - Note: This call will throw iff the initializer does.
   public func get<T: JSONInitializable>() throws -> T? {
     return try T(json: self)
   }
@@ -68,8 +69,10 @@ extension JSON {
     return try T(json: json)
   }
 
+  /// If the Field exists in the JSON then this will call to the expected types initializer
+  /// - Note: This call will throw iff the initializer does
   public func get<T: JSONInitializable>(_ field: String) throws -> T? {
-    guard let json = self[field] else { throw JSON.Error.badField(field) }
+    guard let json = self[field] else { return nil }
     return try T(json: json)
   }
 
@@ -79,7 +82,6 @@ extension JSON {
     return try array.map(T.init(json:))
   }
 
-  // TODO(vdka): Using Any here will likely be a slow down
   /// Returns the content matching the type of its destination
   public func get<T: RawRepresentable>(_ field: String) throws -> T
     where T.RawValue: JSONInitializable
@@ -90,7 +92,6 @@ extension JSON {
     return value
   }
 
-  // TODO(vdka): Using Any here will likely be a slow down
   /// Returns the content matching the type of its destination
   public func get<T: RawRepresentable>(_ field: String) throws -> [T]
     where T.RawValue: JSONInitializable
