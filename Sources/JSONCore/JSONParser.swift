@@ -1,5 +1,8 @@
-
-import Darwin.C
+#if os(Linux)
+    import SwiftGlibc.C
+#else
+    import Darwin.C
+#endif
 
 // MARK: - JSON.Parser
 
