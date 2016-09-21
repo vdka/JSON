@@ -1,3 +1,4 @@
+
 import PackageDescription
 
 let package = Package(
@@ -6,3 +7,4 @@ let package = Package(
     .Package(url: "https://github.com/vdka/JSONCore.git", majorVersion: 0)
   ]
 )
+
