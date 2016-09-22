@@ -1,7 +1,5 @@
 
 
-// MARK: - JSON.Serializer
-
 extension JSON {
   public struct Serializer {
 

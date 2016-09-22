@@ -1,7 +1,5 @@
 
 
-// MARK: - JSONRepresentable
-
 /// Used to declare that that a type can be represented as JSON
 public protocol JSONRepresentable {
 
@@ -178,4 +176,3 @@ extension Int64: JSONRepresentable {
     return .integer(self)
   }
 }
-
