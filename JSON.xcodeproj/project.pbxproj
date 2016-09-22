@@ -7,11 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		_LinkFileRef_JSONCore_via_JSON /* JSONCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = "_____Product_JSONCore" /* JSONCore.framework */; };
-		"__src_cc_ref_Packages/JSONCore-0.1.0/Sources/Constants.swift" /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = "__PBXFileRef_Packages/JSONCore-0.1.0/Sources/Constants.swift" /* Constants.swift */; };
-		"__src_cc_ref_Packages/JSONCore-0.1.0/Sources/JSON.swift" /* JSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = "__PBXFileRef_Packages/JSONCore-0.1.0/Sources/JSON.swift" /* JSON.swift */; };
-		"__src_cc_ref_Packages/JSONCore-0.1.0/Sources/JSONParser.swift" /* JSONParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = "__PBXFileRef_Packages/JSONCore-0.1.0/Sources/JSONParser.swift" /* JSONParser.swift */; };
-		"__src_cc_ref_Packages/JSONCore-0.1.0/Sources/JSONSerializer.swift" /* JSONSerializer.swift in Sources */ = {isa = PBXBuildFile; fileRef = "__PBXFileRef_Packages/JSONCore-0.1.0/Sources/JSONSerializer.swift" /* JSONSerializer.swift */; };
+		AA8A16291D93FA4F008B1475 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = "__PBXFileRef_Packages/JSONCore-0.1.0/Sources/Constants.swift" /* Constants.swift */; };
+		AA8A162A1D93FA4F008B1475 /* JSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = "__PBXFileRef_Packages/JSONCore-0.1.0/Sources/JSON.swift" /* JSON.swift */; };
+		AA8A162B1D93FA4F008B1475 /* JSONParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = "__PBXFileRef_Packages/JSONCore-0.1.0/Sources/JSONParser.swift" /* JSONParser.swift */; };
+		AA8A162C1D93FA4F008B1475 /* JSONSerializer.swift in Sources */ = {isa = PBXBuildFile; fileRef = "__PBXFileRef_Packages/JSONCore-0.1.0/Sources/JSONSerializer.swift" /* JSONSerializer.swift */; };
 		__src_cc_ref_Sources/CoreExport.swift /* CoreExport.swift in Sources */ = {isa = PBXBuildFile; fileRef = __PBXFileRef_Sources/CoreExport.swift /* CoreExport.swift */; };
 		__src_cc_ref_Sources/Expressible.swift /* Expressible.swift in Sources */ = {isa = PBXBuildFile; fileRef = __PBXFileRef_Sources/Expressible.swift /* Expressible.swift */; };
 		__src_cc_ref_Sources/JSONAccessors.swift /* JSONAccessors.swift in Sources */ = {isa = PBXBuildFile; fileRef = __PBXFileRef_Sources/JSONAccessors.swift /* JSONAccessors.swift */; };
@@ -21,16 +20,6 @@
 		__src_cc_ref_Sources/JSONOptionalExtensions.swift /* JSONOptionalExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = __PBXFileRef_Sources/JSONOptionalExtensions.swift /* JSONOptionalExtensions.swift */; };
 		__src_cc_ref_Sources/JSONRepresentable.swift /* JSONRepresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = __PBXFileRef_Sources/JSONRepresentable.swift /* JSONRepresentable.swift */; };
 /* End PBXBuildFile section */
-
-/* Begin PBXContainerItemProxy section */
-		AA0DE29B1D92BC53008FEECE /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = __RootObject_ /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = "______Target_JSONCore";
-			remoteInfo = JSONCore;
-		};
-/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		__PBXFileRef_JSON.xcodeproj/Configs/Project.xcconfig /* JSON.xcodeproj/Configs/Project.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = JSON.xcodeproj/Configs/Project.xcconfig; sourceTree = "<group>"; };
@@ -48,19 +37,10 @@
 		__PBXFileRef_Sources/JSONOptionalExtensions.swift /* JSONOptionalExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONOptionalExtensions.swift; sourceTree = "<group>"; };
 		__PBXFileRef_Sources/JSONRepresentable.swift /* JSONRepresentable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONRepresentable.swift; sourceTree = "<group>"; };
 		"_____Product_JSON" /* JSON.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = JSON.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		"_____Product_JSONCore" /* JSONCore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = JSONCore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		"___LinkPhase_JSON" /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 0;
-			files = (
-				_LinkFileRef_JSONCore_via_JSON /* JSONCore.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		"___LinkPhase_JSONCore" /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 0;
 			files = (
@@ -92,7 +72,6 @@
 		"____Products_" /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				"_____Product_JSONCore" /* JSONCore.framework */,
 				"_____Product_JSON" /* JSON.framework */,
 			);
 			name = Products;
@@ -155,27 +134,10 @@
 			buildRules = (
 			);
 			dependencies = (
-				__Dependency_JSONCore /* PBXTargetDependency */,
 			);
 			name = JSON;
 			productName = JSON;
 			productReference = "_____Product_JSON" /* JSON.framework */;
-			productType = "com.apple.product-type.framework";
-		};
-		"______Target_JSONCore" /* JSONCore */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = "_______Confs_JSONCore" /* Build configuration list for PBXNativeTarget "JSONCore" */;
-			buildPhases = (
-				CompilePhase_JSONCore /* Sources */,
-				"___LinkPhase_JSONCore" /* Frameworks */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = JSONCore;
-			productName = JSONCore;
-			productReference = "_____Product_JSONCore" /* JSONCore.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 /* End PBXNativeTarget section */
@@ -198,7 +160,6 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				"______Target_JSONCore" /* JSONCore */,
 				"______Target_JSON" /* JSON */,
 			);
 		};
@@ -210,36 +171,21 @@
 			buildActionMask = 0;
 			files = (
 				__src_cc_ref_Sources/CoreExport.swift /* CoreExport.swift in Sources */,
+				AA8A162A1D93FA4F008B1475 /* JSON.swift in Sources */,
 				__src_cc_ref_Sources/Expressible.swift /* Expressible.swift in Sources */,
+				AA8A162B1D93FA4F008B1475 /* JSONParser.swift in Sources */,
 				__src_cc_ref_Sources/JSONAccessors.swift /* JSONAccessors.swift in Sources */,
 				__src_cc_ref_Sources/JSONConvertible.swift /* JSONConvertible.swift in Sources */,
 				__src_cc_ref_Sources/JSONError.swift /* JSONError.swift in Sources */,
+				AA8A162C1D93FA4F008B1475 /* JSONSerializer.swift in Sources */,
 				__src_cc_ref_Sources/JSONInitializable.swift /* JSONInitializable.swift in Sources */,
 				__src_cc_ref_Sources/JSONOptionalExtensions.swift /* JSONOptionalExtensions.swift in Sources */,
 				__src_cc_ref_Sources/JSONRepresentable.swift /* JSONRepresentable.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		CompilePhase_JSONCore /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 0;
-			files = (
-				"__src_cc_ref_Packages/JSONCore-0.1.0/Sources/Constants.swift" /* Constants.swift in Sources */,
-				"__src_cc_ref_Packages/JSONCore-0.1.0/Sources/JSON.swift" /* JSON.swift in Sources */,
-				"__src_cc_ref_Packages/JSONCore-0.1.0/Sources/JSONParser.swift" /* JSONParser.swift in Sources */,
-				"__src_cc_ref_Packages/JSONCore-0.1.0/Sources/JSONSerializer.swift" /* JSONSerializer.swift in Sources */,
+				AA8A16291D93FA4F008B1475 /* Constants.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		__Dependency_JSONCore /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = "______Target_JSONCore" /* JSONCore */;
-			targetProxy = AA0DE29B1D92BC53008FEECE /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		_ReleaseConf_JSON /* Release */ = {
@@ -258,22 +204,6 @@
 			};
 			name = Release;
 		};
-		_ReleaseConf_JSONCore /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ENABLE_TESTABILITY = YES;
-				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks";
-				INFOPLIST_FILE = JSON.xcodeproj/JSONCore_Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(TOOLCHAIN_DIR)/usr/lib/swift/macosx";
-				OTHER_LDFLAGS = "$(inherited)";
-				OTHER_SWIFT_FLAGS = "$(inherited)";
-				PRODUCT_BUNDLE_IDENTIFIER = JSONCore;
-				PRODUCT_MODULE_NAME = "$(TARGET_NAME:c99extidentifier)";
-				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
-				SWIFT_VERSION = 3.0;
-			};
-			name = Release;
-		};
 		"___DebugConf_JSON" /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -284,23 +214,6 @@
 				OTHER_LDFLAGS = "$(inherited)";
 				OTHER_SWIFT_FLAGS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = JSON;
-				PRODUCT_MODULE_NAME = "$(TARGET_NAME:c99extidentifier)";
-				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 3.0;
-			};
-			name = Debug;
-		};
-		"___DebugConf_JSONCore" /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ENABLE_TESTABILITY = YES;
-				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks";
-				INFOPLIST_FILE = JSON.xcodeproj/JSONCore_Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(TOOLCHAIN_DIR)/usr/lib/swift/macosx";
-				OTHER_LDFLAGS = "$(inherited)";
-				OTHER_SWIFT_FLAGS = "$(inherited)";
-				PRODUCT_BUNDLE_IDENTIFIER = JSONCore;
 				PRODUCT_MODULE_NAME = "$(TARGET_NAME:c99extidentifier)";
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -339,15 +252,6 @@
 			buildConfigurations = (
 				"___DebugConf_JSON" /* Debug */,
 				_ReleaseConf_JSON /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Debug;
-		};
-		"_______Confs_JSONCore" /* Build configuration list for PBXNativeTarget "JSONCore" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				"___DebugConf_JSONCore" /* Debug */,
-				_ReleaseConf_JSONCore /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;

@@ -33,8 +33,9 @@ xcuserdata/
 *.xccheckout
 *.xcscmblueprint
 
-# Include the Packages folder so that Carthage has the sources it needs.
-# Need to find a better way.
+# NOTE(vdka): While this *will* ignore the files in /Packages I have
+#   manually added in the files from Packages/JSONCore-vX.X.X/Sources/*
+#   so they are retained for the purposed of Carthage
 
 ## SPM
 /Packages
