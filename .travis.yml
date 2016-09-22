@@ -2,4 +2,4 @@ language: objective-c
 osx_image: xcode8
 script:
   - set -o pipefail
-  - xcodebuild -project JSON.xcodeproj -scheme "JSON" build | xcpretty -c
+  - xcodebuild -project JSON.xcodeproj -scheme "JSON" test | xcpretty -c
