@@ -37,6 +37,17 @@
                BlueprintName = "JSONTests"
                ReferencedContainer = "container:JSON.xcodeproj">
             </BuildableReference>
+            <SkippedTests>
+               <Test
+                  Identifier = "ParserBenchmarks">
+               </Test>
+               <Test
+                  Identifier = "ParsingTests/testNumber_Double_Exp_Negative()">
+               </Test>
+               <Test
+                  Identifier = "SerializerBenchmarks">
+               </Test>
+            </SkippedTests>
          </TestableReference>
       </Testables>
       <AdditionalOptions>
