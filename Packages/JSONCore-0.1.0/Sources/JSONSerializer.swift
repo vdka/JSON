@@ -229,7 +229,9 @@ extension JSON.Serializer {
 }
 
 extension JSON.Serializer {
+
   public enum Error: String, Swift.Error {
     case invalidNumber
   }
 }
+

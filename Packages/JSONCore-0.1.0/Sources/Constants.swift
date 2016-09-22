@@ -1,4 +1,5 @@
 
+
 // json special characters
 let arrayOpen: UTF8.CodeUnit = "[".utf8.first!
 let objectOpen: UTF8.CodeUnit = "{".utf8.first!
@@ -56,3 +57,4 @@ let ull: [UTF8.CodeUnit] = ["u".utf8.first!, "l".utf8.first!, "l".utf8.first!]
 let lineComment: [UTF8.CodeUnit] = ["/".utf8.first!, "/".utf8.first!]
 let blockCommentStart: [UTF8.CodeUnit] = ["/".utf8.first!, "*".utf8.first!]
 let blockCommentEnd: [UTF8.CodeUnit] = ["*".utf8.first!, "/".utf8.first!]
+

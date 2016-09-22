@@ -33,6 +33,10 @@ xcuserdata/
 *.xccheckout
 *.xcscmblueprint
 
+# NOTE(vdka): While this *will* ignore the files in /Packages I have
+#   manually added in the files from Packages/JSONCore-vX.X.X/Sources/*
+#   so they are retained for the purposed of Carthage
+
 ## SPM
 /Packages
 

@@ -14,6 +14,20 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
+               BlueprintIdentifier = "______Target_JSONCore"
+               BuildableName = "JSONCore.framework"
+               BlueprintName = "JSONCore"
+               ReferencedContainer = "container:JSON.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
                BlueprintIdentifier = "______Target_JSON"
                BuildableName = "JSON.framework"
                BlueprintName = "JSON"
@@ -26,43 +40,9 @@
       buildConfiguration = "Debug"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
-      shouldUseLaunchSchemeArgsEnv = "YES"
-      codeCoverageEnabled = "YES">
+      shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "______Target_JSONTests"
-               BuildableName = "JSONTests.xctest"
-               BlueprintName = "JSONTests"
-               ReferencedContainer = "container:JSON.xcodeproj">
-            </BuildableReference>
-            <SkippedTests>
-               <Test
-                  Identifier = "ParseToModelBenchmarks">
-               </Test>
-               <Test
-                  Identifier = "ParserBenchmarks">
-               </Test>
-               <Test
-                  Identifier = "ParsingTests/testNumber_Double_Exp_Negative()">
-               </Test>
-               <Test
-                  Identifier = "SerializerBenchmarks">
-               </Test>
-            </SkippedTests>
-         </TestableReference>
       </Testables>
-      <MacroExpansion>
-         <BuildableReference
-            BuildableIdentifier = "primary"
-            BlueprintIdentifier = "______Target_JSON"
-            BuildableName = "JSON.framework"
-            BlueprintName = "JSON"
-            ReferencedContainer = "container:JSON.xcodeproj">
-         </BuildableReference>
-      </MacroExpansion>
       <AdditionalOptions>
       </AdditionalOptions>
    </TestAction>
@@ -79,9 +59,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "______Target_JSON"
-            BuildableName = "JSON.framework"
-            BlueprintName = "JSON"
+            BlueprintIdentifier = "______Target_JSONCore"
+            BuildableName = "JSONCore.framework"
+            BlueprintName = "JSONCore"
             ReferencedContainer = "container:JSON.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -94,15 +74,6 @@
       savedToolIdentifier = ""
       useCustomWorkingDirectory = "NO"
       debugDocumentVersioning = "YES">
-      <MacroExpansion>
-         <BuildableReference
-            BuildableIdentifier = "primary"
-            BlueprintIdentifier = "______Target_JSON"
-            BuildableName = "JSON.framework"
-            BlueprintName = "JSON"
-            ReferencedContainer = "container:JSON.xcodeproj">
-         </BuildableReference>
-      </MacroExpansion>
    </ProfileAction>
    <AnalyzeAction
       buildConfiguration = "Debug">

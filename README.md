@@ -69,9 +69,3 @@ extension Person: JSONConvertible {
 }
 ```
 
-## Alternative Access Patterns
-
-#### Subscripting
-`json["pet"]?["vets"]?[0]?["name"]?.string`
-
- `json["pet"]["vets"][0]["name"].string` is also valid however this one has to perform runtime type checks making it much slower. This will probably be deprecated at least until we can constrain Generic Type extensions to Specific types.
