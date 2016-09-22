@@ -33,6 +33,9 @@ xcuserdata/
 *.xccheckout
 *.xcscmblueprint
 
+# Include the Packages folder so that Carthage has the sources it needs.
+# Need to find a better way.
+
 ## SPM
 /Packages
 
