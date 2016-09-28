@@ -1,7 +1,5 @@
 
 
-// MARK: - VDKA/JSON
-
 /// Any value that can be expressed in JSON has a representation in `JSON`.
 public enum JSON {
   case object([String: JSON])

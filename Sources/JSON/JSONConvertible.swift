@@ -1,4 +1,5 @@
 
+
 public protocol JSONConvertible: JSONInitializable, JSONRepresentable {}
 
 extension JSON: JSONConvertible {

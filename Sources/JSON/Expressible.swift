@@ -1,7 +1,5 @@
 
 
-// MARK: - JSON LiteralConvertible conformance
-
 extension JSON: ExpressibleByArrayLiteral {
   public init(arrayLiteral elements: JSONRepresentable...) {
     self = .array(elements.map(JSON.init))

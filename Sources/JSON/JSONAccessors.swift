@@ -1,7 +1,5 @@
 
 
-// MARK: - JSON Accessors
-
 extension JSON {
 
   public func get<T: JSONInitializable>() throws -> T {
