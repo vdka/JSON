@@ -1,6 +1,6 @@
 # JSON
 
-[![Language](https://img.shields.io/badge/Swift-3-brightgreen.svg)](http://swift.org)
+[![Language](https://img.shields.io/badge/Swift-3-brightgreen.svg)](http://swift.org) [![Build Status](https://travis-ci.org/vdka/JSON.svg?branch=master)](https://travis-ci.org/vdka/JSON)
 
 This is Not just Another Swift JSON Package. This is _**the**_ Swift JSON Package.
 When you are transforming directly to models this framework is [faster](https://github.com/vdka/JSONBenchmarks) than `Foundation.JSONSerialization`.
