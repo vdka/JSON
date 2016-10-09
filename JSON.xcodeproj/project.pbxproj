@@ -1,388 +1,390 @@
 // !$*UTF8*$!
 {
-	archiveVersion = 1;
-	classes = {
-	};
-	objectVersion = 46;
-	objects = {
-
-/* Begin PBXBuildFile section */
-		_LinkFileRef_JSON_via_JSONTests /* JSON.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = "_____Product_JSON" /* JSON.framework */; };
-		__src_cc_ref_Sources/JSON/Constants.swift /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = __PBXFileRef_Sources/JSON/Constants.swift /* Constants.swift */; };
-		__src_cc_ref_Sources/JSON/Expressible.swift /* Expressible.swift in Sources */ = {isa = PBXBuildFile; fileRef = __PBXFileRef_Sources/JSON/Expressible.swift /* Expressible.swift */; };
-		__src_cc_ref_Sources/JSON/JSON.swift /* JSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = __PBXFileRef_Sources/JSON/JSON.swift /* JSON.swift */; };
-		__src_cc_ref_Sources/JSON/JSONAccessors.swift /* JSONAccessors.swift in Sources */ = {isa = PBXBuildFile; fileRef = __PBXFileRef_Sources/JSON/JSONAccessors.swift /* JSONAccessors.swift */; };
-		__src_cc_ref_Sources/JSON/JSONConvertible.swift /* JSONConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = __PBXFileRef_Sources/JSON/JSONConvertible.swift /* JSONConvertible.swift */; };
-		__src_cc_ref_Sources/JSON/JSONError.swift /* JSONError.swift in Sources */ = {isa = PBXBuildFile; fileRef = __PBXFileRef_Sources/JSON/JSONError.swift /* JSONError.swift */; };
-		__src_cc_ref_Sources/JSON/JSONInitializable.swift /* JSONInitializable.swift in Sources */ = {isa = PBXBuildFile; fileRef = __PBXFileRef_Sources/JSON/JSONInitializable.swift /* JSONInitializable.swift */; };
-		__src_cc_ref_Sources/JSON/JSONOptionalExtensions.swift /* JSONOptionalExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = __PBXFileRef_Sources/JSON/JSONOptionalExtensions.swift /* JSONOptionalExtensions.swift */; };
-		__src_cc_ref_Sources/JSON/JSONParser.swift /* JSONParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = __PBXFileRef_Sources/JSON/JSONParser.swift /* JSONParser.swift */; };
-		__src_cc_ref_Sources/JSON/JSONRepresentable.swift /* JSONRepresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = __PBXFileRef_Sources/JSON/JSONRepresentable.swift /* JSONRepresentable.swift */; };
-		__src_cc_ref_Sources/JSON/JSONSerializer.swift /* JSONSerializer.swift in Sources */ = {isa = PBXBuildFile; fileRef = __PBXFileRef_Sources/JSON/JSONSerializer.swift /* JSONSerializer.swift */; };
-		__src_cc_ref_Tests/JSONTests/FixtureSupport.swift /* FixtureSupport.swift in Sources */ = {isa = PBXBuildFile; fileRef = __PBXFileRef_Tests/JSONTests/FixtureSupport.swift /* FixtureSupport.swift */; };
-		__src_cc_ref_Tests/JSONTests/ModelMapTests.swift /* ModelMapTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = __PBXFileRef_Tests/JSONTests/ModelMapTests.swift /* ModelMapTests.swift */; };
-		__src_cc_ref_Tests/JSONTests/ParserPerformance.swift /* ParserPerformance.swift in Sources */ = {isa = PBXBuildFile; fileRef = __PBXFileRef_Tests/JSONTests/ParserPerformance.swift /* ParserPerformance.swift */; };
-		__src_cc_ref_Tests/JSONTests/ParserTests.swift /* ParserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = __PBXFileRef_Tests/JSONTests/ParserTests.swift /* ParserTests.swift */; };
-		__src_cc_ref_Tests/JSONTests/PublicAPITests.swift /* PublicAPITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = __PBXFileRef_Tests/JSONTests/PublicAPITests.swift /* PublicAPITests.swift */; };
-		__src_cc_ref_Tests/JSONTests/SerializerPerformance.swift /* SerializerPerformance.swift in Sources */ = {isa = PBXBuildFile; fileRef = __PBXFileRef_Tests/JSONTests/SerializerPerformance.swift /* SerializerPerformance.swift */; };
-		__src_cc_ref_Tests/JSONTests/SerializerTests.swift /* SerializerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = __PBXFileRef_Tests/JSONTests/SerializerTests.swift /* SerializerTests.swift */; };
-		__src_cc_ref_Tests/JSONTests/UserModel.swift /* UserModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = __PBXFileRef_Tests/JSONTests/UserModel.swift /* UserModel.swift */; };
-/* End PBXBuildFile section */
-
-/* Begin PBXContainerItemProxy section */
-		AA8A162D1D93FF98008B1475 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = __RootObject_ /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = "______Target_JSON";
-			remoteInfo = JSON;
-		};
-/* End PBXContainerItemProxy section */
-
-/* Begin PBXFileReference section */
-		__PBXFileRef_JSON.xcodeproj/Configs/Project.xcconfig /* JSON.xcodeproj/Configs/Project.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = JSON.xcodeproj/Configs/Project.xcconfig; sourceTree = "<group>"; };
-		__PBXFileRef_Package.swift /* Package.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Package.swift; sourceTree = "<group>"; };
-		__PBXFileRef_Sources/JSON/Constants.swift /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
-		__PBXFileRef_Sources/JSON/Expressible.swift /* Expressible.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Expressible.swift; sourceTree = "<group>"; };
-		__PBXFileRef_Sources/JSON/JSON.swift /* JSON.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSON.swift; sourceTree = "<group>"; };
-		__PBXFileRef_Sources/JSON/JSONAccessors.swift /* JSONAccessors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONAccessors.swift; sourceTree = "<group>"; };
-		__PBXFileRef_Sources/JSON/JSONConvertible.swift /* JSONConvertible.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONConvertible.swift; sourceTree = "<group>"; };
-		__PBXFileRef_Sources/JSON/JSONError.swift /* JSONError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONError.swift; sourceTree = "<group>"; };
-		__PBXFileRef_Sources/JSON/JSONInitializable.swift /* JSONInitializable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONInitializable.swift; sourceTree = "<group>"; };
-		__PBXFileRef_Sources/JSON/JSONOptionalExtensions.swift /* JSONOptionalExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONOptionalExtensions.swift; sourceTree = "<group>"; };
-		__PBXFileRef_Sources/JSON/JSONParser.swift /* JSONParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONParser.swift; sourceTree = "<group>"; };
-		__PBXFileRef_Sources/JSON/JSONRepresentable.swift /* JSONRepresentable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONRepresentable.swift; sourceTree = "<group>"; };
-		__PBXFileRef_Sources/JSON/JSONSerializer.swift /* JSONSerializer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONSerializer.swift; sourceTree = "<group>"; };
-		__PBXFileRef_Tests/JSONTests/FixtureSupport.swift /* FixtureSupport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FixtureSupport.swift; sourceTree = "<group>"; };
-		__PBXFileRef_Tests/JSONTests/ModelMapTests.swift /* ModelMapTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelMapTests.swift; sourceTree = "<group>"; };
-		__PBXFileRef_Tests/JSONTests/ParserPerformance.swift /* ParserPerformance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParserPerformance.swift; sourceTree = "<group>"; };
-		__PBXFileRef_Tests/JSONTests/ParserTests.swift /* ParserTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParserTests.swift; sourceTree = "<group>"; };
-		__PBXFileRef_Tests/JSONTests/PublicAPITests.swift /* PublicAPITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublicAPITests.swift; sourceTree = "<group>"; };
-		__PBXFileRef_Tests/JSONTests/SerializerPerformance.swift /* SerializerPerformance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SerializerPerformance.swift; sourceTree = "<group>"; };
-		__PBXFileRef_Tests/JSONTests/SerializerTests.swift /* SerializerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SerializerTests.swift; sourceTree = "<group>"; };
-		__PBXFileRef_Tests/JSONTests/UserModel.swift /* UserModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserModel.swift; sourceTree = "<group>"; };
-		"_____Product_JSON" /* JSON.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = JSON.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		"_____Product_JSONTests" /* JSONTests.xctest */ = {isa = PBXFileReference; lastKnownFileType = file; path = JSONTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-/* End PBXFileReference section */
-
-/* Begin PBXFrameworksBuildPhase section */
-		"___LinkPhase_JSON" /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 0;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		"___LinkPhase_JSONTests" /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 0;
-			files = (
-				_LinkFileRef_JSON_via_JSONTests /* JSON.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXFrameworksBuildPhase section */
-
-/* Begin PBXGroup section */
-		TestProducts_ /* Tests */ = {
-			isa = PBXGroup;
-			children = (
-				"_____Product_JSONTests" /* JSONTests.xctest */,
-			);
-			name = Tests;
-			sourceTree = "<group>";
-		};
-		"___RootGroup_" = {
-			isa = PBXGroup;
-			children = (
-				__PBXFileRef_Package.swift /* Package.swift */,
-				"_____Configs_" /* Configs */,
-				"_____Sources_" /* Sources */,
-				"_______Tests_" /* Tests */,
-				"____Products_" /* Products */,
-			);
-			sourceTree = "<group>";
-		};
-		"____Products_" /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				TestProducts_ /* Tests */,
-				"_____Product_JSON" /* JSON.framework */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
-		"_____Configs_" /* Configs */ = {
-			isa = PBXGroup;
-			children = (
-				__PBXFileRef_JSON.xcodeproj/Configs/Project.xcconfig /* JSON.xcodeproj/Configs/Project.xcconfig */,
-			);
-			name = Configs;
-			sourceTree = "<group>";
-		};
-		"_____Sources_" /* Sources */ = {
-			isa = PBXGroup;
-			children = (
-				"_______Group_JSON" /* JSON */,
-			);
-			name = Sources;
-			sourceTree = "<group>";
-		};
-		"_______Group_JSON" /* JSON */ = {
-			isa = PBXGroup;
-			children = (
-				__PBXFileRef_Sources/JSON/Constants.swift /* Constants.swift */,
-				__PBXFileRef_Sources/JSON/Expressible.swift /* Expressible.swift */,
-				__PBXFileRef_Sources/JSON/JSON.swift /* JSON.swift */,
-				__PBXFileRef_Sources/JSON/JSONAccessors.swift /* JSONAccessors.swift */,
-				__PBXFileRef_Sources/JSON/JSONError.swift /* JSONError.swift */,
-				__PBXFileRef_Sources/JSON/JSONConvertible.swift /* JSONConvertible.swift */,
-				__PBXFileRef_Sources/JSON/JSONInitializable.swift /* JSONInitializable.swift */,
-				__PBXFileRef_Sources/JSON/JSONRepresentable.swift /* JSONRepresentable.swift */,
-				__PBXFileRef_Sources/JSON/JSONOptionalExtensions.swift /* JSONOptionalExtensions.swift */,
-				__PBXFileRef_Sources/JSON/JSONParser.swift /* JSONParser.swift */,
-				__PBXFileRef_Sources/JSON/JSONSerializer.swift /* JSONSerializer.swift */,
-			);
-			name = JSON;
-			path = Sources/JSON;
-			sourceTree = "<group>";
-		};
-		"_______Group_JSONTests" /* JSONTests */ = {
-			isa = PBXGroup;
-			children = (
-				__PBXFileRef_Tests/JSONTests/FixtureSupport.swift /* FixtureSupport.swift */,
-				__PBXFileRef_Tests/JSONTests/ModelMapTests.swift /* ModelMapTests.swift */,
-				__PBXFileRef_Tests/JSONTests/ParserPerformance.swift /* ParserPerformance.swift */,
-				__PBXFileRef_Tests/JSONTests/ParserTests.swift /* ParserTests.swift */,
-				__PBXFileRef_Tests/JSONTests/PublicAPITests.swift /* PublicAPITests.swift */,
-				__PBXFileRef_Tests/JSONTests/SerializerPerformance.swift /* SerializerPerformance.swift */,
-				__PBXFileRef_Tests/JSONTests/SerializerTests.swift /* SerializerTests.swift */,
-				__PBXFileRef_Tests/JSONTests/UserModel.swift /* UserModel.swift */,
-			);
-			name = JSONTests;
-			path = Tests/JSONTests;
-			sourceTree = "<group>";
-		};
-		"_______Tests_" /* Tests */ = {
-			isa = PBXGroup;
-			children = (
-				"_______Group_JSONTests" /* JSONTests */,
-			);
-			name = Tests;
-			sourceTree = "<group>";
-		};
-/* End PBXGroup section */
-
-/* Begin PBXNativeTarget section */
-		"______Target_JSON" /* JSON */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = "_______Confs_JSON" /* Build configuration list for PBXNativeTarget "JSON" */;
-			buildPhases = (
-				CompilePhase_JSON /* Sources */,
-				"___LinkPhase_JSON" /* Frameworks */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = JSON;
-			productName = JSON;
-			productReference = "_____Product_JSON" /* JSON.framework */;
-			productType = "com.apple.product-type.framework";
-		};
-		"______Target_JSONTests" /* JSONTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = "_______Confs_JSONTests" /* Build configuration list for PBXNativeTarget "JSONTests" */;
-			buildPhases = (
-				CompilePhase_JSONTests /* Sources */,
-				"___LinkPhase_JSONTests" /* Frameworks */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				__Dependency_JSON /* PBXTargetDependency */,
-			);
-			name = JSONTests;
-			productName = JSONTests;
-			productReference = "_____Product_JSONTests" /* JSONTests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
-/* End PBXNativeTarget section */
-
-/* Begin PBXProject section */
-		__RootObject_ /* Project object */ = {
-			isa = PBXProject;
-			attributes = {
-				LastUpgradeCheck = 9999;
-			};
-			buildConfigurationList = "___RootConfs_" /* Build configuration list for PBXProject "JSON" */;
-			compatibilityVersion = "Xcode 3.2";
-			developmentRegion = English;
-			hasScannedForEncodings = 0;
-			knownRegions = (
-				en,
-			);
-			mainGroup = "___RootGroup_";
-			productRefGroup = "____Products_" /* Products */;
-			projectDirPath = "";
-			projectRoot = "";
-			targets = (
-				"______Target_JSON" /* JSON */,
-				"______Target_JSONTests" /* JSONTests */,
-			);
-		};
-/* End PBXProject section */
-
-/* Begin PBXSourcesBuildPhase section */
-		CompilePhase_JSON /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 0;
-			files = (
-				__src_cc_ref_Sources/JSON/Constants.swift /* Constants.swift in Sources */,
-				__src_cc_ref_Sources/JSON/Expressible.swift /* Expressible.swift in Sources */,
-				__src_cc_ref_Sources/JSON/JSON.swift /* JSON.swift in Sources */,
-				__src_cc_ref_Sources/JSON/JSONAccessors.swift /* JSONAccessors.swift in Sources */,
-				__src_cc_ref_Sources/JSON/JSONConvertible.swift /* JSONConvertible.swift in Sources */,
-				__src_cc_ref_Sources/JSON/JSONError.swift /* JSONError.swift in Sources */,
-				__src_cc_ref_Sources/JSON/JSONInitializable.swift /* JSONInitializable.swift in Sources */,
-				__src_cc_ref_Sources/JSON/JSONOptionalExtensions.swift /* JSONOptionalExtensions.swift in Sources */,
-				__src_cc_ref_Sources/JSON/JSONParser.swift /* JSONParser.swift in Sources */,
-				__src_cc_ref_Sources/JSON/JSONRepresentable.swift /* JSONRepresentable.swift in Sources */,
-				__src_cc_ref_Sources/JSON/JSONSerializer.swift /* JSONSerializer.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		CompilePhase_JSONTests /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 0;
-			files = (
-				__src_cc_ref_Tests/JSONTests/FixtureSupport.swift /* FixtureSupport.swift in Sources */,
-				__src_cc_ref_Tests/JSONTests/ModelMapTests.swift /* ModelMapTests.swift in Sources */,
-				__src_cc_ref_Tests/JSONTests/ParserPerformance.swift /* ParserPerformance.swift in Sources */,
-				__src_cc_ref_Tests/JSONTests/ParserTests.swift /* ParserTests.swift in Sources */,
-				__src_cc_ref_Tests/JSONTests/PublicAPITests.swift /* PublicAPITests.swift in Sources */,
-				__src_cc_ref_Tests/JSONTests/SerializerPerformance.swift /* SerializerPerformance.swift in Sources */,
-				__src_cc_ref_Tests/JSONTests/SerializerTests.swift /* SerializerTests.swift in Sources */,
-				__src_cc_ref_Tests/JSONTests/UserModel.swift /* UserModel.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		__Dependency_JSON /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = "______Target_JSON" /* JSON */;
-			targetProxy = AA8A162D1D93FF98008B1475 /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
-
-/* Begin XCBuildConfiguration section */
-		_ReleaseConf_JSON /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ENABLE_TESTABILITY = YES;
-				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks";
-				INFOPLIST_FILE = JSON.xcodeproj/JSON_Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(TOOLCHAIN_DIR)/usr/lib/swift/macosx";
-				OTHER_LDFLAGS = "$(inherited)";
-				OTHER_SWIFT_FLAGS = "$(inherited)";
-				PRODUCT_BUNDLE_IDENTIFIER = JSON;
-				PRODUCT_MODULE_NAME = "$(TARGET_NAME:c99extidentifier)";
-				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
-				SWIFT_VERSION = 3.0;
-			};
-			name = Release;
-		};
-		_ReleaseConf_JSONTests /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
-				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks";
-				INFOPLIST_FILE = JSON.xcodeproj/JSONTests_Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../Frameworks";
-				OTHER_LDFLAGS = "$(inherited)";
-				OTHER_SWIFT_FLAGS = "$(inherited)";
-				SWIFT_VERSION = 3.0;
-			};
-			name = Release;
-		};
-		"___DebugConf_JSON" /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ENABLE_TESTABILITY = YES;
-				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks";
-				INFOPLIST_FILE = JSON.xcodeproj/JSON_Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(TOOLCHAIN_DIR)/usr/lib/swift/macosx";
-				OTHER_LDFLAGS = "$(inherited)";
-				OTHER_SWIFT_FLAGS = "$(inherited)";
-				PRODUCT_BUNDLE_IDENTIFIER = JSON;
-				PRODUCT_MODULE_NAME = "$(TARGET_NAME:c99extidentifier)";
-				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 3.0;
-			};
-			name = Debug;
-		};
-		"___DebugConf_JSONTests" /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
-				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks";
-				INFOPLIST_FILE = JSON.xcodeproj/JSONTests_Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../Frameworks";
-				OTHER_LDFLAGS = "$(inherited)";
-				OTHER_SWIFT_FLAGS = "$(inherited)";
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 3.0;
-			};
-			name = Debug;
-		};
-		"_____Release_" /* Release */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = __PBXFileRef_JSON.xcodeproj/Configs/Project.xcconfig /* JSON.xcodeproj/Configs/Project.xcconfig */;
-			buildSettings = {
-			};
-			name = Release;
-		};
-		"_______Debug_" /* Debug */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = __PBXFileRef_JSON.xcodeproj/Configs/Project.xcconfig /* JSON.xcodeproj/Configs/Project.xcconfig */;
-			buildSettings = {
-			};
-			name = Debug;
-		};
-/* End XCBuildConfiguration section */
-
-/* Begin XCConfigurationList section */
-		"___RootConfs_" /* Build configuration list for PBXProject "JSON" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				"_______Debug_" /* Debug */,
-				"_____Release_" /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Debug;
-		};
-		"_______Confs_JSON" /* Build configuration list for PBXNativeTarget "JSON" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				"___DebugConf_JSON" /* Debug */,
-				_ReleaseConf_JSON /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Debug;
-		};
-		"_______Confs_JSONTests" /* Build configuration list for PBXNativeTarget "JSONTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				"___DebugConf_JSONTests" /* Debug */,
-				_ReleaseConf_JSONTests /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Debug;
-		};
-/* End XCConfigurationList section */
-	};
-	rootObject = __RootObject_ /* Project object */;
+    archiveVersion = 1;
+    classes = {};
+    objectVersion = 46;
+    rootObject = __RootObject_;
+    objects = {
+        __RootObject_ = {
+            isa = PBXProject;
+            attributes = {LastUpgradeCheck = 9999;};
+            buildConfigurationList = ___RootConfs_;
+            compatibilityVersion = 'Xcode 3.2';
+            developmentRegion = English;
+            hasScannedForEncodings = 0;
+            knownRegions = (en);
+            mainGroup = ___RootGroup_;
+            productRefGroup = ____Products_;
+            projectDirPath = '';
+            projectRoot = '';
+            targets = (______Target_JSON, ______Target_JSONTests);
+        };
+        '__PBXFileRef_Package.swift' = {
+            isa = PBXFileReference;
+            lastKnownFileType = sourcecode.swift;
+            path = 'Package.swift';
+            sourceTree = '<group>';
+        };
+        ___RootGroup_ = {
+            isa = PBXGroup;
+            children = ('__PBXFileRef_Package.swift', _____Configs_, _____Sources_,  Dependencies_, _______Tests_, ____Products_);
+            sourceTree = '<group>';
+        };
+        _______Group_JSON = {
+            isa = PBXGroup;
+            name = 'JSON';
+            path = 'Sources/JSON';
+            sourceTree = '<group>';
+            children = ('__PBXFileRef_Sources/JSON/Constants.swift', '__PBXFileRef_Sources/JSON/Expressible.swift', '__PBXFileRef_Sources/JSON/JSON.swift', '__PBXFileRef_Sources/JSON/JSONAccessors.swift', '__PBXFileRef_Sources/JSON/JSONConvertible.swift', '__PBXFileRef_Sources/JSON/JSONError.swift', '__PBXFileRef_Sources/JSON/JSONInitializable.swift', '__PBXFileRef_Sources/JSON/JSONOptionalExtensions.swift', '__PBXFileRef_Sources/JSON/JSONParser.swift', '__PBXFileRef_Sources/JSON/JSONRepresentable.swift', '__PBXFileRef_Sources/JSON/JSONSerializer.swift');
+        };
+        '__PBXFileRef_Sources/JSON/Constants.swift' = {
+            isa = PBXFileReference;
+            lastKnownFileType = sourcecode.swift;
+            path = 'Constants.swift';
+            sourceTree = '<group>';
+        };
+        '__PBXFileRef_Sources/JSON/Expressible.swift' = {
+            isa = PBXFileReference;
+            lastKnownFileType = sourcecode.swift;
+            path = 'Expressible.swift';
+            sourceTree = '<group>';
+        };
+        '__PBXFileRef_Sources/JSON/JSON.swift' = {
+            isa = PBXFileReference;
+            lastKnownFileType = sourcecode.swift;
+            path = 'JSON.swift';
+            sourceTree = '<group>';
+        };
+        '__PBXFileRef_Sources/JSON/JSONAccessors.swift' = {
+            isa = PBXFileReference;
+            lastKnownFileType = sourcecode.swift;
+            path = 'JSONAccessors.swift';
+            sourceTree = '<group>';
+        };
+        '__PBXFileRef_Sources/JSON/JSONConvertible.swift' = {
+            isa = PBXFileReference;
+            lastKnownFileType = sourcecode.swift;
+            path = 'JSONConvertible.swift';
+            sourceTree = '<group>';
+        };
+        '__PBXFileRef_Sources/JSON/JSONError.swift' = {
+            isa = PBXFileReference;
+            lastKnownFileType = sourcecode.swift;
+            path = 'JSONError.swift';
+            sourceTree = '<group>';
+        };
+        '__PBXFileRef_Sources/JSON/JSONInitializable.swift' = {
+            isa = PBXFileReference;
+            lastKnownFileType = sourcecode.swift;
+            path = 'JSONInitializable.swift';
+            sourceTree = '<group>';
+        };
+        '__PBXFileRef_Sources/JSON/JSONOptionalExtensions.swift' = {
+            isa = PBXFileReference;
+            lastKnownFileType = sourcecode.swift;
+            path = 'JSONOptionalExtensions.swift';
+            sourceTree = '<group>';
+        };
+        '__PBXFileRef_Sources/JSON/JSONParser.swift' = {
+            isa = PBXFileReference;
+            lastKnownFileType = sourcecode.swift;
+            path = 'JSONParser.swift';
+            sourceTree = '<group>';
+        };
+        '__PBXFileRef_Sources/JSON/JSONRepresentable.swift' = {
+            isa = PBXFileReference;
+            lastKnownFileType = sourcecode.swift;
+            path = 'JSONRepresentable.swift';
+            sourceTree = '<group>';
+        };
+        '__PBXFileRef_Sources/JSON/JSONSerializer.swift' = {
+            isa = PBXFileReference;
+            lastKnownFileType = sourcecode.swift;
+            path = 'JSONSerializer.swift';
+            sourceTree = '<group>';
+        };
+        ______Target_JSON = {
+            isa = PBXNativeTarget;
+            buildConfigurationList = _______Confs_JSON;
+            buildPhases = (CompilePhase_JSON, ___LinkPhase_JSON);
+            buildRules = ();
+            dependencies = ();
+            name = 'JSON';
+            productName = JSON;
+            productReference = _____Product_JSON;
+            productType = 'com.apple.product-type.framework';
+        };
+        _____Product_JSON = {
+            isa = PBXFileReference;
+            explicitFileType = 'wrapper.framework';
+            path = 'JSON.framework';
+            sourceTree = BUILT_PRODUCTS_DIR;
+        };
+        CompilePhase_JSON = {
+            isa = PBXSourcesBuildPhase;
+            files = ('__src_cc_ref_Sources/JSON/Constants.swift', '__src_cc_ref_Sources/JSON/Expressible.swift', '__src_cc_ref_Sources/JSON/JSON.swift', '__src_cc_ref_Sources/JSON/JSONAccessors.swift', '__src_cc_ref_Sources/JSON/JSONConvertible.swift', '__src_cc_ref_Sources/JSON/JSONError.swift', '__src_cc_ref_Sources/JSON/JSONInitializable.swift', '__src_cc_ref_Sources/JSON/JSONOptionalExtensions.swift', '__src_cc_ref_Sources/JSON/JSONParser.swift', '__src_cc_ref_Sources/JSON/JSONRepresentable.swift', '__src_cc_ref_Sources/JSON/JSONSerializer.swift');
+            runOnlyForDeploymentPostprocessing = 0;
+        };
+        '__src_cc_ref_Sources/JSON/Constants.swift' = {
+            isa = PBXBuildFile;
+            fileRef = '__PBXFileRef_Sources/JSON/Constants.swift';
+        };
+        '__src_cc_ref_Sources/JSON/Expressible.swift' = {
+            isa = PBXBuildFile;
+            fileRef = '__PBXFileRef_Sources/JSON/Expressible.swift';
+        };
+        '__src_cc_ref_Sources/JSON/JSON.swift' = {
+            isa = PBXBuildFile;
+            fileRef = '__PBXFileRef_Sources/JSON/JSON.swift';
+        };
+        '__src_cc_ref_Sources/JSON/JSONAccessors.swift' = {
+            isa = PBXBuildFile;
+            fileRef = '__PBXFileRef_Sources/JSON/JSONAccessors.swift';
+        };
+        '__src_cc_ref_Sources/JSON/JSONConvertible.swift' = {
+            isa = PBXBuildFile;
+            fileRef = '__PBXFileRef_Sources/JSON/JSONConvertible.swift';
+        };
+        '__src_cc_ref_Sources/JSON/JSONError.swift' = {
+            isa = PBXBuildFile;
+            fileRef = '__PBXFileRef_Sources/JSON/JSONError.swift';
+        };
+        '__src_cc_ref_Sources/JSON/JSONInitializable.swift' = {
+            isa = PBXBuildFile;
+            fileRef = '__PBXFileRef_Sources/JSON/JSONInitializable.swift';
+        };
+        '__src_cc_ref_Sources/JSON/JSONOptionalExtensions.swift' = {
+            isa = PBXBuildFile;
+            fileRef = '__PBXFileRef_Sources/JSON/JSONOptionalExtensions.swift';
+        };
+        '__src_cc_ref_Sources/JSON/JSONParser.swift' = {
+            isa = PBXBuildFile;
+            fileRef = '__PBXFileRef_Sources/JSON/JSONParser.swift';
+        };
+        '__src_cc_ref_Sources/JSON/JSONRepresentable.swift' = {
+            isa = PBXBuildFile;
+            fileRef = '__PBXFileRef_Sources/JSON/JSONRepresentable.swift';
+        };
+        '__src_cc_ref_Sources/JSON/JSONSerializer.swift' = {
+            isa = PBXBuildFile;
+            fileRef = '__PBXFileRef_Sources/JSON/JSONSerializer.swift';
+        };
+        ___LinkPhase_JSON = {
+            isa = PBXFrameworksBuildPhase;
+            files = ();
+            runOnlyForDeploymentPostprocessing = 0;
+        };
+        _______Confs_JSON = {
+            isa = XCConfigurationList;
+            buildConfigurations = (___DebugConf_JSON, _ReleaseConf_JSON);
+            defaultConfigurationIsVisible = 0;
+            defaultConfigurationName = Debug;
+        };
+        ___DebugConf_JSON = {
+            isa = XCBuildConfiguration;
+            buildSettings = { SWIFT_VERSION = '3.0'; LD_RUNPATH_SEARCH_PATHS = '$(TOOLCHAIN_DIR)/usr/lib/swift/macosx'; PRODUCT_MODULE_NAME = '$(TARGET_NAME:c99extidentifier)'; ENABLE_TESTABILITY = 'YES'; OTHER_SWIFT_FLAGS = '$(inherited)'; INFOPLIST_FILE = 'JSON.xcodeproj/JSON_Info.plist'; FRAMEWORK_SEARCH_PATHS = '$(PLATFORM_DIR)/Developer/Library/Frameworks'; SWIFT_OPTIMIZATION_LEVEL = '-Onone'; PRODUCT_BUNDLE_IDENTIFIER = 'JSON'; PRODUCT_NAME = '$(TARGET_NAME:c99extidentifier)'; OTHER_LDFLAGS = '$(inherited)'; };
+            name = Debug;
+        };
+        _ReleaseConf_JSON = {
+            isa = XCBuildConfiguration;
+            buildSettings = { SWIFT_VERSION = '3.0'; LD_RUNPATH_SEARCH_PATHS = '$(TOOLCHAIN_DIR)/usr/lib/swift/macosx'; PRODUCT_MODULE_NAME = '$(TARGET_NAME:c99extidentifier)'; ENABLE_TESTABILITY = 'YES'; OTHER_SWIFT_FLAGS = '$(inherited)'; INFOPLIST_FILE = 'JSON.xcodeproj/JSON_Info.plist'; FRAMEWORK_SEARCH_PATHS = '$(PLATFORM_DIR)/Developer/Library/Frameworks'; PRODUCT_BUNDLE_IDENTIFIER = 'JSON'; PRODUCT_NAME = '$(TARGET_NAME:c99extidentifier)'; OTHER_LDFLAGS = '$(inherited)'; };
+            name = Release;
+        };
+        __Dependency_JSON = {
+            isa = PBXTargetDependency;
+            target = ______Target_JSON;
+        };
+        _______Group_JSONTests = {
+            isa = PBXGroup;
+            name = 'JSONTests';
+            path = 'Tests/JSONTests';
+            sourceTree = '<group>';
+            children = ('__PBXFileRef_Tests/JSONTests/FixtureSupport.swift', '__PBXFileRef_Tests/JSONTests/ModelMapTests.swift', '__PBXFileRef_Tests/JSONTests/ParserPerformance.swift', '__PBXFileRef_Tests/JSONTests/ParserTests.swift', '__PBXFileRef_Tests/JSONTests/PublicAPITests.swift', '__PBXFileRef_Tests/JSONTests/SerializerPerformance.swift', '__PBXFileRef_Tests/JSONTests/SerializerTests.swift', '__PBXFileRef_Tests/JSONTests/UserModel.swift');
+        };
+        '__PBXFileRef_Tests/JSONTests/FixtureSupport.swift' = {
+            isa = PBXFileReference;
+            lastKnownFileType = sourcecode.swift;
+            path = 'FixtureSupport.swift';
+            sourceTree = '<group>';
+        };
+        '__PBXFileRef_Tests/JSONTests/ModelMapTests.swift' = {
+            isa = PBXFileReference;
+            lastKnownFileType = sourcecode.swift;
+            path = 'ModelMapTests.swift';
+            sourceTree = '<group>';
+        };
+        '__PBXFileRef_Tests/JSONTests/ParserPerformance.swift' = {
+            isa = PBXFileReference;
+            lastKnownFileType = sourcecode.swift;
+            path = 'ParserPerformance.swift';
+            sourceTree = '<group>';
+        };
+        '__PBXFileRef_Tests/JSONTests/ParserTests.swift' = {
+            isa = PBXFileReference;
+            lastKnownFileType = sourcecode.swift;
+            path = 'ParserTests.swift';
+            sourceTree = '<group>';
+        };
+        '__PBXFileRef_Tests/JSONTests/PublicAPITests.swift' = {
+            isa = PBXFileReference;
+            lastKnownFileType = sourcecode.swift;
+            path = 'PublicAPITests.swift';
+            sourceTree = '<group>';
+        };
+        '__PBXFileRef_Tests/JSONTests/SerializerPerformance.swift' = {
+            isa = PBXFileReference;
+            lastKnownFileType = sourcecode.swift;
+            path = 'SerializerPerformance.swift';
+            sourceTree = '<group>';
+        };
+        '__PBXFileRef_Tests/JSONTests/SerializerTests.swift' = {
+            isa = PBXFileReference;
+            lastKnownFileType = sourcecode.swift;
+            path = 'SerializerTests.swift';
+            sourceTree = '<group>';
+        };
+        '__PBXFileRef_Tests/JSONTests/UserModel.swift' = {
+            isa = PBXFileReference;
+            lastKnownFileType = sourcecode.swift;
+            path = 'UserModel.swift';
+            sourceTree = '<group>';
+        };
+        ______Target_JSONTests = {
+            isa = PBXNativeTarget;
+            buildConfigurationList = _______Confs_JSONTests;
+            buildPhases = (CompilePhase_JSONTests, ___LinkPhase_JSONTests);
+            buildRules = ();
+            dependencies = (__Dependency_JSON);
+            name = 'JSONTests';
+            productName = JSONTests;
+            productReference = _____Product_JSONTests;
+            productType = 'com.apple.product-type.bundle.unit-test';
+        };
+        _____Product_JSONTests = {
+            isa = PBXFileReference;
+            explicitFileType = 'compiled.mach-o.wrapper.cfbundle';
+            path = 'JSONTests.xctest';
+            sourceTree = BUILT_PRODUCTS_DIR;
+        };
+        CompilePhase_JSONTests = {
+            isa = PBXSourcesBuildPhase;
+            files = ('__src_cc_ref_Tests/JSONTests/FixtureSupport.swift', '__src_cc_ref_Tests/JSONTests/ModelMapTests.swift', '__src_cc_ref_Tests/JSONTests/ParserPerformance.swift', '__src_cc_ref_Tests/JSONTests/ParserTests.swift', '__src_cc_ref_Tests/JSONTests/PublicAPITests.swift', '__src_cc_ref_Tests/JSONTests/SerializerPerformance.swift', '__src_cc_ref_Tests/JSONTests/SerializerTests.swift', '__src_cc_ref_Tests/JSONTests/UserModel.swift');
+            runOnlyForDeploymentPostprocessing = 0;
+        };
+        '__src_cc_ref_Tests/JSONTests/FixtureSupport.swift' = {
+            isa = PBXBuildFile;
+            fileRef = '__PBXFileRef_Tests/JSONTests/FixtureSupport.swift';
+        };
+        '__src_cc_ref_Tests/JSONTests/ModelMapTests.swift' = {
+            isa = PBXBuildFile;
+            fileRef = '__PBXFileRef_Tests/JSONTests/ModelMapTests.swift';
+        };
+        '__src_cc_ref_Tests/JSONTests/ParserPerformance.swift' = {
+            isa = PBXBuildFile;
+            fileRef = '__PBXFileRef_Tests/JSONTests/ParserPerformance.swift';
+        };
+        '__src_cc_ref_Tests/JSONTests/ParserTests.swift' = {
+            isa = PBXBuildFile;
+            fileRef = '__PBXFileRef_Tests/JSONTests/ParserTests.swift';
+        };
+        '__src_cc_ref_Tests/JSONTests/PublicAPITests.swift' = {
+            isa = PBXBuildFile;
+            fileRef = '__PBXFileRef_Tests/JSONTests/PublicAPITests.swift';
+        };
+        '__src_cc_ref_Tests/JSONTests/SerializerPerformance.swift' = {
+            isa = PBXBuildFile;
+            fileRef = '__PBXFileRef_Tests/JSONTests/SerializerPerformance.swift';
+        };
+        '__src_cc_ref_Tests/JSONTests/SerializerTests.swift' = {
+            isa = PBXBuildFile;
+            fileRef = '__PBXFileRef_Tests/JSONTests/SerializerTests.swift';
+        };
+        '__src_cc_ref_Tests/JSONTests/UserModel.swift' = {
+            isa = PBXBuildFile;
+            fileRef = '__PBXFileRef_Tests/JSONTests/UserModel.swift';
+        };
+        ___LinkPhase_JSONTests = {
+            isa = PBXFrameworksBuildPhase;
+            files = (_LinkFileRef_JSON_via_JSONTests);
+            runOnlyForDeploymentPostprocessing = 0;
+        };
+        _LinkFileRef_JSON_via_JSONTests = {
+            isa = PBXBuildFile;
+            fileRef = _____Product_JSON;
+        };
+        _______Confs_JSONTests = {
+            isa = XCConfigurationList;
+            buildConfigurations = (___DebugConf_JSONTests, _ReleaseConf_JSONTests);
+            defaultConfigurationIsVisible = 0;
+            defaultConfigurationName = Debug;
+        };
+        ___DebugConf_JSONTests = {
+            isa = XCBuildConfiguration;
+            buildSettings = { LD_RUNPATH_SEARCH_PATHS = '@loader_path/../Frameworks'; FRAMEWORK_SEARCH_PATHS = '$(PLATFORM_DIR)/Developer/Library/Frameworks'; OTHER_SWIFT_FLAGS = '$(inherited)'; INFOPLIST_FILE = 'JSON.xcodeproj/JSONTests_Info.plist'; SWIFT_OPTIMIZATION_LEVEL = '-Onone'; EMBEDDED_CONTENT_CONTAINS_SWIFT = 'YES'; OTHER_LDFLAGS = '$(inherited)'; SWIFT_VERSION = '3.0'; };
+            name = Debug;
+        };
+        _ReleaseConf_JSONTests = {
+            isa = XCBuildConfiguration;
+            buildSettings = { LD_RUNPATH_SEARCH_PATHS = '@loader_path/../Frameworks'; FRAMEWORK_SEARCH_PATHS = '$(PLATFORM_DIR)/Developer/Library/Frameworks'; OTHER_SWIFT_FLAGS = '$(inherited)'; INFOPLIST_FILE = 'JSON.xcodeproj/JSONTests_Info.plist'; EMBEDDED_CONTENT_CONTAINS_SWIFT = 'YES'; OTHER_LDFLAGS = '$(inherited)'; SWIFT_VERSION = '3.0'; };
+            name = Release;
+        };
+        __Dependency_JSONTests = {
+            isa = PBXTargetDependency;
+            target = ______Target_JSONTests;
+        };
+        '__PBXFileRef_JSON.xcodeproj/Configs/Project.xcconfig' = {
+            isa = PBXFileReference;
+            lastKnownFileType = text.xcconfig;
+            path = 'JSON.xcodeproj/Configs/Project.xcconfig';
+            sourceTree = '<group>';
+        };
+        _____Configs_ = {
+            isa = PBXGroup;
+            children = ('__PBXFileRef_JSON.xcodeproj/Configs/Project.xcconfig');
+            name = Configs;
+            sourceTree = '<group>';
+        };
+        _____Sources_ = {
+            isa = PBXGroup;
+            children = (_______Group_JSON);
+            name = Sources;
+            sourceTree = '<group>';
+        };
+        _______Tests_ = {
+            isa = PBXGroup;
+            children = (_______Group_JSONTests);
+            name = Tests;
+            sourceTree = '<group>';
+        };
+       TestProducts_ = {
+            isa = PBXGroup;
+            children = (_____Product_JSONTests);
+            name = Tests;
+            sourceTree = '<group>';
+        };
+        ____Products_ = {
+            isa = PBXGroup;
+            children = (TestProducts_, _____Product_JSON);
+            name = Products;
+            sourceTree = '<group>';
+        };
+        _______Debug_ = {
+            isa = XCBuildConfiguration;
+            baseConfigurationReference = '__PBXFileRef_JSON.xcodeproj/Configs/Project.xcconfig';
+            buildSettings = {};
+            name = Debug;
+        };
+        _____Release_ = {
+            isa = XCBuildConfiguration;
+            baseConfigurationReference = '__PBXFileRef_JSON.xcodeproj/Configs/Project.xcconfig';
+            buildSettings = {};
+            name = Release;
+        };
+        ___RootConfs_ = {
+            isa = XCConfigurationList;
+            buildConfigurations = (_______Debug_, _____Release_);
+            defaultConfigurationIsVisible = 0;
+            defaultConfigurationName = Debug;
+        };
+    };
 }
