@@ -8,6 +8,7 @@ extension JSON {
 
   /// - Note: This call will throw iff the initializer does.
   public func get<T: JSONInitializable>() throws -> T? {
+    if case .null = self { return nil }
     return try T(json: self)
   }
 
@@ -26,6 +27,7 @@ extension JSON {
   public func get<T: RawRepresentable>() throws -> T?
     where T.RawValue: JSONInitializable
   {
+    if case .null = self { return nil }
     return try T(json: self)
   }
 
@@ -46,6 +48,7 @@ extension JSON {
   public func get<T: RawRepresentable & JSONInitializable>() throws -> T?
     where T.RawValue: JSONInitializable
   {
+    if case .null = self { return nil }
     return try T(json: self)
   }
 
@@ -60,6 +63,11 @@ extension JSON {
 
 extension JSON {
 
+  public func get(field: String) throws -> JSON {
+    guard let json = self[field] else { throw JSON.Error.badField(field) }
+    return json
+  }
+
   /// Returns the content matching the type of its destination
   public func get<T: JSONInitializable>(_ field: String) throws -> T {
     guard let json = self[field] else { throw JSON.Error.badField(field) }
@@ -71,6 +79,7 @@ extension JSON {
   /// - Note: This call will throw iff the initializer does
   public func get<T: JSONInitializable>(_ field: String) throws -> T? {
     guard let json = self[field] else { return nil }
+    if case .null = json { return nil }
     return try T(json: json)
   }
 
@@ -172,12 +181,7 @@ extension JSON {
   public var object: [String: JSON]? {
     guard case .object(let o) = self else { return nil }
 
-    var dict: [String: JSON] = [:]
-    for (k, v) in o {
-      dict[k] = v
-    }
-
-    return dict
+    return o
   }
 }
 
@@ -197,20 +201,31 @@ extension JSON {
 
   /// Returns this enum's associated `Int64` value iff `self == .integer(i)`, `nil` otherwise.
   public var int64: Int64? {
-    guard case .integer(let i) = self else { return nil }
-    return i
+    switch self {
+    case .integer(let i): return i
+    case .string(let s): return Int64(s)
+    default: return nil
+    }
   }
 
   /// Returns this enum's associated Bool value iff `self == .bool(_)`, `nil` otherwise.
   public var bool: Bool? {
-    guard case .bool(let b) = self else { return nil }
-    return b
+    switch self {
+    case .bool(let b): return b
+    case .string(let s): return Bool(s)
+    default: return nil
+    }
   }
 
   /// Returns this enum's associated Double value iff `self == .double(_)`, `nil` otherwise.
   public var double: Double? {
-    guard case .double(let d) = self else { return nil }
-    return d
+
+    switch self {
+    case .double(let d): return d
+    case .string(let s): return Double(s)
+    case .integer(let i): return Double(i)
+    default: return nil
+    }
   }
 }
 
@@ -221,14 +236,21 @@ extension JSON {
 
   /// Returns this enum's associated `Int64` value as an `Int` iff `self == .integer(_)`, `nil` otherwise.
   public var int: Int? {
-    // We need to do this safety check because on a 32bit platform Swift's `Int` type is actually an Int32
-    guard case .integer(let i) = self, Int64(Int.min) <= i && i <= Int64(Int.max) else { return nil }
-    return Int(i)
+    switch self {
+    case .integer(let i): return Int(exactly: i)
+    case .string(let s): return Int(s)
+    default: return nil
+    }
   }
 
   /// Returns this enum's associated `Double` value as an `Float` iff `self == .double(_)`, `nil` otherwise.
   public var float: Float? {
-    guard case .double(let d) = self else { return nil }
-    return Float(d)
+
+    switch self {
+    case .double(let d): return Float(d)
+    case .string(let s): return Float(s)
+    case .integer(let i): return Float(i)
+    default: return nil
+    }
   }
 }

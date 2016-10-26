@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		AA2B38D61DC0CCBB008CECCD /* AccessorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA2B38D51DC0CCBB008CECCD /* AccessorTests.swift */; };
 		_LinkFileRef_JSON_via_JSONTests /* JSON.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = "_____Product_JSON" /* JSON.framework */; };
 		__src_cc_ref_Sources/JSON/Constants.swift /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = __PBXFileRef_Sources/JSON/Constants.swift /* Constants.swift */; };
 		__src_cc_ref_Sources/JSON/Expressible.swift /* Expressible.swift in Sources */ = {isa = PBXBuildFile; fileRef = __PBXFileRef_Sources/JSON/Expressible.swift /* Expressible.swift */; };
@@ -40,6 +41,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		AA2B38D51DC0CCBB008CECCD /* AccessorTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccessorTests.swift; sourceTree = "<group>"; };
 		__PBXFileRef_JSON.xcodeproj/Configs/Project.xcconfig /* JSON.xcodeproj/Configs/Project.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = JSON.xcodeproj/Configs/Project.xcconfig; sourceTree = "<group>"; };
 		__PBXFileRef_Package.swift /* Package.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Package.swift; sourceTree = "<group>"; };
 		__PBXFileRef_Sources/JSON/Constants.swift /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
@@ -151,6 +153,7 @@
 			isa = PBXGroup;
 			children = (
 				__PBXFileRef_Tests/JSONTests/FixtureSupport.swift /* FixtureSupport.swift */,
+				AA2B38D51DC0CCBB008CECCD /* AccessorTests.swift */,
 				__PBXFileRef_Tests/JSONTests/ModelMapTests.swift /* ModelMapTests.swift */,
 				__PBXFileRef_Tests/JSONTests/ParserPerformance.swift /* ParserPerformance.swift */,
 				__PBXFileRef_Tests/JSONTests/ParserTests.swift /* ParserTests.swift */,
@@ -258,6 +261,7 @@
 			files = (
 				__src_cc_ref_Tests/JSONTests/FixtureSupport.swift /* FixtureSupport.swift in Sources */,
 				__src_cc_ref_Tests/JSONTests/ModelMapTests.swift /* ModelMapTests.swift in Sources */,
+				AA2B38D61DC0CCBB008CECCD /* AccessorTests.swift in Sources */,
 				__src_cc_ref_Tests/JSONTests/ParserPerformance.swift /* ParserPerformance.swift in Sources */,
 				__src_cc_ref_Tests/JSONTests/ParserTests.swift /* ParserTests.swift in Sources */,
 				__src_cc_ref_Tests/JSONTests/PublicAPITests.swift /* PublicAPITests.swift in Sources */,

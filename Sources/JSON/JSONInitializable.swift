@@ -23,7 +23,7 @@ extension JSONInitializable {
 extension Bool: JSONInitializable {
 
   public init(json: JSON) throws {
-    guard case .bool(let b) = json else { throw JSON.Error.badValue(json) }
+    guard let b = json.bool else { throw JSON.Error.badValue(json) }
     self = b
   }
 }
@@ -34,7 +34,7 @@ extension Bool: JSONInitializable {
 extension String: JSONInitializable {
 
   public init(json: JSON) throws {
-    guard case .string(let s) = json else { throw JSON.Error.badValue(json) }
+    guard let s = json.string else { throw JSON.Error.badValue(json) }
     self = s
   }
 }
@@ -45,7 +45,7 @@ extension String: JSONInitializable {
 extension Double: JSONInitializable {
 
   public init(json: JSON) throws {
-    guard case .double(let d) = json else { throw JSON.Error.badValue(json) }
+    guard let d = json.double else { throw JSON.Error.badValue(json) }
     self = d
   }
 }
@@ -53,8 +53,8 @@ extension Double: JSONInitializable {
 extension Float: JSONInitializable {
 
   public init(json: JSON) throws {
-    guard case .double(let d) = json else { throw JSON.Error.badValue(json) }
-    self = Float(d)
+    guard let f = json.float else { throw JSON.Error.badValue(json) }
+    self = f
   }
 }
 
@@ -64,15 +64,15 @@ extension Float: JSONInitializable {
 extension Int: JSONInitializable {
 
   public init(json: JSON) throws {
-    guard case .integer(let i) = json, Int64(Int.min) <= i && i <= Int64(Int.max) else { throw JSON.Error.badValue(json) }
-    self = Int(i)
+    guard let i = json.int else { throw JSON.Error.badValue(json) }
+    self = i
   }
 }
 
 extension Int64: JSONInitializable {
 
   public init(json: JSON) throws {
-    guard case .integer(let i) = json else { throw JSON.Error.badValue(json) }
+    guard let i = json.int64 else { throw JSON.Error.badValue(json) }
     self = i
   }
 }
