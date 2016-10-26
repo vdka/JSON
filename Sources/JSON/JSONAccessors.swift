@@ -299,3 +299,48 @@ extension JSON {
     }
   }
 }
+
+extension JSON {
+
+  public var isObject: Bool {
+
+    if case .object(_) = self { return true }
+    else { return false }
+  }
+
+  public var isArray: Bool {
+
+    if case .array(_) = self { return true }
+    else { return false }
+  }
+
+  public var isInt: Bool {
+
+    if case .integer(_) = self { return true }
+    else { return false }
+  }
+
+  public var isDouble: Bool {
+
+    if case .double(_) = self { return true }
+    else { return false }
+  }
+
+  public var isBool: Bool {
+
+    if case .bool(_) = self { return true }
+    else { return false }
+  }
+
+  public var isString: Bool {
+
+    if case .string(_) = self { return true }
+    else { return false }
+  }
+
+  public var isNull: Bool {
+
+    if case .null = self { return true }
+    else { return false }
+  }
+}
