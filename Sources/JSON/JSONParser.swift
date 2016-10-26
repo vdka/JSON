@@ -61,11 +61,29 @@ extension JSON.Parser {
 
 extension JSON.Parser {
 
-  public static func parse(_ data: [UTF8.CodeUnit], options: Option = []) throws -> JSON {
+  public static func parse(_ buffer: UnsafeBufferPointer<UTF8.CodeUnit>, options: Option = []) throws -> JSON {
 
-    return try data.withUnsafeBufferPointer { bufferPointer in
+    var parser = try JSON.Parser(bufferPointer: buffer, options: options)
 
-      var parser = try JSON.Parser(bufferPointer: bufferPointer, options: options)
+    parser.skipWhitespace()
+    if options.contains(.allowComments) {
+      _ = try? parser.skipComments()
+    }
+    parser.skipWhitespace()
+
+    do {
+
+      let rootValue = try parser.parseValue()
+
+      if !options.contains(.allowFragments) {
+        switch rootValue {
+        case .array(_), .object(_): break
+
+        default: throw Error.Reason.fragmentedJson
+        }
+      }
+
+      // TODO (vkda): option to skip the trailing data check, useful for say streams see Jay's model
 
       parser.skipWhitespace()
       if options.contains(.allowComments) {
@@ -73,34 +91,36 @@ extension JSON.Parser {
       }
       parser.skipWhitespace()
 
-      do {
+      guard parser.pointer == parser.buffer.endAddress else { throw Error.Reason.invalidSyntax }
 
-        let rootValue = try parser.parseValue()
+      return rootValue
+    } catch let error as Error.Reason {
 
-        if !options.contains(.allowFragments) {
-          switch rootValue {
-          case .array(_), .object(_): break
+      // We unwrap here because on we do this check prior to the do { } catch { } block.
+      throw Error(byteOffset: parser.buffer.baseAddress!.distance(to: parser.pointer), reason: error)
+    }
+  }
+}
 
-          default: throw Error.Reason.fragmentedJson
-          }
-        }
+import struct Foundation.Data
 
-        // TODO (vkda): option to skip the trailing data check, useful for say streams see Jay's model
+extension JSON.Parser {
 
-        parser.skipWhitespace()
-        if options.contains(.allowComments) {
-          _ = try? parser.skipComments()
-        }
-        parser.skipWhitespace()
+  public static func parse(_ data: Data, options: Option = []) throws -> JSON {
 
-        guard parser.pointer == parser.buffer.endAddress else { throw Error.Reason.invalidSyntax }
+    return try data.withUnsafeBytes { (pointer: UnsafePointer<UTF8.CodeUnit>) in
 
-        return rootValue
-      } catch let error as Error.Reason {
+      let buffer = UnsafeBufferPointer(start: pointer, count: data.count)
 
-        // We unwrap here because on we do this check prior to the do { } catch { } block.
-        throw Error(byteOffset: parser.buffer.baseAddress!.distance(to: parser.pointer), reason: error)
-      }
+      return try JSON.Parser.parse(buffer, options: options)
+    }
+  }
+
+  public static func parse(_ data: [UTF8.CodeUnit], options: Option = []) throws -> JSON {
+
+    return try data.withUnsafeBufferPointer { buffer in
+
+      return try JSON.Parser.parse(buffer, options: options)
     }
   }
 

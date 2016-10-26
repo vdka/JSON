@@ -535,6 +535,47 @@ class ParsingTests: XCTestCase {
     expect("0xbadf00d", toThrowAtByteOffset: 0, withReason: .invalidNumber)
     expect("false blah", toThrowAtByteOffset: 6, withReason: .invalidSyntax)
   }
+
+  // - MARK: Smoke tests
+
+  func testStringParsing() {
+
+    let jsonString = "{'hello':'world'}".replacingOccurrences(of: "'", with: "\"")
+    do {
+
+      _ = try JSON.Parser.parse(jsonString)
+    } catch {
+      XCTFail("Parsing failed with \(error)")
+    }
+  }
+
+  func testFoundationData() {
+
+    let jsonString = "{'hello':'world'}".replacingOccurrences(of: "'", with: "\"")
+    let data = Data(bytes: Array(jsonString.utf8))
+    do {
+
+      _ = try JSON.Parser.parse(data)
+    } catch {
+      XCTFail("Parsing failed with \(error)")
+    }
+  }
+
+  func testUnsafeBufferPointer() {
+
+    let jsonString = "{'hello':'world'}".replacingOccurrences(of: "'", with: "\"")
+    let data = Array(jsonString.utf8)
+
+    data.withUnsafeBufferPointer { buffer in
+
+      do {
+
+        _ = try JSON.Parser.parse(data)
+      } catch {
+        XCTFail("Parsing failed with \(error)")
+      }
+    }
+  }
 }
 
 extension ParsingTests {
