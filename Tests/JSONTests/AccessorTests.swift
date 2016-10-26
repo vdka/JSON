@@ -82,6 +82,37 @@ class AccessorTests: XCTestCase {
     }
   }
 
+  func testDefaulting() {
+
+    enum Color: String { case teal, unknown }
+
+    let json: JSON = ["name": "Harry", "age": 38, "color": "teal"]
+
+    do {
+      var name: String
+
+      name = try json.get("404", default: "vdka")
+      XCTAssert(name == "vdka")
+
+      name = try json.get("name", default: "Bob")
+      XCTAssert(name == "Harry")
+
+      name = try json.get("age", default: "Julia")
+      XCTAssert(name == "Julia")
+
+      var color: Color
+
+      color = try json.get("color", default: Color.unknown)
+      XCTAssert(color == .teal)
+
+      color = try json.get("404", default: Color.unknown)
+      XCTAssert(color == .unknown)
+
+    } catch {
+      XCTFail("An error occured: \(error)")
+    }
+  }
+
   func testIterator() {
 
     var values: [JSON] = []

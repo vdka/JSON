@@ -1,65 +1,93 @@
 
 
+// I wish this was generated.
+
 extension JSON {
 
-  public func get<T: JSONInitializable>() throws -> T {
-    return try T(json: self)
+  public func get<T: JSONInitializable>(`default`: T? = nil) throws -> T {
+    do {
+      return try T(json: self)
+    } catch {
+      guard let `default` = `default` else { throw error }
+      return `default`
+    }
   }
 
-  /// - Note: This call will throw iff the initializer does.
-  public func get<T: JSONInitializable>() throws -> T? {
-    if case .null = self { return nil }
-    return try T(json: self)
+  public func get<T: JSONInitializable>(`default`: T? = nil) throws -> T? {
+    do {
+      return try T(json: self)
+    } catch {
+      if case .null = self { return nil }
+      guard let `default` = `default` else { throw error }
+      return `default`
+    }
   }
 
   public func get<T: JSONInitializable>() throws -> [T] {
     guard case .array(let array) = self else { throw JSON.Error.badValue(self) }
-
     return try array.map(T.init(json:))
   }
 
-  public func get<T: RawRepresentable>() throws -> T
+  public func get<T: RawRepresentable>(`default`: T? = nil) throws -> T
     where T.RawValue: JSONInitializable
   {
-    return try T(json: self)
+    do {
+      return try T(json: self)
+    } catch {
+      guard let `default` = `default` else { throw error }
+      return `default`
+    }
   }
 
-  public func get<T: RawRepresentable>() throws -> T?
+  public func get<T: RawRepresentable>(`default`: T? = nil) throws -> T?
     where T.RawValue: JSONInitializable
   {
-    if case .null = self { return nil }
-    return try T(json: self)
+    do {
+      return try T(json: self)
+    } catch {
+      if case .null = self { return nil }
+      guard let `default` = `default` else { throw error }
+      return `default`
+    }
   }
 
   public func get<T: RawRepresentable>() throws -> [T]
     where T.RawValue: JSONInitializable
   {
     guard case .array(let array) = self else { throw JSON.Error.badValue(self) }
-
     return try array.map(T.init(json:))
   }
 
-  public func get<T: RawRepresentable & JSONInitializable>() throws -> T {
-
-    return try T(json: self)
+  public func get<T: RawRepresentable & JSONInitializable>(`default`: T? = nil) throws -> T {
+    do {
+      return try T(json: self)
+    } catch {
+      guard let `default` = `default` else { throw error }
+      return `default`
+    }
   }
 
-
-  public func get<T: RawRepresentable & JSONInitializable>() throws -> T?
+  public func get<T: RawRepresentable & JSONInitializable>(`default`: T? = nil) throws -> T?
     where T.RawValue: JSONInitializable
   {
-    if case .null = self { return nil }
-    return try T(json: self)
+    do {
+      return try T(json: self)
+    } catch {
+      if case .null = self { return nil }
+      guard let `default` = `default` else { throw error }
+      return `default`
+    }
   }
 
   /// Returns the content matching the type of its destination
   public func get<T: RawRepresentable & JSONInitializable>() throws -> [T] {
     guard case .array(let array) = self else { throw JSON.Error.badValue(self) }
-
     return try array.map(T.init(json:))
   }
 }
 
+
+// MARK: With fields
 
 extension JSON {
 
@@ -69,34 +97,46 @@ extension JSON {
   }
 
   /// Returns the content matching the type of its destination
-  public func get<T: JSONInitializable>(_ field: String) throws -> T {
-    guard let json = self[field] else { throw JSON.Error.badField(field) }
-
-    return try T(json: json)
+  public func get<T: JSONInitializable>(_ field: String, `default`: T? = nil) throws -> T {
+    do {
+      guard let json = self[field] else { throw JSON.Error.badField(field) }
+      return try T(json: json)
+    } catch {
+      guard let `default` = `default` else { throw error }
+      return `default`
+    }
   }
 
   /// If the Field exists in the JSON then this will call to the expected types initializer
   /// - Note: This call will throw iff the initializer does
-  public func get<T: JSONInitializable>(_ field: String) throws -> T? {
-    guard let json = self[field] else { return nil }
-    if case .null = json { return nil }
-    return try T(json: json)
+  public func get<T: JSONInitializable>(_ field: String, `default`: T? = nil) throws -> T? {
+    guard let json = self[field] else { return `default` }
+    if case .null = json { return `default` }
+    do {
+      return try T(json: json)
+    } catch {
+      guard let `default` = `default` else { throw error }
+      return `default`
+    }
   }
 
   public func get<T: JSONInitializable>(_ field: String) throws -> [T] {
     guard let array = self[field].array else { throw JSON.Error.badField(field) }
-
     return try array.map(T.init(json:))
   }
 
   /// Returns the content matching the type of its destination
-  public func get<T: RawRepresentable>(_ field: String) throws -> T
+  public func get<T: RawRepresentable>(_ field: String, `default`: T? = nil) throws -> T
     where T.RawValue: JSONInitializable
   {
-    let rawValue: T.RawValue = try self.get(field)
-    guard let value = T(rawValue: rawValue) else { throw JSON.Error.badField(field) }
-
-    return value
+    do {
+      let rawValue: T.RawValue = try self.get(field)
+      guard let value = T(rawValue: rawValue) else { throw JSON.Error.badField(field) }
+      return value
+    } catch {
+      guard let `default` = `default` else { throw error }
+      return `default`
+    }
   }
 
   /// Returns the content matching the type of its destination
@@ -104,23 +144,34 @@ extension JSON {
     where T.RawValue: JSONInitializable
   {
     guard let array = self[field].array else { throw JSON.Error.badField(field) }
-
     return try array.map(T.init(json:))
   }
 
-  // NOTE: This is the most constrained version therefore the compiler should use this in the case of a RawRepresentable & JSONInitializable
+  public func get<T: RawRepresentable & JSONInitializable>(_ field: String, `default`: T? = nil) throws -> T? {
+    guard let json = self[field] else { return `default` }
+    if case .null = json { return `default` }
+    do {
+      return try T(json: json)
+    } catch {
+      guard let `default` = `default` else { throw error }
+      return `default`
+    }
+  }
 
   /// Returns the content matching the type of its destination
-  public func get<T: RawRepresentable & JSONInitializable>(_ field: String) throws -> T {
-    guard let json = self[field] else { throw JSON.Error.badField(field) }
-
-    return try T(json: json)
+  public func get<T: RawRepresentable & JSONInitializable>(_ field: String, `default`: T? = nil) throws -> T {
+    do {
+      guard let json = self[field] else { throw JSON.Error.badField(field) }
+      return try T(json: json)
+    } catch {
+      guard let `default` = `default` else { throw error }
+      return `default`
+    }
   }
 
   /// Returns the content matching the type of its destination
   public func get<T: RawRepresentable & JSONInitializable>(_ field: String) throws -> [T] {
     guard let array = self[field].array else { throw JSON.Error.badField(field) }
-
     return try array.map(T.init(json:))
   }
 }
@@ -134,13 +185,11 @@ extension JSON {
   public subscript(key: String) -> JSON? {
     get {
       guard case .object(let object) = self else { return nil }
-
       return object[key]
     }
 
     set {
       guard case .object(var object) = self else { return }
-
       object[key] = newValue
       self = .object(object)
     }
@@ -160,13 +209,10 @@ extension JSON {
     // TODO: Testing for nested objects
     set {
       guard case .array(var a) = self, a.indices ~= index else { return }
-      switch newValue {
-      case .some(let newValue):
-        a[index] = newValue
 
-      case .none:
-        a.remove(at: index)
-      }
+      if let newValue = newValue { a[index] = newValue }
+      else { a.remove(at: index) }
+
       self = .array(a)
     }
   }
@@ -180,7 +226,6 @@ extension JSON {
   /// Returns this enum's associated Dictionary value iff `self == .object(_), `nil` otherwise.
   public var object: [String: JSON]? {
     guard case .object(let o) = self else { return nil }
-
     return o
   }
 }
