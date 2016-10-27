@@ -249,6 +249,12 @@ class ParsingTests: XCTestCase {
     expect("--24.34", toThrowWithReason: .invalidNumber)
   }
 
+  // http://seriot.ch/parsing_json.html
+  func testNumber_Double_ZeroExpOne() {
+
+    expect("0e1", toParseTo: 0.0)
+  }
+
   func testNumber_Double_Exp_Normal() {
 
     expect("-24.3245e2", toParseTo: -2432.45)
@@ -362,7 +368,7 @@ class ParsingTests: XCTestCase {
 
   func testString_Unicode_NoTrailingSurrogate() {
 
-    expect("'\\ud83d'", toThrowWithReason: .endOfStream)
+    expect("'\\ud83d'", toThrowWithReason: .invalidUnicode)
   }
 
   func testString_Unicode_InvalidTrailingSurrogate() {

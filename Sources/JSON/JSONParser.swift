@@ -425,7 +425,11 @@ extension JSON.Parser {
         pop()
         return .integer(0)
       }
-      guard following == decimal || following.isTerminator else { throw Error.Reason.invalidNumber }
+      switch following {
+      case decimal, e, E: break
+      case _ where following.isTerminator: break
+      default: throw Error.Reason.invalidNumber
+      }
     }
 
     var significand: UInt64 = 0
@@ -591,9 +595,7 @@ extension JSON.Parser {
 
         case u:
           let scalar = try parseUnicodeScalar()
-          var bytes: [UTF8.CodeUnit] = []
-          UTF8.encode(scalar, into: { bytes.append($0) })
-          stringBuffer.append(contentsOf: bytes)
+          UTF8.encode(scalar, into: { stringBuffer.append($0) })
 
         default:
           throw Error.Reason.invalidEscape
@@ -635,15 +637,14 @@ extension JSON.Parser {
   mutating func parseUnicodeScalar() throws -> UnicodeScalar {
 
     // For multi scalar Unicodes eg. flags
-    var buffer: [UInt16] = []
+    var buffer: [UTF16.CodeUnit] = []
 
     let codeUnit = try parseUnicodeEscape()
     buffer.append(codeUnit)
-
     if UTF16.isLeadSurrogate(codeUnit) {
-
-      guard pop() == backslash && pop() == u else { throw Error.Reason.endOfStream }
+      guard pop() == backslash && pop() == u else { throw Error.Reason.invalidUnicode }
       let trailingSurrogate = try parseUnicodeEscape()
+      guard UTF16.isTrailSurrogate(trailingSurrogate) else { throw Error.Reason.invalidUnicode }
       buffer.append(trailingSurrogate)
     }
 
