@@ -23,9 +23,14 @@ extension JSON {
     }
   }
 
-  public func get<T: JSONInitializable>() throws -> [T] {
-    guard case .array(let array) = self else { throw JSON.Error.badValue(self) }
-    return try array.map(T.init(json:))
+  public func get<T: JSONInitializable>(`default`: [T]? = nil) throws -> [T] {
+    do {
+      guard case .array(let array) = self else { throw JSON.Error.badValue(self) }
+      return try array.map(T.init(json:))
+    } catch {
+      guard let `default` = `default` else { throw error }
+      return `default`
+    }
   }
 
   public func get<T: RawRepresentable>(`default`: T? = nil) throws -> T
@@ -51,11 +56,16 @@ extension JSON {
     }
   }
 
-  public func get<T: RawRepresentable>() throws -> [T]
+  public func get<T: RawRepresentable>(`default`: [T]? = nil) throws -> [T]
     where T.RawValue: JSONInitializable
   {
-    guard case .array(let array) = self else { throw JSON.Error.badValue(self) }
-    return try array.map(T.init(json:))
+    do {
+      guard case .array(let array) = self else { throw JSON.Error.badValue(self) }
+      return try array.map(T.init(json:))
+    } catch {
+      guard let `default` = `default` else { throw error }
+      return `default`
+    }
   }
 
   public func get<T: RawRepresentable & JSONInitializable>(`default`: T? = nil) throws -> T {
@@ -80,9 +90,14 @@ extension JSON {
   }
 
   /// Returns the content matching the type of its destination
-  public func get<T: RawRepresentable & JSONInitializable>() throws -> [T] {
-    guard case .array(let array) = self else { throw JSON.Error.badValue(self) }
-    return try array.map(T.init(json:))
+  public func get<T: RawRepresentable & JSONInitializable>(`default`: [T]? = nil) throws -> [T] {
+    do {
+      guard case .array(let array) = self else { throw JSON.Error.badValue(self) }
+      return try array.map(T.init(json:))
+    } catch {
+      guard let `default` = `default` else { throw error }
+      return `default`
+    }
   }
 }
 
@@ -120,9 +135,14 @@ extension JSON {
     }
   }
 
-  public func get<T: JSONInitializable>(_ field: String) throws -> [T] {
-    guard let array = self[field].array else { throw JSON.Error.badField(field) }
-    return try array.map(T.init(json:))
+  public func get<T: JSONInitializable>(_ field: String, `default`: [T]? = nil) throws -> [T] {
+    do {
+      guard let array = self[field].array else { throw JSON.Error.badField(field) }
+      return try array.map(T.init(json:))
+    } catch {
+      guard let `default` = `default` else { throw error }
+      return `default`
+    }
   }
 
   /// Returns the content matching the type of its destination
@@ -140,11 +160,16 @@ extension JSON {
   }
 
   /// Returns the content matching the type of its destination
-  public func get<T: RawRepresentable>(_ field: String) throws -> [T]
+  public func get<T: RawRepresentable>(_ field: String, `default`: [T]? = nil) throws -> [T]
     where T.RawValue: JSONInitializable
   {
-    guard let array = self[field].array else { throw JSON.Error.badField(field) }
-    return try array.map(T.init(json:))
+    do {
+      guard let array = self[field].array else { throw JSON.Error.badField(field) }
+      return try array.map(T.init(json:))
+    } catch {
+      guard let `default` = `default` else { throw error }
+      return `default`
+    }
   }
 
   public func get<T: RawRepresentable & JSONInitializable>(_ field: String, `default`: T? = nil) throws -> T? {
@@ -170,9 +195,14 @@ extension JSON {
   }
 
   /// Returns the content matching the type of its destination
-  public func get<T: RawRepresentable & JSONInitializable>(_ field: String) throws -> [T] {
-    guard let array = self[field].array else { throw JSON.Error.badField(field) }
-    return try array.map(T.init(json:))
+  public func get<T: RawRepresentable & JSONInitializable>(_ field: String, `default`: [T]? = nil) throws -> [T] {
+    do {
+      guard let array = self[field].array else { throw JSON.Error.badField(field) }
+      return try array.map(T.init(json:))
+    } catch {
+      guard let `default` = `default` else { throw error }
+      return `default`
+    }
   }
 }
 
