@@ -561,11 +561,9 @@ extension JSON.Parser {
       } else if codeUnit == quote && !escaped {
 
         stringBuffer.append(0)
-        let string = stringBuffer.withUnsafeBufferPointer { bufferPointer in
+        return stringBuffer.withUnsafeBufferPointer { bufferPointer in
           return String(cString: unsafeBitCast(bufferPointer.baseAddress, to: UnsafePointer<CChar>.self))
         }
-
-        return string
       } else if escaped {
 
         switch codeUnit {
