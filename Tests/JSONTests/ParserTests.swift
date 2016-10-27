@@ -224,6 +224,11 @@ class ParsingTests: XCTestCase {
     expect("-", toThrowWithReason: .invalidNumber)
   }
 
+  func testNumber_Dbl_MinusDecimal() {
+
+    expect("-.1", toThrowWithReason: .invalidNumber)
+  }
+
   func testNumber_Dbl_Incomplete() {
 
     expect("24.", toThrowWithReason: .invalidNumber)
@@ -364,6 +369,24 @@ class ParsingTests: XCTestCase {
   func testString_StartEndWithSpaces() {
 
     expect("'  hello world  '", toParseTo: "  hello world  ")
+  }
+
+  // NOTE(vdka): This cannot be fixed until I find a better way to initialize strings
+  func testString_Null() {
+
+    expect("'\\u0000'", toParseTo: "\u{0000}")
+  }
+
+  func testString_Unicode_SimpleUnescaped() {
+
+    expect("'€𝄞'", toParseTo: "€𝄞")
+  }
+
+  func testString_InvalidUnicodeByte() {
+
+    let char = Character(UnicodeScalar(0xFF))
+
+    expect("'\(char)'", toThrowWithReason: .invalidUnicode)
   }
 
   func testString_Unicode_NoTrailingSurrogate() {

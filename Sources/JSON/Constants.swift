@@ -44,6 +44,8 @@ let numbers: ClosedRange<UTF8.CodeUnit> = "0".utf8.first!..."9".utf8.first!
 let alphaNumericLower: ClosedRange<UTF8.CodeUnit> = "a".utf8.first!..."f".utf8.first!
 let alphaNumericUpper: ClosedRange<UTF8.CodeUnit> = "A".utf8.first!..."F".utf8.first!
 
+let invalidUnicodeBytes: ClosedRange<UTF8.CodeUnit> = 0xF5...0xFF
+
 // Valid integer number Range
 let valid64BitInteger: ClosedRange<Int64> = Int64.min...Int64.max
 let validUnsigned64BitInteger: ClosedRange<UInt64> = UInt64.min...UInt64(Int64.max)

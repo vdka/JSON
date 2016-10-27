@@ -601,6 +601,9 @@ extension JSON.Parser {
 
         escaped = false
 
+      } else if invalidUnicodeBytes.contains(codeUnit) || codeUnit == 0xC0 || codeUnit == 0xC1 {
+
+        throw Error.Reason.invalidUnicode
       } else {
 
         stringBuffer.append(codeUnit)
