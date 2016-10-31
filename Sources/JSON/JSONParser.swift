@@ -32,6 +32,8 @@ extension JSON {
 
     /// Used to reduce the number of alloc's for parsing subsequent strings
     var stringBuffer: [UTF8.CodeUnit] = []
+    var objHighwater: Int = 6
+    var arrHighwater: Int = 6
   }
 }
 
@@ -294,7 +296,10 @@ extension JSON.Parser {
       return .object([:])
     }
 
-    var tempDict: [String: JSON] = Dictionary(minimumCapacity: 6)
+    var tempDict: [String: JSON] = Dictionary(minimumCapacity: objHighwater)
+
+    defer { objHighwater = max(objHighwater, tempDict.count) }
+
     var wasComma = false
 
     repeat {
@@ -356,7 +361,9 @@ extension JSON.Parser {
     }
 
     var tempArray: [JSON] = []
-    tempArray.reserveCapacity(6)
+    tempArray.reserveCapacity(arrHighwater)
+
+    defer { arrHighwater = max(arrHighwater, tempArray.count) }
 
     var wasComma = false
 
