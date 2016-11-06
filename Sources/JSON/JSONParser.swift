@@ -166,7 +166,7 @@ extension JSON.Parser {
 
   mutating func skipWhitespace() {
 
-    while pointer.pointee.isWhitespace && pointer != buffer.endAddress {
+    while pointer != buffer.endAddress && pointer.pointee.isWhitespace {
 
       pop()
     }

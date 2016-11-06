@@ -382,11 +382,22 @@ class ParsingTests: XCTestCase {
     expect("'€𝄞'", toParseTo: "€𝄞")
   }
 
+  // NOTE(vdka): Swift changes the value if we encode 0xFF into a string.
   func testString_InvalidUnicodeByte() {
 
-    let char = Character(UnicodeScalar(0xFF))
+    let expectedError = JSON.Parser.Error.Reason.invalidUnicode
+    do {
 
-    expect("'\(char)'", toThrowWithReason: .invalidUnicode)
+      let val = try JSON.Parser.parse([quote, 0xFF, quote])
+    
+      XCTFail("expected to throw \(expectedError) but got \(val)")
+    } catch let error as JSON.Parser.Error {
+
+      XCTAssertEqual(error.reason, expectedError)
+    } catch {
+
+      XCTFail("expected to throw \(expectedError) but got a different error type!.")
+    }
   }
 
   func testString_Unicode_NoTrailingSurrogate() {

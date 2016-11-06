@@ -45,6 +45,9 @@
                   Identifier = "ParsingTests/testNumber_Double_Exp_Negative()">
                </Test>
                <Test
+                  Identifier = "ParsingTests/testString_Null()">
+               </Test>
+               <Test
                   Identifier = "SerializerBenchmarks">
                </Test>
             </SkippedTests>
