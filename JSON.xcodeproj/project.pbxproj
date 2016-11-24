@@ -105,7 +105,9 @@
 				"_______Tests_" /* Tests */,
 				"____Products_" /* Products */,
 			);
+			indentWidth = 2;
 			sourceTree = "<group>";
+			tabWidth = 2;
 		};
 		"____Products_" /* Products */ = {
 			isa = PBXGroup;

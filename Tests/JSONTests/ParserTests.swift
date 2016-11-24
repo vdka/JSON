@@ -541,7 +541,6 @@ class ParsingTests: XCTestCase {
     expect("// This is a comment\n{'key':true}", toParseTo: ["key": true], withOptions: .allowComments)
   }
 
-
   func testLineComment_endWithNewline() {
 
     expect("// This is a comment\n{'key':true}", toParseTo: ["key": true], withOptions: .allowComments)
@@ -552,6 +551,11 @@ class ParsingTests: XCTestCase {
 
     expect("{'key':true}// This is a comment", toParseTo: ["key": true], withOptions: .allowComments)
     expect("{'key':true}\n// This is a comment", toParseTo: ["key": true], withOptions: .allowComments)
+  }
+  
+  func testLineComment_withinRootObject() {
+    
+    expect("{\n'key':true,\n// commented!\n'key2':false'\n}", toParseTo: ["key": true, "key2": false], withOptions: .allowComments)
   }
 
   func testBlockComment_start() {
@@ -568,6 +572,11 @@ class ParsingTests: XCTestCase {
   func testBlockCommentNested() {
 
     expect("[true]/* a /* b */ /* c */ d */", toParseTo: [true], withOptions: .allowComments)
+  }
+  
+  func testBlockComment_withinRootObject() {
+    
+    expect("{'key':true,/* foo */'key2':false'/* bar */}", toParseTo: ["key": true, "key2": false], withOptions: .allowComments)
   }
 
   func testDetailedError() {
