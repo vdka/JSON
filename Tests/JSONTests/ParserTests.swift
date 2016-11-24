@@ -533,7 +533,7 @@ class ParsingTests: XCTestCase {
 
   func testTrollBlockComment() {
 
-    expect("/*/ {'key':'harry'}", toThrowWithReason: .invalidSyntax, withOptions: .allowComments)
+    expect("/*/ {'key':'harry'}", toThrowWithReason: .unmatchedComment, withOptions: .allowComments)
   }
 
   func testLineComment_start() {
@@ -555,7 +555,7 @@ class ParsingTests: XCTestCase {
   
   func testLineComment_withinRootObject() {
     
-    expect("{\n'key':true,\n// commented!\n'key2':false'\n}", toParseTo: ["key": true, "key2": false], withOptions: .allowComments)
+    expect("{\n'key':true,\n// commented!\n'key2':false\n}", toParseTo: ["key": true, "key2": false], withOptions: .allowComments)
   }
 
   func testBlockComment_start() {
@@ -576,7 +576,7 @@ class ParsingTests: XCTestCase {
   
   func testBlockComment_withinRootObject() {
     
-    expect("{'key':true,/* foo */'key2':false'/* bar */}", toParseTo: ["key": true, "key2": false], withOptions: .allowComments)
+    expect("{'key':true,/* foo */'key2':false/* bar */}", toParseTo: ["key": true, "key2": false], withOptions: .allowComments)
   }
 
   func testDetailedError() {

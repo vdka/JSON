@@ -48,9 +48,7 @@ extension JSON.Parser {
 
     guard let pointer = bufferPointer.baseAddress, buffer.endAddress != bufferPointer.baseAddress else { throw Error(byteOffset: 0, reason: .emptyStream) }
 
-    // This can be unwrapped unsafely because
     self.pointer = pointer
-
     self.omitNulls = options.contains(.omitNulls)
     self.allowComments = options.contains(.allowComments)
   }
@@ -65,13 +63,9 @@ extension JSON.Parser {
 
     var parser = try JSON.Parser(bufferPointer: buffer, options: options)
 
-    parser.skipWhitespace()
-    if options.contains(.allowComments) {
-      _ = try? parser.skipComments()
-    }
-    parser.skipWhitespace()
-
     do {
+      
+      try parser.skipWhitespace()
 
       let rootValue = try parser.parseValue()
 
@@ -85,11 +79,7 @@ extension JSON.Parser {
 
       // TODO (vkda): option to skip the trailing data check, useful for say streams see Jay's model
 
-      parser.skipWhitespace()
-      if options.contains(.allowComments) {
-        _ = try? parser.skipComments()
-      }
-      parser.skipWhitespace()
+      try parser.skipWhitespace()
 
       guard parser.pointer == parser.buffer.endAddress else { throw Error.Reason.invalidSyntax }
 
@@ -164,54 +154,55 @@ extension JSON.Parser {
 
 extension JSON.Parser {
 
-  mutating func skipWhitespace() {
+  mutating func skipWhitespace() throws {
+    
+    /// Returns whether a comment was skipped
+    func skipComments() throws -> Bool {
+      
+      if hasPrefix(lineComment) {
+        
+        while let char = peek(), char != newline {
+          
+          pop()
+        }
+        return true
+      } else if hasPrefix(blockCommentStart) {
+        
+        // don't be mislead by `/*/`.
+        pop() // '/'
+        pop() // '*'
+        
+        var depth: UInt = 1
+        repeat {
+          
+          guard peek() != nil else {
+            throw Error.Reason.unmatchedComment
+          }
+          
+          if hasPrefix(blockCommentEnd) {
+            
+            depth -= 1
+          } else if hasPrefix(blockCommentStart) {
+            
+            depth += 1
+          }
+          
+          pop()
+        } while depth > 0
+        pop() // '/'
+        return true
+      }
+      
+      return false
+    }
 
-    while pointer != buffer.endAddress && pointer.pointee.isWhitespace {
+    while pointer != buffer.endAddress && pointer.pointee.isWhitespace  {
 
       pop()
     }
-  }
-
-  /// - Precondition: peek() == slash
-  /// - Postcondition: Both comments and whitespace will be skipped and peek() *will* be at the next meaningfull token
-  mutating func skipComments() throws {
-
-    // Pop off the first slash
-
-    if hasPrefix(lineComment) {
-
-      while let char = peek(), char != newline {
-
-        pop()
-      }
-    } else if hasPrefix(blockCommentStart) {
-
-      // don't be mislead by `/*/`.
-      pop() // '/'
-      pop() // '*'
-
-      var depth: UInt = 1
-      repeat {
-
-        guard peek() != nil else {
-          throw Error.Reason.unmatchedComment
-        }
-
-        if hasPrefix(blockCommentEnd) {
-
-          depth -= 1
-        } else if hasPrefix(blockCommentStart) {
-
-          depth += 1
-        }
-
-        pop()
-      } while depth > 0
-      // pop that last '/' char
-      pop()
-    } else {
-
-      throw Error.Reason.invalidSyntax
+    if allowComments { 
+      let wasComment = try skipComments()
+      if wasComment { try skipWhitespace() }
     }
   }
 }
@@ -226,7 +217,7 @@ extension JSON.Parser {
 
     assert(!pointer.pointee.isWhitespace)
 
-    defer { skipWhitespace() }
+    defer { _ = try? skipWhitespace() }
     switch peek() {
     case objectOpen?:
 
@@ -267,7 +258,7 @@ extension JSON.Parser {
       return .null
 
     case slash? where allowComments:
-      try skipComments()
+      try skipWhitespace()
       return try parseValue()
 
     default:
@@ -287,7 +278,7 @@ extension JSON.Parser {
     assert(peek() == objectOpen)
     pop()
 
-    skipWhitespace()
+    try skipWhitespace()
 
     guard peek() != objectClose else {
       pop()
@@ -306,7 +297,7 @@ extension JSON.Parser {
 
         wasComma = true
         pop()
-        skipWhitespace()
+        try skipWhitespace()
 
       case quote?:
 
@@ -315,9 +306,9 @@ extension JSON.Parser {
         }
 
         let key = try parseString()
-        skipWhitespace()
+        try skipWhitespace()
         guard pop() == colon else { throw Error.Reason.expectedColon }
-        skipWhitespace()
+        try skipWhitespace()
         let value = try parseValue()
         wasComma = false
 
@@ -347,7 +338,7 @@ extension JSON.Parser {
     assert(peek() == arrayOpen)
     pop()
 
-    skipWhitespace()
+    try skipWhitespace()
 
     // Saves the allocation of the tempArray
     guard peek() != arrayClose else {
@@ -388,7 +379,7 @@ extension JSON.Parser {
         }
 
         let value = try parseValue()
-        skipWhitespace()
+        try skipWhitespace()
         wasComma = false
 
         switch value {
@@ -666,7 +657,7 @@ extension JSON.Parser {
   mutating func skipComma() throws {
     assert(peek() == comma)
     pop()
-    skipWhitespace()
+    try skipWhitespace()
   }
 }
 
