@@ -2,7 +2,8 @@
 
 extension JSON: ExpressibleByArrayLiteral {
   public init(arrayLiteral elements: JSONRepresentable...) {
-    self = .array(elements.map(JSON.init))
+    let array = elements.map({ $0.encoded() })
+    self = .array(array)
   }
 }
 
