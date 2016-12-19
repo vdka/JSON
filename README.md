@@ -2,76 +2,136 @@
 
 [![Language](https://img.shields.io/badge/Swift-3-brightgreen.svg)](http://swift.org) [![Build Status](https://travis-ci.org/vdka/JSON.svg?branch=master)](https://travis-ci.org/vdka/JSON)
 
-This is Not just Another Swift JSON Package. This is _**the**_ Swift JSON Package.
-When you are transforming directly to models this framework is [faster](https://github.com/vdka/JSONBenchmarks) than `Foundation.JSONSerialization`.
+Improve both the brevity and clarity of your model mapping code.
 
-Time to Parse and initialize a struct from a sample 432KB JSON file.
+JSON provides a simple and performant interface for accessing and creating serialized data.
 
-|          | Foundation | vdka/json |
-|:---------|-----------:|----------:|
-| **Time** | `149.7ms`  | `27.03ms` |
-| **LOC**  | `71`       | `35`      |
+This library exposes an API with minimal surface area.
 
-Tests run on Darwin (Linux Foundation is even slower) built with `-Ounchecked`
-
-Type safety can get you a long way, lets see how you can use it for your applications.
-
+# API
+<details>
+  <summary>API summary</summary>
 ```swift
-enum Currency: String { case AUD, EUR, GBP, USD }
+// Creating a JSON instance (static)
+static func JSON.Parser.parse(_ buffer: UnsafeBufferPointer<UTF8.CodeUnit>, options: JSON.Parser.Option = []) throws -> JSON
+static func JSON.Parser.parse(_ data: [UTF8.CodeUnit], options: JSON.Parser.Option = []) throws -> JSON
+static func JSON.Parser.parse(_ data: Data, options: JSON.Parser.Option = []) throws -> JSON
+static func JSON.Parser.parse(_ string: String, options: JSON.Parser.Option = []) throws -> JSON
 
-struct Money {
-  var minorUnits: Int
-  var currency: Currency
+// Serializing a JSON instance
+static func JSON.Serializer.serialize(_ json: JSON, options: JSON.Serializer.Option = []) throws -> String
+static func JSON.Serializer.serialize<O: TextOutputStream>(_ json: JSON, to stream: inout O, options: JSON.Serializer.Option) throws
+func JSON.serialized(options: JSON.Serializer.Option = []) throws -> String
 
+// Accessing JSON
+func JSON.get<T: JSONInitializable>(_ field: String, `default`: String?) -> T
+func JSON.get<T: JSONInitializable>(_ field: String, `default`: T? = nil) throws -> T?
+func JSON.get<T: JSONInitializable>(_ field: String, `default`: [T]? = nil) throws -> [T]
+
+var JSON.object: [String: JSON]?
+var JSON.array: [JSON]?
+var JSON.string: String?
+var JSON.int: Int?
+var JSON.bool: Bool?
+var JSON.double: Double?
+
+var JSON.isObject: Bool
+var JSON.isArray: Bool
+var JSON.isString: Bool
+var JSON.isInt: Bool
+var JSON.isBool: Bool
+var JSON.isDouble: Bool
+
+protocol JSONInitializable {
+    init(json: JSON) throws
 }
 
-struct Person {
-  var name: String
-  var age: Int
-  var accountBalances: [Money]
-  var petName: String?
+protocol JSONRepresentable {
+    func encoded() -> JSON
 }
+```
+</details>
 
-extension Money: JSONConvertible {
+For deserialization the `get` method is generic and initializes the result type with `init(json: JSON) throws` or throws an error indicative of what went wrong. Because this generic method is constraint to any type that conforms to `JSONInitializable` it is possible to extract your own complex nested models by just calling `get`.
+Furthermore there are overloads to the `get` method that allow the initialization of `Optional` and `RawRepresentable` types when their `Wrapped` and `RawValue`s are conformant to `JSONInitialable`. This means the majority of your simple `RawRepresentable` enum's can be initialized without needing to create an explicit initializer.
 
-  func encoded() -> JSON {
-    return
-      [
-        "minorUnits": minorUnits,
-        "currencyCode": currency.encoded()
-    ]
-  }
+Similarly on the model serialization side the `encoded` method is the single point of call. It is automatically called by the initializers for `ExpressibleByArrayLiteral` & `ExpressibleByDictionaryLiteral`. This makes declaring JSON instances extremely simple.
 
-  init(json: JSON) throws {
-    self.minorUnits = try json.get("minorUnits")
-    self.currency   = try json.get("currencyCode")
-  }
-}
+# Examples
 
+[Samples](https://github.com/vdka/JSON-Sample) Catered examples using real API's
+[Commandline application](https://github.com/vdka/cj) for accessing JSON when scripting
 
-extension Person: JSONConvertible {
-
-  func encoded() -> JSON {
-    return
-      [
-        "name": name,
-        "age": age,
-        "accountBalances": accountBalances.encoded()
-    ]
-  }
-
-  init(json: JSON) throws {
-    self.name             = try json.get("name")
-    self.age              = try json.get("age")
-    self.accountBalances  = try json.get("accountBalances")
-    self.petName          = try json.get("petName")
-  }
+<details>
+  <summary>Example Usage</summary>
+```json
+{
+    "status": "online",
+    "last_active": 1481873354,
+    "email": "jane@example.com",
+    "username": "janesmith",
+    "name": "Jane Smith",
+    "dob": 805852800,
+    "accepted_terms": true
 }
 ```
 
-## Alternative Access Patterns
+```swift
+enum State: String { case online, offline }
 
-#### Subscripting
-`json["pet"]?["vets"]?[0]?["name"]?.string`
+struct User {
+    var status:        Status
+    var lastActive:    Date
+    var name:          String
+    var email:         String
+    var dob:           Date
+    var acceptedTerms: Bool
+    var friends:       [String]
+    var avatarUrl:     URL?
+}
 
- `json["pet"]["vets"][0]["name"].string` is also valid however this one has to perform runtime type checks making it much slower. This will probably be deprecated at least until we can constrain Generic Type extensions to Specific types.
+extension User: JSONInitializable {
+    init(json: JSON) throws {
+        status        = try json.get("status")
+        lastActive    = try json.get("last_active")
+        name          = try json.get("name")
+        email         = try json.get("email")
+        dob           = try json.get("dob")
+        acceptedTerms = try json.get("accepted_terms")
+        friends       = try json.get("friends")
+        avatarUrl     = try json.get("avatar_url")
+    }
+}
+
+extension User: JSONRepresentable {
+
+    func encoded() -> JSON {
+        return
+            [
+                "status": status,
+                "name": name,
+                "email": email,
+                "dob": dob,
+                "accepted_terms": acceptedTerms,
+                "friends": friends.encoded(),
+                "avatar_url": avatarUrl.encoded()
+            ]
+    }
+}
+```
+</details>
+
+# Installation
+
+## CocoaPods
+> Coming soon!
+
+## Carthage
+```
+github "vdka/json"
+```
+
+## Swift Package Manager
+```
+.Package(url: "https://github.com/vdka/JSON", majorVersion: 0, minor: 16),
+```

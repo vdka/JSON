@@ -209,7 +209,6 @@ extension JSON {
 
 // MARK: - JSON Subscripts
 
-// TODO: Investigate `subscript(set key: String) -> JSONRepresentable?` for setting.
 extension JSON {
   /// Treat this JSON as a JSON object and attempt to get or set its associated Dictionary values.
   public subscript(key: String) -> JSON? {
@@ -236,7 +235,6 @@ extension JSON {
       return a[index]
     }
 
-    // TODO: Testing for nested objects
     set {
       guard case .array(var a) = self, a.indices ~= index else { return }
 
@@ -258,9 +256,6 @@ extension JSON {
     guard case .object(let o) = self else { return nil }
     return o
   }
-}
-
-extension JSON {
 
   /// Returns this enum's associated Array value iff `self == .array(_)`, `nil` otherwise.
   public var array: [JSON]? {
