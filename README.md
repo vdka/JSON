@@ -59,8 +59,8 @@ Similarly on the model serialization side the `encoded` method is the single poi
 
 # Examples
 
-[Samples](https://github.com/vdka/JSON-Sample) Catered examples using real API's
-[Commandline application](https://github.com/vdka/cj) for accessing JSON when scripting
+- [Samples](https://github.com/vdka/JSON-Sample) Catered examples using real API's
+- [Commandline application](https://github.com/vdka/cj) for accessing JSON when scripting
 
 <details>
   <summary>Example Usage</summary>
