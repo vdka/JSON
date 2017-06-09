@@ -428,36 +428,36 @@ extension JSON.Parser {
     var divisor: Double = 10
     var exponent: UInt64 = 0
     var negativeExponent = false
-    var didOverflow: Bool
+    var overflow: ArithmeticOverflow
 
     repeat {
 
       switch peek() {
       case numbers? where !seenDecimal && !seenExponent:
 
-        (significand, didOverflow) = UInt64.multiplyWithOverflow(significand, 10)
-        guard !didOverflow else { throw Error.Reason.numberOverflow }
+        (significand, overflow) = significand.multipliedReportingOverflow(by: 10)
+        guard case .none = overflow else { throw Error.Reason.numberOverflow }
 
-        (significand, didOverflow) = UInt64.addWithOverflow(significand, UInt64(pop() - zero))
-        guard !didOverflow else { throw Error.Reason.numberOverflow }
+        (significand, overflow) = significand.addingReportingOverflow(UInt64(pop() - zero))
+        guard case .none = overflow else { throw Error.Reason.numberOverflow }
 
       case numbers? where seenDecimal && !seenExponent:
 
         divisor *= 10
 
-        (mantisa, didOverflow) = UInt64.multiplyWithOverflow(mantisa, 10)
-        guard !didOverflow else { throw Error.Reason.numberOverflow }
+        (significand, overflow) = significand.multipliedReportingOverflow(by: 10)
+        guard case .none = overflow else { throw Error.Reason.numberOverflow }
 
-        (mantisa, didOverflow) = UInt64.addWithOverflow(mantisa, UInt64(pop() - zero))
-        guard !didOverflow else { throw Error.Reason.numberOverflow }
+        (significand, overflow) = significand.addingReportingOverflow(UInt64(pop() - zero))
+        guard case .none = overflow else { throw Error.Reason.numberOverflow }
 
       case numbers? where seenExponent:
 
-        (exponent, didOverflow) = UInt64.multiplyWithOverflow(exponent, 10)
-        guard !didOverflow else { throw Error.Reason.numberOverflow }
+        (significand, overflow) = significand.multipliedReportingOverflow(by: 10)
+        guard case .none = overflow else { throw Error.Reason.numberOverflow }
 
-        (exponent, didOverflow) = UInt64.addWithOverflow(exponent, UInt64(pop() - zero))
-        guard !didOverflow else { throw Error.Reason.numberOverflow }
+        (significand, overflow) = significand.addingReportingOverflow(UInt64(pop() - zero))
+        guard case .none = overflow else { throw Error.Reason.numberOverflow }
 
       case decimal? where !seenExponent && !seenDecimal:
 
