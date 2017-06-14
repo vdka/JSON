@@ -445,18 +445,18 @@ extension JSON.Parser {
 
         divisor *= 10
 
-        (mantisa, overflow) = significand.multipliedReportingOverflow(by: 10)
+        (mantisa, overflow) = mantisa.multipliedReportingOverflow(by: 10)
         guard case .none = overflow else { throw Error.Reason.numberOverflow }
 
-        (mantisa, overflow) = significand.addingReportingOverflow(UInt64(pop() - zero))
+        (mantisa, overflow) = mantisa.addingReportingOverflow(UInt64(pop() - zero))
         guard case .none = overflow else { throw Error.Reason.numberOverflow }
 
       case numbers? where seenExponent:
 
-        (exponent, overflow) = significand.multipliedReportingOverflow(by: 10)
+        (exponent, overflow) = exponent.multipliedReportingOverflow(by: 10)
         guard case .none = overflow else { throw Error.Reason.numberOverflow }
 
-        (exponent, overflow) = significand.addingReportingOverflow(UInt64(pop() - zero))
+        (exponent, overflow) = exponent.addingReportingOverflow(UInt64(pop() - zero))
         guard case .none = overflow else { throw Error.Reason.numberOverflow }
 
       case decimal? where !seenExponent && !seenDecimal:
