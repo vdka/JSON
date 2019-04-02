@@ -207,7 +207,7 @@ extension JSON.Serializer {
         default:
           stream.write("\\u")
           let str = String(char.value, radix: 16, uppercase: true)
-          if str.characters.count == 1 {
+          if str.count == 1 {
 
             stream.write("000\(str)")
           } else {
