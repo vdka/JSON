@@ -1,6 +1,6 @@
 # JSON
 
-[![Language](https://img.shields.io/badge/Swift-3-brightgreen.svg)](http://swift.org) [![Build Status](https://travis-ci.org/vdka/JSON.svg?branch=master)](https://travis-ci.org/vdka/JSON)
+[![Language](https://img.shields.io/badge/Swift-5-brightgreen.svg)](http://swift.org) [![Build Status](https://travis-ci.org/vdka/JSON.svg?branch=master)](https://travis-ci.org/vdka/JSON)
 
 Improve both the brevity and clarity of your model mapping code.
 
