@@ -9,7 +9,7 @@ class AccessorTests: XCTestCase {
   let json: JSON =
     [
       "array": [1, 2, 3] as JSON,
-      "object": ["Goodbye": "Brisbane", "Hello": "World"] as JSON,
+      "object": ["Hello": "World", "Goodbye": "Brisbane"] as JSON,
       "intLiteral": 1,
       "intString": "1",
       "floatLiteral": 6.28,
@@ -121,12 +121,6 @@ class AccessorTests: XCTestCase {
       values.append(value)
     }
     XCTAssert(values == [1, 2, 3] as [JSON])
-    values.removeAll()
-
-    for value in json["object"]! {
-      values.append(value)
-    }
-    XCTAssert(values == [["Hello": "World"], ["Goodbye": "Brisbane"]] as [JSON])
     values.removeAll()
 
     for value in json["intLiteral"]! {

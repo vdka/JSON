@@ -1,6 +1,7 @@
 
 
 /// Any value that can be expressed in JSON has a representation in `JSON`.
+@dynamicMemberLookup
 public enum JSON {
   case object([String: JSON])
   case array([JSON])
@@ -9,6 +10,12 @@ public enum JSON {
   case string(String)
   case integer(Int64)
   case double(Double)
+}
+
+extension JSON {
+  subscript(dynamicMember member: String) -> JSON {
+    return (try? self.get(member)) ?? .null
+  }
 }
 
 

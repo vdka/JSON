@@ -66,7 +66,7 @@
 		__PBXFileRef_Tests/JSONTests/SerializerTests.swift /* SerializerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SerializerTests.swift; sourceTree = "<group>"; };
 		__PBXFileRef_Tests/JSONTests/UserModel.swift /* UserModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserModel.swift; sourceTree = "<group>"; };
 		"_____Product_JSON" /* JSON.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = JSON.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		"_____Product_JSONTests" /* JSONTests.xctest */ = {isa = PBXFileReference; lastKnownFileType = file; path = JSONTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		"_____Product_JSONTests" /* JSONTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; path = JSONTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -228,6 +228,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 			);
 			mainGroup = "___RootGroup_";
@@ -302,7 +303,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = JSON;
 				PRODUCT_MODULE_NAME = "$(TARGET_NAME:c99extidentifier)";
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
-				SWIFT_VERSION = 3.0;
+				SWIFT_VERSION = 5.0;
 				TVOS_DEPLOYMENT_TARGET = 9.0;
 				WATCHOS_DEPLOYMENT_TARGET = 2.0;
 			};
@@ -317,7 +318,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../Frameworks";
 				OTHER_LDFLAGS = "$(inherited)";
 				OTHER_SWIFT_FLAGS = "$(inherited)";
-				SWIFT_VERSION = 3.0;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
 		};
@@ -336,7 +337,7 @@
 				PRODUCT_MODULE_NAME = "$(TARGET_NAME:c99extidentifier)";
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 3.0;
+				SWIFT_VERSION = 5.0;
 				TVOS_DEPLOYMENT_TARGET = 9.0;
 				WATCHOS_DEPLOYMENT_TARGET = 2.0;
 			};
@@ -352,7 +353,7 @@
 				OTHER_LDFLAGS = "$(inherited)";
 				OTHER_SWIFT_FLAGS = "$(inherited)";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 3.0;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
 		};
